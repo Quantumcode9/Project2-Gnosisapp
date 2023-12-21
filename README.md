@@ -1,9 +1,17 @@
 
 
-# GNOSIS
+# _GNOSIS_
 An app that helps you find and manages favorite Tv Shows
 
 # **Overview**
+
+_GNOSIS_ is an  application designed to enhance the TV viewing experience for users by allowing them to discover, manage, and keep track of their favorite TV shows. 
+
+
+
+
+###
+![Login or Sign Up Screenshot](Photos/readme/New1.png)
 
 ## User Stories
 > - As a user, I want the ability to sign up.
