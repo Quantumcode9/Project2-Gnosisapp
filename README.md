@@ -20,9 +20,6 @@ An app that helps you find and manages favorite Tv Shows
 
 
 
-## Background Color Theme
-- Light Mode: `#ffffff`
-- Dark Mode: `#000000`
 
 ## Technologies Used
 - **Backend:** Node.js with Express
@@ -33,7 +30,7 @@ An app that helps you find and manages favorite Tv Shows
 ## Wireframes / Screenshots
 
 ### Log In or Sign Up
-![Login or Sign Up Screenshot](Photos/readme/Login_Signin_screenshot.png)
+![Login or Sign Up Screenshot](Photos/readme/Login:Signin:screenshot.png)
 
 ### Home Page and Navigation
 ![Home Page and Navigation Screenshot](Photos/readme/Nav.png)
