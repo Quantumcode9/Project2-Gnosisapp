@@ -51,6 +51,7 @@ _GNOSIS_ is an application designed to enhance the TV viewing experience for use
 - **API Communication:** Axios for TVDB API requests
 
 ## Wireframes / Screenshots
+![Entity Relationship Diagram 1](Photos/readme/wireframe.png)
 
 ### Log In or Sign Up
 ![Login or Sign Up Screenshot](Photos/readme/Login:Signin:screenshot.png)
@@ -59,5 +60,4 @@ _GNOSIS_ is an application designed to enhance the TV viewing experience for use
 ![Home Page and Navigation Screenshot](Photos/readme/Nav.png)
 
 ## Entity Relationship Diagrams
-![Entity Relationship Diagram 1](Photos/readme/ERD1.png)
 ![Entity Relationship Diagram 2](Photos/readme/ERD2.png)
