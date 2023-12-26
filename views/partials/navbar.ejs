@@ -1,0 +1,27 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container-fluid">
+      <a href="/" class="navbar-brand me-3">GNOSIS</a>
+      <% if (loggedIn) { %>
+          <a href="/places/mine" class="nav-link text-warning me-3">Hello <%= username %></a>
+      <% } %>
+      <button class="navbar-toggler me-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="navbarNav" class="collapse navbar-collapse me-3">
+          <% if (loggedIn) { %>
+
+              <a href="/" class="nav-item nav-link active">Home</a>
+              <a href="/favorites" class="nav-item nav-link">Favorites</a>
+              <a href="/logout" class="nav-item nav-link">Logout</a>
+              <% } else { %>
+
+          <div class="navbar-nav ms-auto">
+              <a href="/signup" class="nav-item nav-link">Register</a>
+              <a href="/login" class="nav-item nav-link">Login</a>
+              <% } %>
+          </div>
+      </div>
+  </div>
+</nav>
+
+  

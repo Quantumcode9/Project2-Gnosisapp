@@ -18,7 +18,7 @@ router.get('/signup', (req, res) => {
     const { username, loggedIn, userId } = req.session
 
     res.render('users/signup', { username, loggedIn, userId })
-})
+});
 
 // POST -> SignUp - /users/signup
 
@@ -108,4 +108,4 @@ router.delete('/logout', (req, res) => {
 ///////////////////////
 //// Export Router ////
 ///////////////////////
-module.exports = router
+module.exports = router;
