@@ -1,4 +1,14 @@
-const Show = require('../models/show'); // Assuming you have a Show model
+
+const express = require('express')
+const axios = require('axios')
+const Show = require('../models/show'); 
+
+///////////////////////
+//// Create Router ////
+///////////////////////
+const router = express.Router()
+
+
 
 const showsController = {
   list: async (req, res) => {
@@ -20,4 +30,4 @@ const showsController = {
   // Add more methods as needed
 };
 
-module.exports = showsController;
+module.exports = router;

@@ -1,13 +1,19 @@
 const path = require('path');
 require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
 const middleware = require('./utils/middleware');
+
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./path-to-your-swagger.yaml');
 
 const UserRouter = require('./controllers/userController')
 const ShowRouter = require('./controllers/ShowsController')
 
+
 const app = express();
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
 // EJS view engine
@@ -44,9 +50,8 @@ app.get('/', (req, res) => {
     res.render('home.ejs', { username, loggedIn, userId })
 })
 
-app.use('/', indexRouter);
 app.use('/users', UserRouter);
-app.use('/shows', showsRoutes);
+app.use('/shows', ShowRouter);
 
 
 
