@@ -4,6 +4,7 @@ const session = require('express-session')
 const MongoStore = require('connect-mongo') // connect-mongo(for the session)
 require('dotenv').config()
 const methodOverride = require('method-override') // for forms and CRUD
+const path = require('path');
 
 
 
@@ -17,6 +18,7 @@ const middleware = (app) => {
     app.use(morgan('tiny')) //tiny is a qualifier that says - be short
     // to serve stylesheets, we use static files in the public directory
     app.use(express.static('public'))
+    app.use(express.static(path.join(__dirname, 'public')));
     // to utilize json we can add this:
     app.use(express.json())
 
@@ -30,6 +32,12 @@ const middleware = (app) => {
     }));
 
 }
+
+
+
+
+
+
 
 //     app.use(
 //         session({

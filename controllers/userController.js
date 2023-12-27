@@ -77,7 +77,7 @@ router.post('/login', async (req, res) => {
                     req.session.userId = user.id
 
                     // once we're logged in, redirect to the home page
-                    res.redirect('/')
+                    res.redirect('')
                 } else {
                     res.redirect(`/error?error=something%20wrong%20with%20credentials`)
                 }
