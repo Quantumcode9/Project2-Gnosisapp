@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Favorites</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Favorite Shows</h1>
+        <ul>
+            <% favorites.forEach(show => { %>
+                <li><%= show.title %></li> <!-- Display show title -->
+                <!-- Add more show details as needed -->
+            <% }) %>
+        </ul>
+    </div>
+</body>
+</html>
+
+

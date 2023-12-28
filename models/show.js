@@ -15,8 +15,12 @@ const showSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  // You can expand this schema to include more fields like air dates, seasons, etc.
-  // You can also add a field for artwork if you plan to store image URLs.
+  airDates: [Date], // Array of air dates
+  seasons: [{
+    seasonNumber: Number,
+    episodes: [String]
+  }],
+  artworkUrl: String // URL to the show's artwork
 });
 
 const Show = mongoose.model('Show', showSchema);

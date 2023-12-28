@@ -1,6 +1,6 @@
 
 /* Reset some basic elements */
-body, h1, h2, h3, p, form, input, button {
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -120,10 +120,12 @@ fieldset {
 
 .container-sm {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 50vh;
 }
+
 
 .container-sm > * {
     text-align: center;

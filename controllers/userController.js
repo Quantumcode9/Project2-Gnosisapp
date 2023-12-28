@@ -47,6 +47,24 @@ router.post('/signup', async (req, res) => {
 })
 
 
+//GET -> Favorites - /users/favorites
+router.get('/favorites', async (req, res) => {
+    if (!req.session.userId) {
+        return res.redirect('/login'); // Redirect to login if not authenticated
+    }
+
+    try {
+        const user = await User.findById(req.session.userId).populate('favorites');
+        res.render('favorites', { favorites: user.favorites });
+    } catch (error) {
+        console.error(error);
+        res.redirect('/error');
+    }
+});
+
+
+
+
 // GET -> Login -> /users/login
 router.get('/login', (req, res) => {
     const { username, loggedIn, userId } = req.session
@@ -54,43 +72,73 @@ router.get('/login', (req, res) => {
     res.render('users/login', { username, loggedIn, userId })
 })
 
-// POST -> Login
 router.post('/login', async (req, res) => {
-    // const { username, loggedIn, userId } = req.session
+    const { username, password } = req.body;
 
-    // we can pull our credentials from the req.body
-    const { username, password } = req.body
+    try {
+        const user = await User.findOne({ username });
+        if (user) {
+            const result = await bcrypt.compare(password, user.password);
+            if (result) {
+                req.session.username = username;
+                req.session.loggedIn = true;
+                req.session.userId = user._id; // Use _id for MongoDB ObjectId
 
-    // search the db for our user
-    // since our usernames are unique, we can use that
-    User.findOne({ username })
-        .then(async (user) => {
-            // if the user exists
-            if (user) {
-                // compare the password
-                const result = await bcrypt.compare(password, user.password)
-
-                if (result) {
-                    // if the pws match -> log them in and create the session
-                    req.session.username = username
-                    req.session.loggedIn = true
-                    req.session.userId = user.id
-
-                    // once we're logged in, redirect to the home page
-                    res.redirect('')
-                } else {
-                    res.redirect(`/error?error=something%20wrong%20with%20credentials`)
-                }
-
-            } else {
-                res.redirect(`/error`)
+                res.redirect('/users/favorites.ejs');
+             } else {
+            res.redirect(`/error?error=Invalid credentials`);
             }
-        })
-        .catch(err => {
-            console.log('error')
-            res.redirect(`/error?error=${err}`)
-        })
-})
+        } else {
+            res.redirect(`/error?error=User not found`);
+        }
+    } catch (err) {
+        console.log('Login error:', err);
+        res.redirect(`/error?error=Server error`);
+    }
+});
+
+
+// POST -> Login
+// router.post('/login', async (req, res) => {
+//     // const { username, loggedIn, userId } = req.session
+
+//     // we can pull our credentials from the req.body
+//     const { username, password } = req.body
+
+//     // search the db for our user
+//     // since our usernames are unique, we can use that
+//     User.findOne({ username })
+//         .then(async (user) => {
+//             // if the user exists
+//             if (user) {
+//                 // compare the password
+//                 const result = await bcrypt.compare(password, user.password)
+
+//                 if (result) {
+//                     // if the pws match -> log them in and create the session
+//                     req.session.username = username
+//                     req.session.loggedIn = true
+//                     req.session.userId = user.id
+
+//                     // once we're logged in, redirect to the home page
+//                     res.redirect('/favorites'); 
+//                 } else {
+//                     res.redirect(`/error?error=something%20wrong%20with%20credentials`)
+//                 }
+
+//             } else {
+//                 res.redirect(`/error`)
+//             }
+//         })
+//         .catch(err => {
+//             console.log('error')
+//             res.redirect(`/error?error=${err}`)
+//         })
+// })
+
+
+
+
 
 // GET -> Logout - /users/logout
 router.get('/logout', (req, res) => {
