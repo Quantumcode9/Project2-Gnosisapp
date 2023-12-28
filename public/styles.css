@@ -57,6 +57,7 @@ form {
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+    width: 50%;
 }
 
 form input[type='text'],
@@ -79,9 +80,10 @@ form button {
     
 }
 
-form button:hover {
+form .btn:hover {
     background: #0056b3; 
 }
+
 h1 {
     margin: 20px 0;
     font-size: 30px;
@@ -102,11 +104,39 @@ a {
         width: 100%;
         float: none;
     }
-
-
 }
 
+fieldset {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
 
+.form-control {
+    text-align: center;
+}
 
+.container-sm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+}
 
+.container-sm > * {
+    text-align: center;
+}
 
+.btn {
+    margin: 10px;
+    background: #007bff; 
+    color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 10px 15px;
+    margin-top: 10px;
+    width: 50%;
+
+}
