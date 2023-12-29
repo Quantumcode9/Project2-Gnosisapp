@@ -5,10 +5,12 @@ const MongoStore = require('connect-mongo') // connect-mongo(for the session)
 require('dotenv').config()
 const methodOverride = require('method-override') // for forms and CRUD
 const path = require('path');
+const cors = require('cors');
 
 
 
-//// Middleware Function      ///
+
+///  Middleware Function      ///
 const middleware = (app) => {
   
     app.use(methodOverride('_method'))
@@ -22,7 +24,7 @@ const middleware = (app) => {
     // to utilize json we can add this:
     app.use(express.json())
 
-
+    app.use(cors());
 
     app.use(session({
         secret: process.env.SECRET,

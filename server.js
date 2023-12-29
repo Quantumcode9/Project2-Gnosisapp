@@ -7,7 +7,7 @@ const mongoose = require('./utils/connection');
 
 
 const UserRouter = require('./controllers/userController')
-const ShowRouter = require('./controllers/ShowsController')
+const ShowRouter = require('./controllers/showsController')
 
 
 const app = express();
@@ -33,6 +33,36 @@ app.get('/', (req, res) => {
 
 app.use('/users', UserRouter);
 app.use('/shows', ShowRouter);
+
+
+// app.get('/shows/:genre', async (req, res) => {
+//   try {
+//     const genre = req.params.genre;
+//     const shows = await showsController.fetchShowsByGenre(genre);
+//     res.json(shows);
+//   } catch (error) {
+//     res.status(500).send('Error fetching shows');
+//   }
+// });
+
+app.get('/shows/:genre', async (req, res) => {
+  const genre = req.params.genre;
+
+  if (!genres.includes(genre)) {
+      return res.status(400).send('Invalid genre');
+  }
+
+  try {
+      // Replace this URL with the actual TVDB API endpoint for fetching shows by genre
+      const response = await axios.get(`https://api.thetvdb.com/shows?genre=${genre}`);
+      res.json(response.data);
+  } catch (error) {
+      console.error('Error fetching data:', error);
+      res.status(500).send('Failed to fetch shows');
+  }
+});
+
+
 
 
 

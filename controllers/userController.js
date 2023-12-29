@@ -4,6 +4,7 @@
 const express = require('express')
 const User = require('../models/user')
 const bcrypt = require('bcryptjs')
+require('dotenv').config()
 
 ///////////////////////
 //// Create Router ////
@@ -23,15 +24,11 @@ router.get('/signup', (req, res) => {
 // POST -> SignUp - /users/signup
 
 router.post('/signup', async (req, res) => {
-
-
     const newUser = req.body
-
-
     newUser.password = await bcrypt.hash(
         newUser.password, 
         await bcrypt.genSalt(10)
-    )
+    );
 
     // we can now create our user
     User.create(newUser)
@@ -47,20 +44,6 @@ router.post('/signup', async (req, res) => {
 })
 
 
-//GET -> Favorites - /users/favorites
-router.get('/favorites', async (req, res) => {
-    if (!req.session.userId) {
-        return res.redirect('/login'); // Redirect to login if not authenticated
-    }
-
-    try {
-        const user = await User.findById(req.session.userId).populate('favorites');
-        res.render('favorites', { favorites: user.favorites });
-    } catch (error) {
-        console.error(error);
-        res.redirect('/error');
-    }
-});
 
 
 
@@ -75,27 +58,49 @@ router.get('/login', (req, res) => {
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
-    try {
-        const user = await User.findOne({ username });
-        if (user) {
-            const result = await bcrypt.compare(password, user.password);
-            if (result) {
-                req.session.username = username;
-                req.session.loggedIn = true;
-                req.session.userId = user._id; // Use _id for MongoDB ObjectId
+    User.findOne({ username })
+        .then(async (user) => {
+            // if the user exists
+            if (user) {
+                const result = await bcrypt.compare(password, user.password);
 
-                res.redirect('/users/favorites.ejs');
-             } else {
-            res.redirect(`/error?error=Invalid credentials`);
+                if (result) {
+                    req.session.username = username;
+                    req.session.loggedIn = true;
+                    req.session.userId = user._id; // Use _id for MongoDB ObjectId
+
+                    res.redirect('/');
+                } else {
+                    res.redirect(`/error?error=Invalid credentials`);
+                }
+            } else {
+                res.redirect(`/error?error=User not found`);
             }
-        } else {
-            res.redirect(`/error?error=User not found`);
-        }
-    } catch (err) {
-        console.log('Login error:', err);
-        res.redirect(`/error?error=Server error`);
+        })
+        .catch(err => {
+            console.error('error', err); // Enhanced logging for debugging
+            res.redirect(`/error?error=${err}`);
+        });
+});
+
+//GET -> Favorites - /users/favorites
+router.get('favorites', async (req, res) => {
+    if (!req.session.userId) {
+        return res.redirect('/login'); // Redirect to login if not authenticated
+    }
+
+    try {
+        const user = await User.findById(req.session.userId).populate('favorites');
+        res.render('/users/favorites', { favorites: user.favorites });
+    } catch (error) {
+        console.error(error);
+        res.redirect('/error');
     }
 });
+
+
+module.exports = router;
+
 
 
 // POST -> Login
@@ -135,6 +140,8 @@ router.post('/login', async (req, res) => {
 //             res.redirect(`/error?error=${err}`)
 //         })
 // })
+
+
 
 
 
