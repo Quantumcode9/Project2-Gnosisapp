@@ -3,23 +3,14 @@ const axios = require('axios');
 const Show = require('../models/show');
 require('dotenv').config();
 
+
 const router = express.Router();
 const apiKey = process.env.TVDB_API_KEY; 
+const TMDB_API_KEY = process.env.APIKEY;
 
 
 
-const TVDBService = require('../utils/TVDBService');
 
-// Example: Fetch shows by genre
-async function fetchShowsByGenre(genre) {
-  try {
-    const shows = await TVDBService.searchShows({ genre });
-    console.log(shows);
-    // Process and use the shows data as needed
-  } catch (error) {
-    console.error('Failed to fetch shows:', error);
-  }
-}
 
 
 // const fetchSeriesData = async (seriesId) => {
@@ -46,60 +37,64 @@ async function fetchShowsByGenre(genre) {
 //     }
 // });
 
-router.get('/series/:id', async (req, res) => {
-    console.log("Series ID:", req.params.id); // Check the received series ID
-    try {
-        const seriesData = await fetchSeriesData(req.params.id);
-        console.log("Series Data:", seriesData); // Check the API response
-        res.render('series/seriesDetail', { series: seriesData });
-    } catch (error) {
-        console.error('Error fetching series:', error);
-        res.status(500).send('Error fetching series');
-    }
+router.get('/pages/browse', async (req, res) => {
+  console.log('Browse route hit');
 });
 
+// Fetch shows by genre
 
 router.get('/pages/browse', async (req, res) => {
-    // Fetch or define your data
-    const genres = ['Action', 'Adventure', 'Animation', 'Children', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Family', 'Fantasy', 'Food', 'Home and Garden', 'Horror', 'Mini-Series', 'Mystery', 'News', 'Reality', 'Romance', 'Sci-Fi', 'Sport', 'Suspense', 'Talk Show', 'Thriller', 'Travel'];
-    const data = await TVDBService.searchShows({ genre: genres });
-    const selectedGenre = req.query.genre;
+  try {
+    const genreResponse = await axios.get('https://api.themoviedb.org/3/genre/tv/list?language=en', {
+      headers: {
+        'Authorization': `Bearer ${TMDB_API_KEY}`,
+        'Accept': 'application/json'
+      }
+    });
+    console.log(genreResponse.data); // Log the response data
 
-    res.render('/pages/browse', {genres, selectedGenre: data }); // Render the EJS template with the data
+    const genres = genreResponse.data.genres; // Extract genres from the response
+    console.log(genres);
+    res.render('pages/browse', { genres }); // Pass genres to the EJS template
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error fetching genres');
+  }
 });
+////////////////
+router.get('/pages/browse', async (req, res) => {
+  console.log('Browse route hit');
+  res.send('Browse page'); // Send a response back
+});
+
+
+
+// Fetch popular TV shows
+router.get('/popular-shows', async (req, res) => {
+  try {
+    const response = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${TMDB_API_KEY}`);
+    res.render('popularShows', { shows: response.data.results });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error fetching popular TV shows');
+  }
+});
+
+// Fetch genres
+router.get('/genres', async (req, res) => {
+  try {
+    const response = await axios.get(`https://api.themoviedb.org/3/genre/tv/list?api_key=${TMDB_API_KEY}`);
+    res.render('genres', { genres: response.data.genres });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error fetching genres');
+  }
+});
+
 
 
 
 module.exports = router;
 
 
-
-
-
-
-
-
-
-
-
-
-// const showsController = {
-//   list: async (req, res) => {
-//     try {
-//       const shows = await Show.find(); // Fetch all shows from your database
-//       res.render('pages/shows', { shows: shows });
-//     } catch (error) {
-//       res.status(500).send(error);
-//     }
-//   },
-//   detail: async (req, res) => {
-//     try {
-//       const show = await Show.findById(req.params.id); // Fetch a single show by ID
-//       res.render('pages/showDetail', { show: show });
-//     } catch (error) {
-//       res.status(500).send(error);
-//     }
-//   }
-//   // Add more methods as needed
-// };
 

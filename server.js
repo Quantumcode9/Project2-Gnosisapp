@@ -3,6 +3,10 @@ require('dotenv').config();
 const express = require('express');
 const middleware = require('./utils/middleware');
 const mongoose = require('./utils/connection');
+const axios = require('axios');
+const TMDB_API_KEY = process.env.APIKEY;
+const apiKey = process.env.TVDB_API_KEY;
+
 
 
 
@@ -31,37 +35,55 @@ app.get('/', (req, res) => {
     res.render('pages/home', { username, loggedIn, userId })
 })
 
-app.use('/users', UserRouter);
-app.use('/shows', ShowRouter);
 
+app.get('/pages/browse', (req, res) => {
+  axios.get('https://api.themoviedb.org/3/genre/tv/list?language=en', {
+    headers: {
+      'Authorization': `Bearer ${TMDB_API_KEY}`,
+      'Accept': 'application/json'
+    }
+  })
+  .then(response => {
+    // Pass the genres to the EJS template
+    res.render('pages/browse', { genres: response.data.genres });
+  })
+  .catch(error => {
+    console.error(error); // Log the error
+    res.status(500).send('Error fetching genres');
+  });
+});
 
-// app.get('/shows/:genre', async (req, res) => {
-//   try {
-//     const genre = req.params.genre;
-//     const shows = await showsController.fetchShowsByGenre(genre);
-//     res.json(shows);
-//   } catch (error) {
-//     res.status(500).send('Error fetching shows');
-//   }
-// });
-
-app.get('/shows/:genre', async (req, res) => {
-  const genre = req.params.genre;
-
-  if (!genres.includes(genre)) {
-      return res.status(400).send('Invalid genre');
-  }
+//////////////////////////////
+app.get('/pages/genre/:genreId', async (req, res) => {
+  const genreId = req.params.genreId;
 
   try {
-      // Replace this URL with the actual TVDB API endpoint for fetching shows by genre
-      const response = await axios.get(`https://api.thetvdb.com/shows?genre=${genre}`);
-      res.json(response.data);
+    // Fetch TV shows from TMDb API based on the genreId
+    // This is an example URL, you'll need to use the correct API endpoint and parameters
+    const response = await axios.get(`https://api.themoviedb.org/3/discover/tv?with_genres=${genreId}&api_key=${TMDB_API_KEY}`);
+
+    // Render a template with the fetched TV shows
+    res.render('pages/genre', { shows: response.data.results });
   } catch (error) {
-      console.error('Error fetching data:', error);
-      res.status(500).send('Failed to fetch shows');
+    console.error(error);
+    res.status(500).send('Error fetching TV shows for the genre');
   }
 });
 
+
+// app.get('/pages/browse', (req, res) => {
+//     const { username, loggedIn, userId } = req.session
+
+
+
+//     res.render('pages/browse', {genres, selectedGenre}); // Render the EJS template with the data
+// })
+
+
+
+
+app.use('/users', UserRouter);
+app.use('/shows', ShowRouter);
 
 
 

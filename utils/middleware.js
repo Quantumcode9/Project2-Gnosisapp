@@ -26,14 +26,16 @@ const middleware = (app) => {
 
     app.use(cors());
 
+    app.set('view engine', 'ejs');
+
     app.use(session({
         secret: process.env.SECRET,
         resave: false,
         saveUninitialized: true,
         store: MongoStore.create({ mongoUrl: process.env.DATABASE_URL })
     }));
-
 }
+
 
 
 
