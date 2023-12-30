@@ -35,49 +35,66 @@ app.get('/', (req, res) => {
     res.render('pages/home', { username, loggedIn, userId })
 })
 
+//////////////////////////////
+//ADD TO CONTROLLER FILE//
+/////////////////////////////
+// Middleware to fetch genres
+app.use(async (req, res, next) => {
+  try {
+    const response = await axios.get('https://api.themoviedb.org/3/genre/tv/list?language=en', {
+      headers: {
+        'Authorization': `Bearer ${TMDB_API_KEY}`,
+        'Accept': 'application/json'
+      }
+    });
+    req.genres = response.data.genres; // Attach genres to the req object
+    next(); // Proceed to the next middleware/route handler
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error fetching genres');
+  }
+});
 
+// Route to render the 'browse' view
 app.get('/pages/browse', (req, res) => {
-  axios.get('https://api.themoviedb.org/3/genre/tv/list?language=en', {
+  res.render('pages/browse', { genres: req.genres }); // Use the genres from the req object
+});
+
+// Route to render the 'genre' view
+app.get('/pages/genre', (req, res) => {
+  res.render('pages/genre', { genres: req.genres }); // Use the genres from the req object
+});
+
+
+
+
+
+//////////////////////////////
+app.get('/pages/genre/:genreId', async (req, res) => {
+  const genreId = req.params.genreId; // Get the genre ID from the URL parameter
+
+  const url = `https://api.themoviedb.org/3/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=1&sort_by=popularity.desc&with_genres=${genreId}`;
+  const options = {
+    method: 'GET',
     headers: {
       'Authorization': `Bearer ${TMDB_API_KEY}`,
       'Accept': 'application/json'
     }
-  })
-  .then(response => {
-    // Pass the genres to the EJS template
-    res.render('pages/browse', { genres: response.data.genres });
-  })
-  .catch(error => {
-    console.error(error); // Log the error
-    res.status(500).send('Error fetching genres');
-  });
-});
-
-//////////////////////////////
-app.get('/pages/genre/:genreId', async (req, res) => {
-  const genreId = req.params.genreId;
+  };
 
   try {
-    // Fetch TV shows from TMDb API based on the genreId
-    // This is an example URL, you'll need to use the correct API endpoint and parameters
-    const response = await axios.get(`https://api.themoviedb.org/3/discover/tv?with_genres=${genreId}&api_key=${TMDB_API_KEY}`);
-
+    const response = await axios(url, options);
     // Render a template with the fetched TV shows
-    res.render('pages/genre', { shows: response.data.results });
+    res.render('pages/genre', { shows: response.data.results, });
   } catch (error) {
     console.error(error);
     res.status(500).send('Error fetching TV shows for the genre');
   }
 });
 
-
-// app.get('/pages/browse', (req, res) => {
-//     const { username, loggedIn, userId } = req.session
+//////////////////////////////
 
 
-
-//     res.render('pages/browse', {genres, selectedGenre}); // Render the EJS template with the data
-// })
 
 
 

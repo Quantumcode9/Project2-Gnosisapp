@@ -142,3 +142,38 @@ fieldset {
     width: 50%;
 
 }
+
+.show-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 20px;
+
+  }
+
+.show img {
+    max-width: 100%;
+    height: auto;
+    margin: 20px;
+    border-radius: 8px;
+    
+  }
+  
+  @media (min-width: 600px) {
+    .show img {
+      max-width: 200px;
+    }
+  }
+
+    .show {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        margin: 20px;
+    }
+
+

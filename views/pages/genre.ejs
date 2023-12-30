@@ -1,17 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <title>Genre</title>
+    <link rel="stylesheet" href="/styles.css">
   <!-- ... Head elements ... -->
 </head>
 <body>
-  <h1>TV Shows</h1>
+    <h1>TV Shows </h1>
   <div class="show-list">
     <% shows.forEach(show => { %>
       <div class="show">
         <h2><%= show.name %></h2>
-        <!-- More details here -->
+        <!-- Check if the show has a poster image -->
+        <% if (show.poster_path) { %>
+          <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
+        <% } else { %>
+          <p>No image available.</p>
+        <% } %>
+        <p><%= show.vote_average %> / 10</p>
+        <p><%= show.vote_count %> votes</p>
+        <div class="add">
+        <button onclick="addToFavorites('<%= show.id %>')">Add to Favorites</button><br>
+      <button onclick="addToWatchList('<%= show.id %>')">Add to Watch List</button><br>
+      <button onclick="addToWatched('<%= show.id %>')">Add to Watched</button>
+        <!-- Additional show details -->
       </div>
+        </div>
+
     <% }); %>
   </div>
-</body>
-</html>
