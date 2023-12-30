@@ -127,6 +127,32 @@ app.post('/add-to-favorites', async (req, res) => {
   }
 });
 
+// Fetch recommendations
+
+app.get('/get-recommendations/:showId', async (req, res) => {
+  const showId = req.params.showId;
+  const url = `https://api.themoviedb.org/3/tv/${showId}/recommendations?language=en-US&page=1`;
+
+  const options = {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${TMDB_API_KEY}`,
+      'Accept': 'application/json'
+    }
+  };
+
+  try {
+    const apiResponse = await fetch(url, options);
+    const jsonResponse = await apiResponse.json();
+    res.json(jsonResponse.results.slice(0, 3)); // Send top 3 recommendations
+  } catch (error) {
+    console.error('Error fetching recommendations:', error);
+    res.status(500).send('Error fetching recommendations');
+  }
+});
+
+
+
 
 /////////////////////////////////////////
 // routes
