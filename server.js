@@ -6,18 +6,27 @@ const mongoose = require('./utils/connection');
 const axios = require('axios');
 const TMDB_API_KEY = process.env.APIKEY;
 const apiKey = process.env.TVDB_API_KEY;
-
-
-
+const User = require('./models/user');
 
 const UserRouter = require('./controllers/userController')
-const ShowRouter = require('./controllers/showsController')
-
+const ShowRouter = require('./controllers/showsController');
+const Show = require('./models/show');
 
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 
+app.use(express.json());
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(express.static('public'));
+
+//middleware error handling
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
 
 
 // EJS view engine
@@ -26,7 +35,6 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Middleware for static files
 middleware(app)
-
 
 
 app.get('/', (req, res) => {
@@ -66,9 +74,6 @@ app.get('/pages/genre', (req, res) => {
 });
 
 
-
-
-
 //////////////////////////////
 app.get('/pages/genre/:genreId', async (req, res) => {
   const genreId = req.params.genreId; // Get the genre ID from the URL parameter
@@ -94,11 +99,37 @@ app.get('/pages/genre/:genreId', async (req, res) => {
 
 //////////////////////////////
 
+//add to favorites
+
+app.post('/add-to-favorites', async (req, res) => {
+  const { showId } = req.body;
+  const userId = req.session.userId; 
+
+  try {
+    const user = await User.findById(userId);
+
+    if (user) {
+      // Add showId to the user's favorites, avoiding duplicates
+      if (!user.favorites.includes(showId)) {
+        user.favorites.push(showId);
+        await user.save();
+        res.json({ message: 'Show added to favorites' });
+      } else {
+        // Handle the case where the show is already in the favorites
+        res.json({ message: 'Show is already in favorites' });
+      }
+    } else {
+      res.status(404).send('User not found');
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error processing request');
+  }
+});
 
 
-
-
-
+/////////////////////////////////////////
+// routes
 app.use('/users', UserRouter);
 app.use('/shows', ShowRouter);
 

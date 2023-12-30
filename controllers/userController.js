@@ -98,8 +98,9 @@ router.get('favorites', async (req, res) => {
     }
 });
 
-
+console.log('userController.js is connected')
 module.exports = router;
+
 
 
 
@@ -163,4 +164,3 @@ router.delete('/logout', (req, res) => {
 ///////////////////////
 //// Export Router ////
 ///////////////////////
-module.exports = router;

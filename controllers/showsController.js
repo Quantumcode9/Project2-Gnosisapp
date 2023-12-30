@@ -63,7 +63,7 @@ router.get('/popular-shows', async (req, res) => {
 // });
 
 
-
+console.log('showController is connected')
 module.exports = router;
 
 

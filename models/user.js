@@ -13,27 +13,21 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  genrePreferences: [{
-    type: String
-  }],
-  favorites: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Show'
-  }],
-  watched: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Show'
-  }],
-  wantToWatch: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Show'
-  }]
-});
 
+  // genrePreferences: [{
+  //   type: String
+  // }],
+  favorites: [String],
+  watched:[String],
+   wantToWatch: [String]
+});
 
 const User = mongoose.model('User', userSchema);
 
+
 module.exports = User;
+
+
 
 
 
