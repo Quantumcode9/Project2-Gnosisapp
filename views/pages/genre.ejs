@@ -20,14 +20,11 @@
         <% } else { %>
           <p>No image available.</p>
         <% } %>
-        <h2><%= show.name %></h2>
-        <p><%= show.vote_average %> /10  <span><%= show.vote_count %> votes</p></span>
-        <div class="add">
-        <button onclick="addToFavorites('<%= show.id %>')">Add to Favorites</button><br>
-      <button onclick="addToWatchList('<%= show.id %>')">Add to Watch List</button><br>
-      <button onclick="addToWatched('<%= show.id %>')">Add to Watched</button><br>
-        <!-- Additional show details -->
-      </div>
+        <div class="show-icons">
+            <img src="/images/Favorites.png" alt="Add to Favorites" onclick="addToFavorites('<%= show.id %>')" class="icon">
+            <img src="/images/Watching.png" alt="Add to Watch List" onclick="addToWatchList('<%= show.id %>')" class="icon">
+            <img src="/images/Watched.png" alt="Add to Watched" onclick="addToWatched('<%= show.id %>')" class="icon">
+          </div>
         </div>
       <div id="recommendations-container"></div>
     <% }); %>

@@ -1,6 +1,14 @@
 
 
 document.addEventListener('click', function(event) {
+  if (event.target.matches('.add-to-watched-btn')) {
+    const showId = event.target.getAttribute('data-show-id');
+    openRatingModal(showId);
+  }
+});
+
+
+document.addEventListener('click', function(event) {
   if (event.target.matches('.add-to-favorites-btn')) {
     const showId = event.target.getAttribute('data-show-id');
     addToFavorites(showId);
@@ -14,6 +22,16 @@ document.addEventListener('click', function(event) {
     closeRatingModal();
   }
 });
+
+
+// document.addEventListener('click', function(event) {
+//   if (event.target.matches('.add-to-watched-btn')) {
+//     const showId = event.target.getAttribute('data-show-id');
+//     openRatingModal(showId);
+//   } else if (event.target.matches('.close') || event.target.matches('#submitRating')) {
+//     closeRatingModal();
+//   }
+// });
 
 
 // STAR RATING
@@ -39,19 +57,10 @@ function highlightStars(rating) {
 
 //RATING MODAL
 
-document.addEventListener('click', function(event) {
-  if (event.target.matches('.add-to-watched-btn')) {
-    const showId = event.target.getAttribute('data-show-id');
-    openRatingModal(showId);
-  } else if (event.target.matches('.close') || event.target.matches('#submitRating')) {
-    closeRatingModal();
-  }
-});
 
 function addToWatched(showId) {
   openRatingModal(showId);  // Open the rating modal when a show is marked as watched
 }
-
 
 function openRatingModal(showId) {
   const modal = document.getElementById('ratingModal');
@@ -71,7 +80,7 @@ function openRatingModal(showId) {
     ratingOptions.appendChild(star);
   }
 
-  modal.dataset.showId = showId; // Associate showId with the modal
+  modal.dataset.showId = showId; // Show the modal
   modal.style.display = 'block';
 }
 
@@ -79,6 +88,8 @@ function closeRatingModal() {
   const modal = document.getElementById('ratingModal');
   modal.style.display = 'none';
 }
+
+document.querySelector('.close').addEventListener('click', closeRatingModal);
 
 // Submit rating
 

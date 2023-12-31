@@ -154,7 +154,7 @@ fieldset {
   }
 
 .show img {
-    max-width: 100%;
+    max-width: 60%;
     height: auto;
     margin: 20px;
     border-radius: 8px;
@@ -168,6 +168,7 @@ fieldset {
   }
 
     .show {
+        position: relative;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -192,7 +193,7 @@ fieldset {
       }
       
       .recommendation-poster {
-        max-width: 100%;
+        max-width: 60%;
         height: auto;
         border-radius: 8px;
       }
@@ -210,23 +211,23 @@ fieldset {
       /* MODAL */
 
       .modal {
-        display: none;
-        position: fixed;
-        z-index: 1;
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
         left: 0;
         top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0,0,0,0.4);
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
       }
       
       .modal-content {
         background-color: #fefefe;
-        margin: 15% auto;
+        margin: 15% auto; /* 15% from the top and centered */
         padding: 20px;
         border: 1px solid #888;
-        width: 80%;
+        width: 80%; /* Could be more or less, depending on screen size */
       }
       
       .close {
@@ -242,7 +243,6 @@ fieldset {
         text-decoration: none;
         cursor: pointer;
       }
-      
 
 
       .star {
@@ -251,7 +251,39 @@ fieldset {
         color: gold;
       }
       
-      /* Style for half-stars if using characters */
+      /* Style for half-stars  */
       .half-star::after {
         content: '\u2606'; /* Unicode character for half-star */
+      }
+
+      .show-icons {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        max-width: 100%;
+        height: auto;
+        margin: 20px;
+        border-radius: 8px;
+    
+        display: flex;
+        justify-content: space-evenly; 
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+        padding: 5px;
+        visibility: hidden;
+        transition: ease-in-out 0.1s;
+      }
+
+      .show:hover .show-icons {
+        opacity: 1;
+        visibility: visible;
+        transition: ease-in-out 0.1s;
+      }
+
+
+      .icon {
+        cursor: pointer;
+        width: 30px; 
+        height: auto;
       }

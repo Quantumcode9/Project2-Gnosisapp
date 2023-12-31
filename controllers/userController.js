@@ -102,23 +102,7 @@ console.log('userController.js is connected')
 module.exports = router;
 
 
-router.post('/add-rated-show', async (req, res) => {
-    const { showId, rating } = req.body;
-    const userId = req.session.userId;
-  
-    try {
-      const user = await User.findById(userId);
-      if (user) {
-        // Add logic to update user's schema with the rated show
-        res.json({ message: 'Show rating added' });
-      } else {
-        res.status(404).send('User not found');
-      }
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Error processing request');
-    }
-  });
+
 
 
 
