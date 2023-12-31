@@ -19,7 +19,11 @@ const userSchema = new mongoose.Schema({
   // }],
   favorites: [String],
   watched:[String],
-   wantToWatch: [String]
+   wantToWatch: [String],
+   ratedShows: [{
+    showId: String,
+    rating: Number,
+  }], 
 });
 
 const User = mongoose.model('User', userSchema);

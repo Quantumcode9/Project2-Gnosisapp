@@ -1,5 +1,109 @@
 
 
+document.addEventListener('click', function(event) {
+  if (event.target.matches('.add-to-favorites-btn')) {
+    const showId = event.target.getAttribute('data-show-id');
+    addToFavorites(showId);
+  } else if (event.target.matches('.add-to-watchlist-btn')) {
+    const showId = event.target.getAttribute('data-show-id');
+    addToWatchList(showId);
+  } else if (event.target.matches('.add-to-watched-btn')) {
+    const showId = event.target.getAttribute('data-show-id');
+    addToWatched(showId);
+  } else if (event.target.matches('.close') || event.target.matches('#submitRating')) {
+    closeRatingModal();
+  }
+});
+
+
+// STAR RATING
+
+document.getElementById('ratingOptions').addEventListener('click', function(event) {
+  if (event.target.matches('.star')) {
+    const selectedRating = event.target.dataset.value;
+    highlightStars(selectedRating);
+  }
+});
+
+function highlightStars(rating) {
+  const stars = document.querySelectorAll('#ratingOptions .star');
+  stars.forEach(star => {
+    star.style.color = star.dataset.value <= rating ? 'gold' : 'grey';
+  });
+
+  // Save the rating in the modal dataset for submission
+  const modal = document.getElementById('ratingModal');
+  modal.dataset.rating = rating;
+}
+
+
+//RATING MODAL
+
+document.addEventListener('click', function(event) {
+  if (event.target.matches('.add-to-watched-btn')) {
+    const showId = event.target.getAttribute('data-show-id');
+    openRatingModal(showId);
+  } else if (event.target.matches('.close') || event.target.matches('#submitRating')) {
+    closeRatingModal();
+  }
+});
+
+function addToWatched(showId) {
+  openRatingModal(showId);  // Open the rating modal when a show is marked as watched
+}
+
+
+function openRatingModal(showId) {
+  const modal = document.getElementById('ratingModal');
+  if (!modal) {
+    console.error('Rating modal not found');
+    return;
+  }
+
+  const ratingOptions = document.getElementById('ratingOptions');
+
+  ratingOptions.innerHTML = ''; // Clear previous stars
+  for (let i = 1; i <= 10; i++) {
+    const star = document.createElement('span');
+    star.className = 'star';
+    star.dataset.value = i; // 1-10 for half-star increments
+    star.innerHTML = i % 2 === 0 ? '&#9733;' : '&#9734;';
+    ratingOptions.appendChild(star);
+  }
+
+  modal.dataset.showId = showId; // Associate showId with the modal
+  modal.style.display = 'block';
+}
+
+function closeRatingModal() {
+  const modal = document.getElementById('ratingModal');
+  modal.style.display = 'none';
+}
+
+// Submit rating
+
+document.getElementById('submitRating').addEventListener('click', function() {
+  const modal = document.getElementById('ratingModal');
+  const showId = modal.dataset.showId;
+  const rating = modal.dataset.rating;
+
+  fetch('/add-rated-show', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ showId: showId, rating: rating }),
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log(data);
+    closeRatingModal();
+  })
+  .catch(error => console.error('Error:', error));
+});
+
+
+// Add to favorites
 
 function addToFavorites(showId) {
   fetch('/add-to-favorites', {
@@ -9,20 +113,7 @@ function addToFavorites(showId) {
     },
     body: JSON.stringify({ showId: showId })
   })
-//   .then(response => {
-//     if (!response.ok) {
-//       throw new Error(`HTTP error! Status: ${response.status}`);
-//     }
-//     return response.json();
-//   })
-//   .then(data => {
-//     // Handle response
-//     console.log(data);
-//   })
-//   .catch(error => {
-//     console.error('Error:', error);
-//   });
-// }
+
 .then(response => response.json())
 .then(data => {
   if(data.message === 'Show added to favorites') {
@@ -40,32 +131,46 @@ function fetchRecommendations(showId) {
   fetch(`/get-recommendations/${showId}`)
     .then(response => response.json())
     .then(recommendations => {
-      displayRecommendations(recommendations); // Function to update the DOM with recommendations
+      displayRecommendations(showId, recommendations);
     })
     .catch(error => console.error('Error fetching recommendations:', error));
 }
 
 
-
 // Display recommendations
 
-function displayRecommendations(recommendations) {
-  const recommendationsContainer = document.getElementById('recommendations-container');
-  recommendationsContainer.innerHTML = ''; // Clear previous recommendations
-  recommendationsContainer.style.display = 'flex';
+function displayRecommendations(showId, recommendations) {
+  let recommendationsContainer = document.getElementById(`recommendations_${showId}`);
+  
+  // If the container doesn't exist, create it and place it after the selected show
+  if (!recommendationsContainer) {
+    recommendationsContainer = document.createElement('div');
+    recommendationsContainer.id = `recommendations_${showId}`;
+    recommendationsContainer.className = 'recommendations-container';
+    
+    const showElement = document.getElementById(`show_${showId}`);
+    showElement.after(recommendationsContainer);
+  }
+
+  // Clear previous recommendations
+  recommendationsContainer.innerHTML = '';
 
   recommendations.forEach(show => {
-    // Create HTML elements for each recommendation and append to the container
-    const showElement = document.createElement('div');
-    showElement.innerHTML = `
-    <img src="https://image.tmdb.org/t/p/w200${show.poster_path}" alt="${show.name}" class="recommendation-poster">
-    <h3>${show.name}</h3>
-    <button onclick="addToFavorites('${show.id}')">Add to Favorites</button>
-    <button onclick="addToWatchList('${show.id}')">Add to Watch List</button>
-    <button onclick="addToWatched('${show.id}')">Add to Watched</button>
-  `;
-    
-    // `<h3>${show.name}</h3>`;
-    recommendationsContainer.appendChild(showElement);
+    const recommendationElement = document.createElement('div');
+    recommendationElement.className = 'recommendation';
+    recommendationElement.innerHTML = `
+      <img src="https://image.tmdb.org/t/p/w200${show.poster_path}" alt="${show.name}" class="recommendation-poster">
+      <h3>${show.name}</h3>
+      <button class="add-to-favorites-btn" data-show-id="${show.id}">Add to Favorites</button>
+      <button class="add-to-watchlist-btn" data-show-id="${show.id}">Add to Watch List</button>
+      <button class="add-to-watched-btn" data-show-id="${show.id}">Add to Watched</button>
+    `;
+    recommendationsContainer.appendChild(recommendationElement);
   });
 }
+
+
+
+
+
+

@@ -12,26 +12,35 @@
 </h1>
   <div class="show-list">
     <% shows.forEach(show => { %>
-      <div class="show">
-        <h2><%= show.name %></h2>
+        
+        <div id="show_<%= show.id %>" class="show">
         <!-- Check if the show has a poster image -->
         <% if (show.poster_path) { %>
           <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
         <% } else { %>
           <p>No image available.</p>
         <% } %>
-        <p><%= show.vote_average %> / 10</p>
-        <p><%= show.vote_count %> votes</p>
+        <h2><%= show.name %></h2>
+        <p><%= show.vote_average %> /10  <span><%= show.vote_count %> votes</p></span>
         <div class="add">
         <button onclick="addToFavorites('<%= show.id %>')">Add to Favorites</button><br>
       <button onclick="addToWatchList('<%= show.id %>')">Add to Watch List</button><br>
       <button onclick="addToWatched('<%= show.id %>')">Add to Watched</button><br>
         <!-- Additional show details -->
       </div>
-      <div id="recommendations-container"></div>
         </div>
+      <div id="recommendations-container"></div>
     <% }); %>
     <!-- back button redirect to browse -->
+    <div id="ratingModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>Rate the Show</h2>
+          <div id="ratingOptions"> 
+          </div>
+          <button id="submitRating">Submit Rating</button>
+        </div>
+      </div>
 
 
   </div>
