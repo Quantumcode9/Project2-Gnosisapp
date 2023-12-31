@@ -171,10 +171,11 @@ function displayRecommendations(showId, recommendations) {
     recommendationElement.className = 'recommendation';
     recommendationElement.innerHTML = `
       <img src="https://image.tmdb.org/t/p/w200${show.poster_path}" alt="${show.name}" class="recommendation-poster">
-      <h3>${show.name}</h3>
-      <button class="add-to-favorites-btn" data-show-id="${show.id}">Add to Favorites</button>
-      <button class="add-to-watchlist-btn" data-show-id="${show.id}">Add to Watch List</button>
-      <button class="add-to-watched-btn" data-show-id="${show.id}">Add to Watched</button>
+      <div class="recommendation-buttons">
+      <img src="/images/Favorites.png" alt="Add to Favorites" onclick="addToFavorites('${show.id}')" class="icon">
+      <img src="/images/Watching.png" alt="Add to Watch List" onclick="addToWatchList('${show.id}')" class="icon">
+      <img src="/images/Watched.png" alt="Add to Watched" onclick="addToWatched('${show.id}')" class="icon">
+    </div>
     `;
     recommendationsContainer.appendChild(recommendationElement);
   });

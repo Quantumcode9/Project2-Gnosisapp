@@ -142,6 +142,8 @@ fieldset {
     width: 50%;
 
 }
+/* Show Title */
+
 
 .show-list {
     display: flex;
@@ -186,16 +188,42 @@ fieldset {
       }
       
       .recommendation {
-        margin: 10px;
+        position: relative;
+        display: flex;
+        margin: 2px;
+        /*   margin: 10px;
         padding: 10px;
         border: 1px solid #ddd;
         text-align: center;
+         */
       }
       
       .recommendation-poster {
-        max-width: 60%;
+        max-width: 80%;
         height: auto;
         border-radius: 8px;
+      }
+
+      .recommendation .recommendation-buttons {
+        opacity: 0;
+        visibility: hidden;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 10px;
+    
+        width: 80%;
+        display: flex;
+        justify-content: center;
+        justify-content: space-evenly;
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 1px;
+        transition: ease-in-out 0.1s;
+      }
+
+      .recommendation:hover .recommendation-buttons {
+        opacity: 1;
+        visibility: visible;
       }
 
 
@@ -287,3 +315,8 @@ fieldset {
         width: 30px; 
         height: auto;
       }
+
+        .icon:hover {
+            transform: scale(1.5);
+            transition: ease-in-out 0.1s;
+        }
