@@ -177,3 +177,22 @@ fieldset {
     }
 
 
+    .recommendations-container {
+        margin-top: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .recommendation {
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: center;
+      }
+      
+      .recommendation-poster {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+      }

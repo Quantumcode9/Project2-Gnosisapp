@@ -52,11 +52,20 @@ function fetchRecommendations(showId) {
 function displayRecommendations(recommendations) {
   const recommendationsContainer = document.getElementById('recommendations-container');
   recommendationsContainer.innerHTML = ''; // Clear previous recommendations
+  recommendationsContainer.style.display = 'flex';
 
   recommendations.forEach(show => {
     // Create HTML elements for each recommendation and append to the container
     const showElement = document.createElement('div');
-    showElement.innerHTML = `<h3>${show.name}</h3>`;
+    showElement.innerHTML = `
+    <img src="https://image.tmdb.org/t/p/w200${show.poster_path}" alt="${show.name}" class="recommendation-poster">
+    <h3>${show.name}</h3>
+    <button onclick="addToFavorites('${show.id}')">Add to Favorites</button>
+    <button onclick="addToWatchList('${show.id}')">Add to Watch List</button>
+    <button onclick="addToWatched('${show.id}')">Add to Watched</button>
+  `;
+    
+    // `<h3>${show.name}</h3>`;
     recommendationsContainer.appendChild(showElement);
   });
 }
