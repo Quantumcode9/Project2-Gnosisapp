@@ -1,0 +1,13 @@
+<%- include('../partials/header') %>
+
+<h1>Hub</h1>
+<div class="shows-container">
+    <% shows.forEach(show => { %>
+        <div class="show">
+            <!-- Display show details -->
+            <h2><%= show.name %></h2>
+            <p>Air Date: <%= show.airDate %></p>
+            <!-- other details -->
+        </div>
+    <% }); %>
+</div>

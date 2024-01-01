@@ -1,20 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My Favorites</title>
-    <link rel="stylesheet" href="/css/style.css">
-</head>
+<%- include('../partials/header') %>
 <body>
-    <div class="container">
-        <h1>Favorite Shows</h1>
-        <ul>
-            <% favorites.forEach(show => { %>
-                <li><%= show.title %></li> <!-- Display show title -->
-                <!-- Add more show details as needed -->
-            <% }) %>
-        </ul>
+    <h1>Your Favorite Shows</h1>
+    <div class="show-list">
+        <% favorites.forEach(show => { %>
+            <div class="show">
+                <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
+                <h3><%= show.name %></h3>
+                <!-- Other show details -->
+            </div>
+        <% }); %>
     </div>
-    <script src="/script.js"></script>
 </body>
 </html>
 

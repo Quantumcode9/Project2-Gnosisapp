@@ -171,6 +171,23 @@ app.post('/add-rated-show', async (req, res) => {
 });
 
 
+//Favorites Page
+
+app.get('/users/favorites', async (req, res) => {
+  try {
+      const userId = req.session.userId; // Or however you store the logged-in user's ID
+      const user = await User.findById(userId).populate('favorites'); // Assuming 'favorites' is stored in User schema
+      
+      if (!user) {
+          return res.status(404).send('User not found');
+      }
+
+      res.render('users/favorites', { favorites: user.favorites }); // Render the EJS template with favorites data
+  } catch (error) {
+      console.error(error);
+      res.status(500).send('Error retrieving favorites');
+  }
+});
 
 
 

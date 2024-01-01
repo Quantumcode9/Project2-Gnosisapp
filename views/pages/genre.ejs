@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <title>Genre</title>
     <link rel="stylesheet" href="/styles.css">
+    <%- include('../partials/navbar.ejs') %>
   <!-- ... Head elements ... -->
 </head>
 <body>
     <h1>TV Shows <br>
     <button onclick="window.location.href='/pages/browse'">Back</button>
+    <button onclick="window.location.href='/hub';">Go to Hub</button>
 </h1>
   <div class="show-list">
     <% shows.forEach(show => { %>
@@ -38,8 +40,6 @@
           <button id="submitRating">Submit Rating</button>
         </div>
       </div>
-
-
   </div>
     <script src="/script.js"></script>
 
