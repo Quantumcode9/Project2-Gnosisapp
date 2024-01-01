@@ -31,13 +31,6 @@ router.get('/pages/browse', async (req, res) => {
   }
 });
 
-// Fetch shows by genre
-
-
-
-
-
-
 
 // Fetch popular TV shows
 router.get('/popular-shows', async (req, res) => {
@@ -48,7 +41,12 @@ router.get('/popular-shows', async (req, res) => {
     console.error(error);
     res.status(500).send('Error fetching popular TV shows');
   }
-});
+})
+
+console.log('showController is connected')
+module.exports = router;
+
+
 
 
 // // Fetch genres
@@ -59,12 +57,7 @@ router.get('/popular-shows', async (req, res) => {
 //   } catch (error) {
 //     console.error(error);
 //     res.status(500).send('Error fetching genres');
-//   }
-// });
 
-
-console.log('showController is connected')
-module.exports = router;
 
 
 

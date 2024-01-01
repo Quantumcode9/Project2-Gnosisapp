@@ -44,10 +44,6 @@ router.post('/signup', async (req, res) => {
 })
 
 
-
-
-
-
 // GET -> Login -> /users/login
 router.get('/login', (req, res) => {
     const { username, loggedIn, userId } = req.session
@@ -83,23 +79,41 @@ router.post('/login', async (req, res) => {
         });
 });
 
-//GET -> Favorites - /users/favorites
-router.get('favorites', async (req, res) => {
-    if (!req.session.userId) {
-        return res.redirect('/login'); // Redirect to login if not authenticated
-    }
 
-    try {
-        const user = await User.findById(req.session.userId).populate('favorites');
-        res.render('/users/favorites', { favorites: user.favorites });
-    } catch (error) {
-        console.error(error);
-        res.redirect('/error');
-    }
-});
+
+// GET -> Logout - /users/logout
+router.get('/logout', (req, res) => {
+    const { username, loggedIn, userId } = req.session
+
+    res.render('users/logout', { username, loggedIn, userId })
+})
+// DELETE -> Logout
+router.delete('/logout', (req, res) => {
+    req.session.destroy(() => {
+        res.redirect('/')
+    })
+})
+
+
+
+exports.getFavorites = (req, res) => {
+  User.findById(req.user.id)
+    .populate('favorites') // Assuming 'favorites' is the field that holds the IDs of the favorite shows
+    .then(user => {
+      res.render('users/favorites', { favorites: user.favorites });
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).send('An error occurred while trying to fetch favorites');
+    });
+};
+
 
 console.log('userController.js is connected')
 module.exports = router;
+
+
+
 
 
 
@@ -150,18 +164,7 @@ module.exports = router;
 
 
 
-// GET -> Logout - /users/logout
-router.get('/logout', (req, res) => {
-    const { username, loggedIn, userId } = req.session
 
-    res.render('users/logout', { username, loggedIn, userId })
-})
-// DELETE -> Logout
-router.delete('/logout', (req, res) => {
-    req.session.destroy(() => {
-        res.redirect('/')
-    })
-})
 
 ///////////////////////
 //// Export Router ////

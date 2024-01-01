@@ -1,47 +1,41 @@
 const path = require('path');
 require('dotenv').config();
 const express = require('express');
-const middleware = require('./utils/middleware');
 const mongoose = require('./utils/connection');
 const axios = require('axios');
 const TMDB_API_KEY = process.env.APIKEY;
-const apiKey = process.env.TVDB_API_KEY;
-const User = require('./models/user');
 
-const UserRouter = require('./controllers/userController')
+const UserRouter = require('./controllers/userController');
 const ShowRouter = require('./controllers/showsController');
-const Show = require('./models/show');
+const { addShowToFavorites } = require('./services/showService');
+const User = require('./models/user');
+const middleware = require('./utils/middleware');
 
 const app = express();
 
+// Express body parser
 app.use(express.urlencoded({ extended: true }));
-
 app.use(express.json());
 
+// Static files
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use(express.static('public'));
-
-//middleware error handling
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
-});
-
 
 // EJS view engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Middleware for static files
+const Show = require('./models/show');
+
+// Middleware 
 middleware(app)
 
 
+// Home route
 app.get('/', (req, res) => {
-    const { username, loggedIn, userId } = req.session
-    // res.send('the app is connected')
-    res.render('pages/home', { username, loggedIn, userId })
-})
+  const { username, loggedIn, userId } = req.session;
+  res.render('pages/home', { username, loggedIn, userId });
+});
+
 
 //////////////////////////////
 //ADD TO CONTROLLER FILE//
@@ -63,16 +57,19 @@ app.use(async (req, res, next) => {
   }
 });
 
-// Route to render the 'browse' view
+// Routes
+app.use('/users', UserRouter);
+app.use('/shows', ShowRouter);
+
+
+// Genre routes
 app.get('/pages/browse', (req, res) => {
-  res.render('pages/browse', { genres: req.genres }); // Use the genres from the req object
+  res.render('pages/browse', { genres: req.genres });
 });
 
-// Route to render the 'genre' view
 app.get('/pages/genre', (req, res) => {
-  res.render('pages/genre', { genres: req.genres }); // Use the genres from the req object
+  res.render('pages/genre', { genres: req.genres });
 });
-
 
 //////////////////////////////
 app.get('/pages/genre/:genreId', async (req, res) => {
@@ -99,28 +96,44 @@ app.get('/pages/genre/:genreId', async (req, res) => {
 
 //////////////////////////////
 
-//add to favorites
 
+//add to favorites
+// const { addShowToFavorites } = require('./services/showService');
+
+// app.post('/add-to-favorites', async (req, res) => {
+//   const { showId } = req.body;
+//   const userId = req.session.userId; 
+
+//   try {
+//     const user = await User.findById(userId);
+
+//     if (user) {
+//       // Add showId to the user's favorites, avoiding duplicates
+//       if (!user.favorites.includes(showId)) {
+//         user.favorites.push(showId);
+//         await user.save();
+//         res.json({ message: 'Show added to favorites' });
+//       } else {
+//         // Handle the case where the show is already in the favorites
+//         res.json({ message: 'Show is already in favorites' });
+//       }
+//     } else {
+//       res.status(404).send('User not found');
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send('Error processing request');
+//   }
+// });
+
+// Add to favorites
 app.post('/add-to-favorites', async (req, res) => {
   const { showId } = req.body;
   const userId = req.session.userId; 
 
   try {
-    const user = await User.findById(userId);
-
-    if (user) {
-      // Add showId to the user's favorites, avoiding duplicates
-      if (!user.favorites.includes(showId)) {
-        user.favorites.push(showId);
-        await user.save();
-        res.json({ message: 'Show added to favorites' });
-      } else {
-        // Handle the case where the show is already in the favorites
-        res.json({ message: 'Show is already in favorites' });
-      }
-    } else {
-      res.status(404).send('User not found');
-    }
+    const result = await addShowToFavorites(userId, showId);
+    res.json(result);
   } catch (error) {
     console.error(error);
     res.status(500).send('Error processing request');
@@ -174,27 +187,25 @@ app.post('/add-rated-show', async (req, res) => {
 //Favorites Page
 
 app.get('/users/favorites', async (req, res) => {
-  try {
-      const userId = req.session.userId; // Or however you store the logged-in user's ID
-      const user = await User.findById(userId).populate('favorites'); // Assuming 'favorites' is stored in User schema
-      
-      if (!user) {
+ try {
+const userId = req.session.userId; // Or however you store the logged-in user's ID
+       const user = await User.findById(userId).populate('favorites'); 
+     
+      console.log(user.favorites); // Log to check the data
+
+     if (!user) {
           return res.status(404).send('User not found');
       }
-
-      res.render('users/favorites', { favorites: user.favorites }); // Render the EJS template with favorites data
-  } catch (error) {
+       res.render('users/favorites', { favorites: user.favorites }); // Render the EJS template with favorites data
+   } catch (error) {
       console.error(error);
-      res.status(500).send('Error retrieving favorites');
-  }
-});
+       res.status(500).send('Error retrieving favorites');
+   }
+   });
 
 
 
 /////////////////////////////////////////
-// routes
-app.use('/users', UserRouter);
-app.use('/shows', ShowRouter);
 
 
 
@@ -213,4 +224,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 
-
+module.exports = app;

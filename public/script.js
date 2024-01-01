@@ -114,6 +114,7 @@ document.getElementById('submitRating').addEventListener('click', function() {
 });
 
 
+
 // Add to favorites
 
 function addToFavorites(showId) {
@@ -122,7 +123,12 @@ function addToFavorites(showId) {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ showId: showId })
+    body: JSON.stringify({
+      showId: show.id, // Assuming show.id is the showId
+      title: show.title,
+      description: show.description,
+      genre: show.genre // Make sure genre is formatted as required by your backend
+    })
   })
 
 .then(response => response.json())

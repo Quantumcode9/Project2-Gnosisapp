@@ -13,18 +13,17 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-
-  // genrePreferences: [{
-  //   type: String
-  // }],
-  favorites: [String],
-  watched:[String],
-   wantToWatch: [String],
-   ratedShows: [{
-    showId: String,
-    rating: Number,
-  }], 
+ watched:[String],
+ wantToWatch: [String],
+ ratedShows: [{
+  showId: String,
+  rating: Number, 
+}], 
+favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Show' }]
 });
+
+
+
 
 const User = mongoose.model('User', userSchema);
 
