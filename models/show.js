@@ -11,7 +11,7 @@ const showSchema = new mongoose.Schema({
      type: String,
    required: true
    }],
-   posterPath: String,
+   posterPath: Object,
    airDates: [Date], // Array of air dates
    seasons: [{
     seasonNumber: Number,

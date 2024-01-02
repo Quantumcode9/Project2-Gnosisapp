@@ -80,6 +80,18 @@ router.post('/login', async (req, res) => {
 });
 
 
+router.get('/favorites', async (req, res) => {
+    try {
+      const user = await User.findById(req.session.userId).populate('favorites');
+      const favorites = user.favorites;
+      res.render('users/favorites', { favorites }); // Pass favorites to the template
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('An error occurred while trying to fetch favorites');
+    }
+  });
+
+
 
 // GET -> Logout - /users/logout
 router.get('/logout', (req, res) => {
@@ -95,69 +107,8 @@ router.delete('/logout', (req, res) => {
 })
 
 
-
-exports.getFavorites = (req, res) => {
-  User.findById(req.user.id)
-    .populate('favorites') // Assuming 'favorites' is the field that holds the IDs of the favorite shows
-    .then(user => {
-      res.render('users/favorites', { favorites: user.favorites });
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('An error occurred while trying to fetch favorites');
-    });
-};
-
-
 console.log('userController.js is connected')
 module.exports = router;
-
-
-
-
-
-
-
-
-
-// POST -> Login
-// router.post('/login', async (req, res) => {
-//     // const { username, loggedIn, userId } = req.session
-
-//     // we can pull our credentials from the req.body
-//     const { username, password } = req.body
-
-//     // search the db for our user
-//     // since our usernames are unique, we can use that
-//     User.findOne({ username })
-//         .then(async (user) => {
-//             // if the user exists
-//             if (user) {
-//                 // compare the password
-//                 const result = await bcrypt.compare(password, user.password)
-
-//                 if (result) {
-//                     // if the pws match -> log them in and create the session
-//                     req.session.username = username
-//                     req.session.loggedIn = true
-//                     req.session.userId = user.id
-
-//                     // once we're logged in, redirect to the home page
-//                     res.redirect('/favorites'); 
-//                 } else {
-//                     res.redirect(`/error?error=something%20wrong%20with%20credentials`)
-//                 }
-
-//             } else {
-//                 res.redirect(`/error`)
-//             }
-//         })
-//         .catch(err => {
-//             console.log('error')
-//             res.redirect(`/error?error=${err}`)
-//         })
-// })
-
 
 
 

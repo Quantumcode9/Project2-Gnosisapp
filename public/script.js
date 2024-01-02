@@ -11,7 +11,9 @@ document.addEventListener('click', function(event) {
 document.addEventListener('click', function(event) {
   if (event.target.matches('.add-to-favorites-btn')) {
     const showId = event.target.getAttribute('data-show-id');
-    addToFavorites(showId);
+    const showTitle = event.target.getAttribute('data-show-title');
+    const showPoster = event.target.getAttribute('data-show-poster');
+    addToFavorites(showId, showTitle, showPoster);
   } else if (event.target.matches('.add-to-watchlist-btn')) {
     const showId = event.target.getAttribute('data-show-id');
     addToWatchList(showId);
@@ -53,7 +55,6 @@ function highlightStars(rating) {
   const modal = document.getElementById('ratingModal');
   modal.dataset.rating = rating;
 }
-
 
 //RATING MODAL
 
@@ -116,31 +117,27 @@ document.getElementById('submitRating').addEventListener('click', function() {
 
 
 // Add to favorites
-
-function addToFavorites(showId) {
+function addToFavorites(showId, showTitle, showPoster) {
   fetch('/add-to-favorites', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      showId: show.id, // Assuming show.id is the showId
-      title: show.title,
-      description: show.description,
-      genre: show.genre // Make sure genre is formatted as required by your backend
+      showId: showId,
+      title: showTitle,
+      poster: showPoster
     })
   })
-
-.then(response => response.json())
+  .then(response => response.json())
 .then(data => {
   if(data.message === 'Show added to favorites') {
     fetchRecommendations(showId); // Fetch recommendations
   }
 })
-.catch(error => {
-  console.error('Error:', error);
-});
+    .catch(error => console.error('Error fetching show:', error));
 }
+
 
 // Fetch recommendations
 

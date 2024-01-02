@@ -19,8 +19,15 @@ const userSchema = new mongoose.Schema({
   showId: String,
   rating: Number, 
 }], 
-favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Show' }]
+// favorites: { type: [String], default: [] },
+// });
+favorites: [{
+  showId: String, 
+  title: String,
+  posterPath: String
+}]
 });
+
 
 
 

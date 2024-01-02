@@ -4,7 +4,6 @@ const express = require('express');
 const mongoose = require('./utils/connection');
 const axios = require('axios');
 const TMDB_API_KEY = process.env.APIKEY;
-
 const UserRouter = require('./controllers/userController');
 const ShowRouter = require('./controllers/showsController');
 const { addShowToFavorites } = require('./services/showService');
@@ -97,48 +96,44 @@ app.get('/pages/genre/:genreId', async (req, res) => {
 //////////////////////////////
 
 
-//add to favorites
-// const { addShowToFavorites } = require('./services/showService');
-
-// app.post('/add-to-favorites', async (req, res) => {
-//   const { showId } = req.body;
-//   const userId = req.session.userId; 
-
-//   try {
-//     const user = await User.findById(userId);
-
-//     if (user) {
-//       // Add showId to the user's favorites, avoiding duplicates
-//       if (!user.favorites.includes(showId)) {
-//         user.favorites.push(showId);
-//         await user.save();
-//         res.json({ message: 'Show added to favorites' });
-//       } else {
-//         // Handle the case where the show is already in the favorites
-//         res.json({ message: 'Show is already in favorites' });
-//       }
-//     } else {
-//       res.status(404).send('User not found');
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send('Error processing request');
-//   }
-// });
-
-// Add to favorites
 app.post('/add-to-favorites', async (req, res) => {
   const { showId } = req.body;
-  const userId = req.session.userId; 
-
+  const userId = req.session.userId;
+  const data = req.body;
   try {
-    const result = await addShowToFavorites(userId, showId);
-    res.json(result);
+    const user = await User.findById(userId);
+    const showData = data;
+
+    const show = new Show({
+      showId: showData.id,
+      title: showData.name,
+      posterPath: showData.poster_path,     
+    });
+
+    if (user && user.favorites) {
+      // Add showId to the user's favorites, avoiding duplicates
+      if (!user.favorites.includes(showId)) {
+        user.favorites.push(showId);
+        await user.save();
+        res.json({ message: 'Show added to favorites' });
+      } else {
+        // Handle the case where the show is already in the favorites
+        res.json({ message: 'Show is already in favorites' });
+      }
+    } else {
+      if (!user) {
+        res.status(404).send('User not found');
+      } else if (!user.favorites) {
+        res.status(404).send('User has no favorites');
+      }
+    }
   } catch (error) {
     console.error(error);
     res.status(500).send('Error processing request');
   }
 });
+
+
 
 // Fetch recommendations
 
@@ -186,28 +181,13 @@ app.post('/add-rated-show', async (req, res) => {
 
 //Favorites Page
 
-app.get('/users/favorites', async (req, res) => {
- try {
-const userId = req.session.userId; // Or however you store the logged-in user's ID
-       const user = await User.findById(userId).populate('favorites'); 
-     
-      console.log(user.favorites); // Log to check the data
 
-     if (!user) {
-          return res.status(404).send('User not found');
-      }
-       res.render('users/favorites', { favorites: user.favorites }); // Render the EJS template with favorites data
-   } catch (error) {
-      console.error(error);
-       res.status(500).send('Error retrieving favorites');
-   }
-   });
+// server.js
+
 
 
 
 /////////////////////////////////////////
-
-
 
 
 // Error page

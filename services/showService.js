@@ -33,24 +33,6 @@ async function addNewShow(showData) {
     }
 }
 
-
-
-// async function addNewShow(showData) {
-//     try {
-//         let show = await Show.findOne({ showId: showData.showId });
-
-//         if (!show) {
-//             show = new Show({ ...showData });
-//             await show.save();
-//         }
-
-//         return show; // Return the show, whether it was newly created or found
-//     } catch (err) {
-//         console.error('Error saving the show:', err);
-//         throw err; // Rethrow the error to handle it in the calling function
-//     }
-// }
-
 const User = require('../models/user');
 async function addShowToFavorites(userId, showData) {
     try {
@@ -64,8 +46,8 @@ async function addShowToFavorites(userId, showData) {
         }
 
         // Validate required showData fields
-        if (!showData.title || !showData.description || !showData.genre) {
-            throw new Error('Missing required show data: title, description, and genre are required.');
+        if (!showData.title || !showData.posterPath || !showData.ShowId) {
+            throw new Error('Missing required show data: title, posterPath, or showId');
         }
 
         let show = await Show.findOne({ showId: showData.showId });
@@ -73,8 +55,7 @@ async function addShowToFavorites(userId, showData) {
             show = new Show({
                 showId: showData.showId,
                 title: showData.title,
-                description: showData.description,
-                genre: showData.genre,
+                posterPath: showData.posterPath,
                 // Add other fields from showData as needed
             });
             await show.save();
