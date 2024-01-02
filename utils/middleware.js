@@ -6,6 +6,7 @@ const methodOverride = require('method-override');
 const path = require('path');
 const cors = require('cors');
 
+
 const middleware = (app) => {
     // Configure session middleware first
     app.use(session({
@@ -21,9 +22,9 @@ const middleware = (app) => {
         res.locals.username = req.session?.username;
         next();
     });
-
     // Other middlewares
     app.use(methodOverride('_method'));
+    app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use(morgan('tiny'));
     app.use(express.static('public'));

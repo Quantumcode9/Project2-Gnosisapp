@@ -4,26 +4,29 @@ const express = require('express');
 const mongoose = require('./utils/connection');
 const axios = require('axios');
 const TMDB_API_KEY = process.env.APIKEY;
+const API_KEY = process.env.TMDB_API_KEY;
 const UserRouter = require('./controllers/userController');
 const ShowRouter = require('./controllers/showsController');
 const { addShowToFavorites } = require('./services/showService');
 const User = require('./models/user');
 const middleware = require('./utils/middleware');
+const router = require('./controllers/userController');
+
+
 
 const app = express();
 
-// Express body parser
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+
 
 // Static files
+app.use(express.static('node_modules/bootstrap/dist'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // EJS view engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-const Show = require('./models/show');
+
 
 // Middleware 
 middleware(app)
@@ -60,6 +63,8 @@ app.use(async (req, res, next) => {
 // add to favorites
 
 app.post('/add-to-favorites', async (req, res) => {
+  console.log(req.body);
+  
   const userId = req.session.userId;
   const { id, name, poster_path } = req.body; // Adjusted to match the client-side
 
@@ -170,6 +175,25 @@ app.post('/add-rated-show', async (req, res) => {
     res.status(500).send('Error processing request');
   }
 });
+
+async function fetchShows(endpoint) {
+  const response = await axios.get(`https://api.themoviedb.org/3/tv/${endpoint}?api_key=${API_KEY}&language=en-US`);
+  return response.data.results.slice(0, 8); // Limit to 8 shows
+}
+
+app.get('/', async (req, res) => {
+  try {
+      const popularShows = await fetchShows('popular');
+      console.log(popularShows); // Log the value of popularShows
+      res.render('home', { popularShows }); // Pass popularShows to the view
+  } catch (err) {
+      console.error(err);
+      res.status(500).send('An error occurred while trying to fetch shows');
+  }
+});
+
+
+
 
 
 //Favorites Page

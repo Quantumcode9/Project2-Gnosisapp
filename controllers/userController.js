@@ -96,28 +96,43 @@ router.post('/login', async (req, res) => {
 
 // GET -> Favorites - /users/favorites
 
+// router.get('/favorites', async (req, res) => {
+//     try {
+//         const userId = req.session.userId; // Or however you identify the logged-in user
+
+//         // Fetch the user and their favorites
+//         const user = await User.findById(userId).exec();
+
+//         if (!user) {
+//             return res.status(404).send('User not found');
+//         }
+
+//         // Render the favorites page with the user's favorites
+//         res.render('users/favorites', { 
+//             favorites: user.favorites 
+//         });
+//     } catch (error) {
+//         console.error('Error fetching favorites:', error);
+//         res.status(500).send('Internal Server Error');
+//     }
+// });
+
+
 router.get('/favorites', async (req, res) => {
     try {
-        const userId = req.session.userId; // Or however you identify the logged-in user
-
-        // Fetch the user and their favorites
-        const user = await User.findById(userId).exec();
-
-        if (!user) {
-            return res.status(404).send('User not found');
-        }
-
-        // Render the favorites page with the user's favorites
-        res.render('users/favorites', { 
-            favorites: user.favorites 
-        });
+      const userId = req.session.userId; 
+      const user = await User.findById(userId);
+  
+      if (!user) {
+        return res.status(404).send('User not found');
+      }
+  
+      res.render('users/favorites', { favorites: user.favorites });
     } catch (error) {
-        console.error('Error fetching favorites:', error);
-        res.status(500).send('Internal Server Error');
+      console.error('Error fetching favorites:', error);
+      res.status(500).send('Error loading favorites page');
     }
-});
-
-
+  });
 
 
 
@@ -134,6 +149,7 @@ router.delete('/logout', (req, res) => {
         res.redirect('/')
     })
 })
+
 
 
 

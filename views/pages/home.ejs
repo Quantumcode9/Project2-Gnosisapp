@@ -1,12 +1,38 @@
 <%- include('../partials/header.ejs'); %>
 
-<body>
+<script>
+    const API_KEY = "<%= process.env.TMDB_API_KEY %>";
+</script>
 
+<body>
 
 <% title = 'Home Page'; %>
 <h1>Welcome to GNOSIS</h1>
 <p>Discover and manage your favorite TV shows.</p>
 <!-- Additional content specific to the home page -->
+
+
+
+<div class="container center">
+    <div class="container row text-center">
+<% if (typeof popularShows !== 'undefined' && popularShows.length > 0) { %>
+    <% popularShows.forEach(function(show) { %>
+        <div class="card">
+            <div class="overlay">
+                <div class="show">
+                    <h2><%= show.name %></h2>
+                    <p id="p_rating"><strong>Rating:</strong> <span><%= show.vote_average %> / 10</span></p>
+                    <a href="/show/<%= show.id %>">Details</a>
+                </div>
+            </div>
+            <img src="http://image.tmdb.org/t/p/w400/<%= show.poster_path %>" onerror="this.onerror=null;this.src='../images/imageNotFound.png';">
+        </div>
+    <% }); %>
+<% } else { %>
+    <p>No popular shows found.</p>
+<% } %>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/scripts/hub.js"></script>
 
 
 
