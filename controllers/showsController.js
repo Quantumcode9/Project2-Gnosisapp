@@ -49,6 +49,9 @@ module.exports = router;
 
 
 
+
+
+
 // // Fetch genres
 // router.get('/genres', async (req, res) => {
 //   try {

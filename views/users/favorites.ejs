@@ -5,13 +5,11 @@
         <% favorites.forEach(show => { %>
             <div class="show">
                 <% if (show.poster_path) { %>
-                    <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
+                    <img src="https://image.tmdb.org/t/p/w500<%= favorite.posterPath %>" alt="<%= favorite.title %>">
                 <% } else { %>
                     <img src="/images/Untitled.png" alt="No image available">
-                    <!-- Or display a message instead of a placeholder image -->
                 <% } %>
                 <h3><%= show.name %></h3>
-                <!-- Other show details -->
             </div>
         <% }); %>
     </div>

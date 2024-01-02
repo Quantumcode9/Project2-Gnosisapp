@@ -13,20 +13,22 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
- watched:[String],
- wantToWatch: [String],
- ratedShows: [{
-  showId: String,
-  rating: Number, 
-}], 
+  watched: [String],
+  wantToWatch: [String],
+  ratedShows: [{
+    showId: String,
+    rating: Number, 
+  }],
+  favorites: [{
+    showId: String, 
+    title: String,
+    posterPath: String
+  }]
+});
+
 // favorites: { type: [String], default: [] },
 // });
-favorites: [{
-  showId: String, 
-  title: String,
-  posterPath: String
-}]
-});
+
 
 
 

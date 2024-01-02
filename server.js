@@ -56,6 +56,37 @@ app.use(async (req, res, next) => {
   }
 });
 
+
+// add to favorites
+
+app.post('/add-to-favorites', async (req, res) => {
+  const userId = req.session.userId;
+  const { id, name, poster_path } = req.body; // Adjusted to match the client-side
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    const isAlreadyFavorite = user.favorites.some(favorite => favorite.showId === id);
+    if (!isAlreadyFavorite) {
+      user.favorites.push({ showId: id, title: name, posterPath: poster_path });
+      await user.save();
+      res.json({ message: 'Show added to favorites' });
+    } else {
+      res.json({ message: 'Show is already in favorites' });
+    }
+  } catch (error) {
+    console.error('Error processing request:', error);
+    res.status(500).send('Error processing request');
+  }
+});
+
+
+
+
+
 // Routes
 app.use('/users', UserRouter);
 app.use('/shows', ShowRouter);
@@ -94,44 +125,6 @@ app.get('/pages/genre/:genreId', async (req, res) => {
 });
 
 //////////////////////////////
-
-
-app.post('/add-to-favorites', async (req, res) => {
-  const { showId } = req.body;
-  const userId = req.session.userId;
-  const data = req.body;
-  try {
-    const user = await User.findById(userId);
-    const showData = data;
-
-    const show = new Show({
-      showId: showData.id,
-      title: showData.name,
-      posterPath: showData.poster_path,     
-    });
-
-    if (user && user.favorites) {
-      // Add showId to the user's favorites, avoiding duplicates
-      if (!user.favorites.includes(showId)) {
-        user.favorites.push(showId);
-        await user.save();
-        res.json({ message: 'Show added to favorites' });
-      } else {
-        // Handle the case where the show is already in the favorites
-        res.json({ message: 'Show is already in favorites' });
-      }
-    } else {
-      if (!user) {
-        res.status(404).send('User not found');
-      } else if (!user.favorites) {
-        res.status(404).send('User has no favorites');
-      }
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Error processing request');
-  }
-});
 
 
 
@@ -183,7 +176,6 @@ app.post('/add-rated-show', async (req, res) => {
 
 
 // server.js
-
 
 
 

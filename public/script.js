@@ -7,12 +7,10 @@ document.addEventListener('click', function(event) {
   }
 });
 
-
+//event listener 
 document.addEventListener('click', function(event) {
   if (event.target.matches('.add-to-favorites-btn')) {
-    const showId = event.target.getAttribute('data-show-id');
-    const showTitle = event.target.getAttribute('data-show-title');
-    const showPoster = event.target.getAttribute('data-show-poster');
+
     addToFavorites(showId, showTitle, showPoster);
   } else if (event.target.matches('.add-to-watchlist-btn')) {
     const showId = event.target.getAttribute('data-show-id');
@@ -116,7 +114,6 @@ document.getElementById('submitRating').addEventListener('click', function() {
 
 
 
-// Add to favorites
 function addToFavorites(showId, showTitle, showPoster) {
   fetch('/add-to-favorites', {
     method: 'POST',
@@ -124,19 +121,22 @@ function addToFavorites(showId, showTitle, showPoster) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      showId: showId,
-      title: showTitle,
-      poster: showPoster
+      id: showId,
+      name: showTitle,
+      poster_path: showPoster
     })
   })
   .then(response => response.json())
-.then(data => {
-  if(data.message === 'Show added to favorites') {
-    fetchRecommendations(showId); // Fetch recommendations
-  }
-})
-    .catch(error => console.error('Error fetching show:', error));
+  .then(data => {
+    if (data.message === 'Show added to favorites') {
+      fetchRecommendations(showId); // Fetch recommendations
+    } else {
+      console.error('Error:', data.message);
+    }
+  })
+  .catch(error => console.error('Error:', error));
 }
+
 
 
 // Fetch recommendations
@@ -186,6 +186,36 @@ function displayRecommendations(showId, recommendations) {
 
 
 
+// async function addShowToFavorites(userId, showData) {
+//   try {
+//       // Validate userId
+//       if (!mongoose.Types.ObjectId.isValid(userId)) {
+//           throw new Error('Invalid userId');
+//       }
 
+//       const user = await User.findById(userId);
+//       if (!user) {
+//           throw new Error('User not found');
+//       }
+
+//       // Check if the show is already in the user's favorites
+//       const isAlreadyFavorite = user.favorites.some(favorite => favorite.showId === showData.showId);
+//       if (!isAlreadyFavorite) {
+//           // Add the show to the user's favorites with the showId, title, and posterPath
+//           user.favorites.push({
+//               showId: showData.showId,
+//               title: showData.title,
+//               posterPath: showData.posterPath
+//           });
+//           await user.save();
+//           return { message: 'Show added to favorites' };
+//       } else {
+//           return { message: 'Show is already in favorites' };
+//       }
+//   } catch (error) {
+//       console.error('Error adding show to favorites:', error);
+//       throw error;
+//   }
+// }
 
 

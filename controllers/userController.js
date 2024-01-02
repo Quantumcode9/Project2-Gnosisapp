@@ -5,6 +5,7 @@ const express = require('express')
 const User = require('../models/user')
 const bcrypt = require('bcryptjs')
 require('dotenv').config()
+const showService = require('../services/showService');
 
 ///////////////////////
 //// Create Router ////
@@ -80,16 +81,43 @@ router.post('/login', async (req, res) => {
 });
 
 
+
+// router.get('/favorites', async (req, res) => {
+//     try {
+//       const user = await User.findById(req.session.userId).populate('favorites');
+//       const favorites = user.favorites;
+//       res.render('users/favorites', { favorites }); // Pass favorites to the template
+//     } catch (err) {
+//       console.error(err);
+//       res.status(500).send('An error occurred while trying to fetch favorites');
+//     }
+//   });
+
+
+// GET -> Favorites - /users/favorites
+
 router.get('/favorites', async (req, res) => {
     try {
-      const user = await User.findById(req.session.userId).populate('favorites');
-      const favorites = user.favorites;
-      res.render('users/favorites', { favorites }); // Pass favorites to the template
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('An error occurred while trying to fetch favorites');
+        const userId = req.session.userId; // Or however you identify the logged-in user
+
+        // Fetch the user and their favorites
+        const user = await User.findById(userId).exec();
+
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+
+        // Render the favorites page with the user's favorites
+        res.render('users/favorites', { 
+            favorites: user.favorites 
+        });
+    } catch (error) {
+        console.error('Error fetching favorites:', error);
+        res.status(500).send('Internal Server Error');
     }
-  });
+});
+
+
 
 
 
@@ -97,14 +125,17 @@ router.get('/favorites', async (req, res) => {
 router.get('/logout', (req, res) => {
     const { username, loggedIn, userId } = req.session
 
-    res.render('users/logout', { username, loggedIn, userId })
+    res.render('users/logout', { username, loggedIn, userId }) // Adjusted the path to the view
 })
-// DELETE -> Logout
+
+// DELETE -> Logout - /logout
 router.delete('/logout', (req, res) => {
     req.session.destroy(() => {
         res.redirect('/')
     })
 })
+
+
 
 
 console.log('userController.js is connected')
