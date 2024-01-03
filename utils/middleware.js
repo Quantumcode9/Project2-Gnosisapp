@@ -5,6 +5,7 @@ const MongoStore = require('connect-mongo');
 const methodOverride = require('method-override');
 const path = require('path');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
 
 const middleware = (app) => {
@@ -22,6 +23,7 @@ const middleware = (app) => {
         res.locals.username = req.session?.username;
         next();
     });
+    app.use(bodyParser.urlencoded({ extended: true }));
     // Other middlewares
     app.use(methodOverride('_method'));
     app.use(express.json());

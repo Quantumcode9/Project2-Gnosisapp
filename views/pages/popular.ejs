@@ -1,0 +1,18 @@
+<%- include('../partials/header.ejs'); %>
+    <h1>Popular TV Shows</h1>
+    <div class="show-list">
+        <% shows.forEach(show => { %>
+            <div id="show_<%= show.id %>" class="show">
+                <!-- Check if the show has a poster image -->
+                <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
+                <h2><%= show.name %></h2>
+                <form action="/add-tv-show" method="post">
+                    <input type="hidden" name="title" value="<%= show.name %>">
+                    <input type="hidden" name="imageUrl" value="https://image.tmdb.org/t/p/w500<%= show.poster_path %>">
+                    <button type="submit">Add to My Collection</button>
+                </form>
+            </div>
+        <% }) %>
+    </div>
+</body>
+</html>

@@ -23,8 +23,18 @@ const userSchema2 = new mongoose.Schema({
     showId: String, 
     title: String,
     posterPath: String
-  }]
+  }],
+  showId: String,
+  title: {
+      type: String,
+      required: true,
+    },
+    imageUrl: {
+     type: String,
+     required: true
+ },
 });
+
 
 // favorites: { type: [String], default: [] },
 // });

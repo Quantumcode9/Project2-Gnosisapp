@@ -10,7 +10,7 @@ const ShowRouter = require('./controllers/showsController');
 const { addShowToFavorites } = require('./services/showService');
 const User = require('./models/user');
 const middleware = require('./utils/middleware');
-const router = require('./controllers/userController');
+const showsController = require('./controllers/showsController');
 
 
 
@@ -26,18 +26,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-
-
 // Middleware 
 middleware(app)
-
 
 // Home route
 app.get('/', (req, res) => {
   const { username, loggedIn, userId } = req.session;
   res.render('pages/home', { username, loggedIn, userId });
 });
-
 
 //////////////////////////////
 //ADD TO CONTROLLER FILE//
@@ -59,12 +55,17 @@ app.use(async (req, res, next) => {
   }
 });
 
+// add to favorites///////////////////////////
 
-// add to favorites
+const axiosConfig = {
+  headers: {
+    'Content-Type': 'application/json'
+  }
+};
 
 app.post('/add-to-favorites', async (req, res) => {
   console.log(req.body);
-  
+
   const userId = req.session.userId;
   const { id, name, poster_path } = req.body; // Adjusted to match the client-side
 
@@ -78,7 +79,11 @@ app.post('/add-to-favorites', async (req, res) => {
     if (!isAlreadyFavorite) {
       user.favorites.push({ showId: id, title: name, posterPath: poster_path });
       await user.save();
-      res.json({ message: 'Show added to favorites' });
+
+      // Send the data to the server using axios
+      const response = await axios.post('/api/add-to-favorites', { id, name, poster_path }, axiosConfig);
+
+      res.json({ message: response.data.message });
     } else {
       res.json({ message: 'Show is already in favorites' });
     }
@@ -175,33 +180,68 @@ app.post('/add-rated-show', async (req, res) => {
     res.status(500).send('Error processing request');
   }
 });
+app.get('/pages/popular', (req, res) => {
+  const url = 'https://api.themoviedb.org/3/tv/popular?language=en-US&page=1';
+  const options = {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${TMDB_API_KEY}`,
+      accept: 'application/json'
+      
+    }
+  };
 
-async function fetchShows(endpoint) {
-  const response = await axios.get(`https://api.themoviedb.org/3/tv/${endpoint}?api_key=${API_KEY}&language=en-US`);
-  return response.data.results.slice(0, 8); // Limit to 8 shows
+  app.use('/', showsController);
+
+
+  fetch(url, options)
+    .then(response => response.json())
+    .then(data => {
+      // Render your EJS view here, passing the TV shows data
+      res.render('pages/popular', { shows: data.results });
+    })
+    .catch(err => {
+      console.error('error:', err);
+      res.status(500).send('Error fetching TV shows');
+    });
+});
+
+
+
+async function fetchPopularTvShows() {
+  const options = {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${TMDB_API_KEY}`,
+      'Accept': 'application/json'
+    }
+  };
+  try {
+      const response = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${TMDB_API_KEY}&language=en-US&page=1`);
+      return response.data.results;
+  } catch (error) {
+      console.error('Error fetching popular TV shows:', error);
+      return [];
+  }
 }
 
-app.get('/', async (req, res) => {
+
+app.get('/home', async (req, res) => {
   try {
-      const popularShows = await fetchShows('popular');
-      console.log(popularShows); // Log the value of popularShows
-      res.render('home', { popularShows }); // Pass popularShows to the view
-  } catch (err) {
-      console.error(err);
-      res.status(500).send('An error occurred while trying to fetch shows');
+    const tvShows = await fetchPopularTvShows();
+    res.render('home', { tvShows }); // Render home.ejs with tvShows data
+  } catch (error) {
+    console.error('Error fetching TV shows:', error);
+    res.status(500).send('Error fetching TV shows');
   }
 });
 
 
 
 
-
 //Favorites Page
 
-
 // server.js
-
-
 
 /////////////////////////////////////////
 
@@ -212,7 +252,6 @@ app.get('/error', (req, res) => {
   const { username, loggedIn, userId } = req.session;
   res.render('error', { error, userId, username, loggedIn }); // Assuming 'error.ejs' is in the 'views' directory
 });
-
 
 
 // Listen on port 3000
