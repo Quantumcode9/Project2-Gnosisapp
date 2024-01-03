@@ -1,0 +1,45 @@
+<!-- create a search bar for searching for tv shows -->
+<%- include('../partials/header') %> 
+<form action="/search" method="get"> 
+    <input type="text" name="search" id="searchInput"  placeholder="Search for a TV show">
+    <button type="submit">Search</button>
+</form>
+
+<div id="searchResults"></div>
+
+
+
+<script>
+    document.getElementById('searchInput').addEventListener('keyup', function(event) {
+        const query = event.target.value;
+    
+        if (query.length > 2) { // Start searching
+            fetch(`/search-tv-shows?q=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    
+                  // Display the results
+                    document.getElementById('searchResults').innerHTML = data.map(show => `<p>${show.name}</p>`).join('');
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    });
+    </script>
+
+
+<%- include('../partials/footer') %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

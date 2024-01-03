@@ -9,6 +9,7 @@ const TMDB_API_KEY = process.env.TMDB_API_KEY;
 const LATEST_TV_SHOWS_URL = '/trending/tv/day?language=en-US&page=1';
 const API_BASE_URL = 'https://api.themoviedb.org/3';
 const POPULAR_TV_SHOWS_URL = '/tv/popular?language=en-US&page=1';
+const SEARCH = '/search/tv?language=en-US&page=1&query=';
 const HEADERS = {
     'Accept': 'application/json',
       'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNzI0MmRmZmQ1ZTA3ZmFkNzFmYjc1MWFjZjY2MjY1MiIsInN1YiI6IjY1OGYwZjQ0MGQyZjUzNWNjZWQzZDRmOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.J-Rmx8CA0fnwbMwHLG5pTqTxjKE-1abuG1by44-kN1s',
@@ -58,6 +59,42 @@ res.render('pages/latest', { shows: apiRes.data.results, username, loggedIn, use
 }
  )
  })
+
+
+ router.get('/search-tv-shows', async (req, res) => {
+  const query = req.query.q;
+  try {
+     const response = await axios.get(`${API_BASE_URL}/search/tv?query=${query}`,{ headers: HEADERS })
+      // Process and filter the API response as needed
+      res.json(response.data.results);
+  } catch (error) {
+     console.error(error);
+     res.status(500).send('Error during search');
+}
+});
+
+
+
+
+
+
+//   router.get('/pages/search', (req, res) => {
+//   const query = req.query.q;
+//   const { username, loggedIn, userId } = req.session;
+//   const { name } = req.params;
+//   axios(`${API_BASE_URL}${SEARCH}${name}`, { headers: HEADERS })
+//     .then(apiRes => {
+//      res.render('pages/search', { shows: apiRes.data.results, username, loggedIn, userId });
+//       res.json(response.data.results);
+//    })
+//     .catch(err => {
+//        console.log(err)
+//        res.send('error')
+//     })
+//  })
+
+
+
 
 
 

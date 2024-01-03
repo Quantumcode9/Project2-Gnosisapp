@@ -158,6 +158,17 @@ app.get('/get-recommendations/:showId', async (req, res) => {
   }
 });
 
+
+
+
+// search tv shows
+
+app.get('/pages/search', (req, res) => {
+  res.render('pages/search');
+});
+
+
+
 // Submit rating
 app.post('/add-rated-show', async (req, res) => {
   const { showId, rating } = req.body;
