@@ -155,6 +155,8 @@ fieldset {
 
   }
 
+
+
 .show img {
     max-width: 60%;
     height: auto;
@@ -178,7 +180,13 @@ fieldset {
         text-align: center;
         margin: 20px;
     }
+    #searchResults {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px; 
+  }
 
+  
 
     .recommendations-container {
         margin-top: 20px;
@@ -203,6 +211,15 @@ fieldset {
         height: auto;
         border-radius: 8px;
       }
+
+
+
+
+
+
+
+
+
 
       .recommendation .recommendation-buttons {
         opacity: 0;

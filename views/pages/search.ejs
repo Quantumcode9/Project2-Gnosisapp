@@ -13,22 +13,26 @@
     document.getElementById('searchInput').addEventListener('keyup', function(event) {
         const query = event.target.value;
     
-        if (query.length > 2) { // Start searching
+        if (query.length > 2) {
             fetch(`/search-tv-shows?q=${encodeURIComponent(query)}`)
                 .then(response => response.json())
                 .then(data => {
-                    
-                  // Display the results
-                    document.getElementById('searchResults').innerHTML = data.map(show => `<p>${show.name}</p>`).join('');
+                    // Display the results with poster images
+                    document.getElementById('searchResults').innerHTML = data.map(show => `
+    <div class="show">  
+        <img src="https://image.tmdb.org/t/p/w500${show.poster_path}" alt="${show.name}" class= "img"> 
+        <div class="recommendation-buttons">
+            <img src="/images/Favorites.png" alt="Add to Favorites" onclick="addToFavorites('${show.id}')" class="icon">
+            <img src="/images/Watching.png" alt="Add to Watch List" onclick="addToWatchList('${show.id}')" class="icon">
+            <img src="/images/Watched.png" alt="Add to Watched" onclick="addToWatched('${show.id}')" class="icon">
+        </div>
+    </div>
+`).join('');
                 })
                 .catch(error => console.error('Error:', error));
         }
     });
-    </script>
-
-
-<%- include('../partials/footer') %>
-
+</script>
 
 
 
