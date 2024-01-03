@@ -6,55 +6,59 @@ const client = require('../utils/connection');
 
 const router = express.Router();
 const TMDB_API_KEY = process.env.TMDB_API_KEY;
+const LATEST_TV_SHOWS_URL = '/trending/tv/day?language=en-US&page=1';
+const API_BASE_URL = 'https://api.themoviedb.org/3';
+const POPULAR_TV_SHOWS_URL = '/tv/popular?language=en-US&page=1';
+const HEADERS = {
+    'Accept': 'application/json',
+      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNzI0MmRmZmQ1ZTA3ZmFkNzFmYjc1MWFjZjY2MjY1MiIsInN1YiI6IjY1OGYwZjQ0MGQyZjUzNWNjZWQzZDRmOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.J-Rmx8CA0fnwbMwHLG5pTqTxjKE-1abuG1by44-kN1s',
+    // 'Authorization': `Bearer ${TMDB_API_KEY}`,
+    'Host': 'api.themoviedb.org'
+};
+
 
 
 
 
 // Fetch shows by genre
-router.get('/pages/browse', async (req, res) => {
-  try {
-    const genreResponse = await axios.get('https://api.themoviedb.org/3/genre/tv/list?language=en', {
-      headers: {
-        'Authorization': `Bearer ${TMDB_API_KEY}`,
-        'Accept': 'application/json'
-      }
-    });
+
+ router.get('/pages/browse', async (req, res) => {
+   try {
+     const genreResponse = await axios.get(`${API_BASE_URL}/genre/tv/list?language=en`, { headers: HEADERS });
     console.log(genreResponse.data); // Log the response data
 
     const genres = genreResponse.data.genres; // Extract genres from the response
-    console.log(genres);
-    res.render('pages/browse', { genres }); // Pass genres to the EJS template
-  } catch (error) {
+     console.log(genres);
+     res.render('pages/browse', { genres }); // Pass genres to the EJS template
+   } catch (error) {
     console.error(error);
     res.status(500).send('Error fetching genres');
-  }
-});
+   }
+ });
 
 
 
 
-async function storeTvShows() {
-  try {
-      await client.connect();
-      const db = client.db('TVDB');
-      const collection = db.collection('shows');
+//Fetch latest TV shows
 
-      const tvShows = await fetchPopularTvShows();
 
-      const formattedShows = tvShows.map(show => ({
-          tmdbId: show.id,
-          title: show.name,
-          imageUrl: `https://image.tmdb.org/t/p/w500${show.poster_path}`
-      }));
+router.get('/pages/latest', (req, res) => {
+const { username, loggedIn, userId } = req.session;
+axios(`${API_BASE_URL}${LATEST_TV_SHOWS_URL}`, { headers: HEADERS })
+  .then(apiRes => {
+// console.log('this came back from the api: \n', apiRes.data)
+// 
+res.render('pages/latest', { shows: apiRes.data.results, username, loggedIn, userId });
+})
 
-      await collection.insertMany(formattedShows);
-      console.log('TV shows stored in MongoDB');
-  } catch (error) {
-      console.error('Error storing TV shows:', error);
-  } finally {
-      await client.close();
-  }
+
+.catch(err => {
+ console.log(err)
+  res.send('error')
 }
+ )
+ })
+
 
 
 
@@ -73,8 +77,7 @@ router.get('/home', async (req, res) => {
       await client.close();
   }
 });
-console.log('showController is connected')
-module.exports = router;
+
 
 
 router.post('/add-tv-show', async (req, res) => {
@@ -95,6 +98,14 @@ router.post('/add-tv-show', async (req, res) => {
 });
 
 
+console.log('showController is connected')
+module.exports = router;
+
+
+
+
+
+
 
 
 
@@ -110,7 +121,7 @@ router.post('/add-tv-show', async (req, res) => {
 // })
 
 // console.log('showController is connected')
-// module.exports = router;
+
 
 
 

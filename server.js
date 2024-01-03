@@ -3,8 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('./utils/connection');
 const axios = require('axios');
-const TMDB_API_KEY = process.env.APIKEY;
-const API_KEY = process.env.TMDB_API_KEY;
+const TMDB_API_KEY = process.env.TMDB_API_KEY;
 const UserRouter = require('./controllers/userController');
 const ShowRouter = require('./controllers/showsController');
 const { addShowToFavorites } = require('./services/showService');
@@ -12,6 +11,13 @@ const User = require('./models/user');
 const middleware = require('./utils/middleware');
 const showsController = require('./controllers/showsController');
 
+const API_BASE_URL = 'https://api.themoviedb.org/3';
+const POPULAR_TV_SHOWS_URL = '/tv/popular?language=en-US&page=1';
+const HEADERS = {
+    'Accept': 'application/json',
+    'Authorization': `Bearer ${TMDB_API_KEY}`,
+    'Host': 'api.themoviedb.org'
+};
 
 
 const app = express();
@@ -49,11 +55,11 @@ app.use(async (req, res, next) => {
     });
     req.genres = response.data.genres; // Attach genres to the req object
     next(); // Proceed to the next middleware/route handler
-  } catch (error) {
+ } catch (error) {
     console.error(error);
     res.status(500).send('Error fetching genres');
   }
-});
+ });
 
 // add to favorites///////////////////////////
 
@@ -112,20 +118,16 @@ app.get('/pages/genre', (req, res) => {
 });
 
 //////////////////////////////
+
+
+
 app.get('/pages/genre/:genreId', async (req, res) => {
   const genreId = req.params.genreId; // Get the genre ID from the URL parameter
 
-  const url = `https://api.themoviedb.org/3/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=1&sort_by=popularity.desc&with_genres=${genreId}`;
-  const options = {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${TMDB_API_KEY}`,
-      'Accept': 'application/json'
-    }
-  };
+  const url = `${API_BASE_URL}/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=1&sort_by=popularity.desc&with_genres=${genreId}`;
 
   try {
-    const response = await axios(url, options);
+    const response = await axios.get(url, { headers: HEADERS });
     // Render a template with the fetched TV shows
     res.render('pages/genre', { shows: response.data.results, });
   } catch (error) {
@@ -133,6 +135,8 @@ app.get('/pages/genre/:genreId', async (req, res) => {
     res.status(500).send('Error fetching TV shows for the genre');
   }
 });
+
+
 
 //////////////////////////////
 
@@ -142,19 +146,11 @@ app.get('/pages/genre/:genreId', async (req, res) => {
 
 app.get('/get-recommendations/:showId', async (req, res) => {
   const showId = req.params.showId;
-  const url = `https://api.themoviedb.org/3/tv/${showId}/recommendations?language=en-US&page=1`;
-
-  const options = {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${TMDB_API_KEY}`,
-      'Accept': 'application/json'
-    }
-  };
+  const url = `${API_BASE_URL}/tv/${showId}/recommendations?language=en-US&page=1`;
 
   try {
-    const apiResponse = await fetch(url, options);
-    const jsonResponse = await apiResponse.json();
+    const apiResponse = await axios.get(url, { headers: HEADERS });
+    const jsonResponse = apiResponse.data;
     res.json(jsonResponse.results.slice(0, 3)); // Send top 3 recommendations
   } catch (error) {
     console.error('Error fetching recommendations:', error);
@@ -180,63 +176,34 @@ app.post('/add-rated-show', async (req, res) => {
     res.status(500).send('Error processing request');
   }
 });
-app.get('/pages/popular', (req, res) => {
-  const url = 'https://api.themoviedb.org/3/tv/popular?language=en-US&page=1';
-  const options = {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${TMDB_API_KEY}`,
-      accept: 'application/json'
-      
-    }
-  };
+app.get('/pages/popular', async (req, res) => {
+  const { username, loggedIn, userId } = req.session;
+  const url = `${API_BASE_URL}${POPULAR_TV_SHOWS_URL}`;
 
-  app.use('/', showsController);
-
-
-  fetch(url, options)
-    .then(response => response.json())
-    .then(data => {
-      // Render your EJS view here, passing the TV shows data
-      res.render('pages/popular', { shows: data.results });
-    })
-    .catch(err => {
-      console.error('error:', err);
-      res.status(500).send('Error fetching TV shows');
-    });
+  try {
+    const response = await axios.get(url, { headers: HEADERS });
+    // Render your EJS view here, passing the TV shows data
+    res.render('pages/popular', { shows: response.data.results });
+  } catch (error) {
+    console.error('error:', error);
+    res.status(500).send('Error fetching TV shows');
+  }
 });
 
-
-
-async function fetchPopularTvShows() {
-  const options = {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${TMDB_API_KEY}`,
-      'Accept': 'application/json'
-    }
-  };
-  try {
-      const response = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${TMDB_API_KEY}&language=en-US&page=1`);
-      return response.data.results;
-  } catch (error) {
-      console.error('Error fetching popular TV shows:', error);
-      return [];
-  }
-}
+app.use('/', showsController);
 
 
 app.get('/home', async (req, res) => {
+  const url = `${API_BASE_URL}${POPULAR_TV_SHOWS_URL}`;
+
   try {
-    const tvShows = await fetchPopularTvShows();
-    res.render('home', { tvShows }); // Render home.ejs with tvShows data
+    const response = await axios.get(url, { headers: HEADERS });
+    res.render('home', { shows: response.data.results }); // Render home.ejs with tvShows data
   } catch (error) {
     console.error('Error fetching TV shows:', error);
     res.status(500).send('Error fetching TV shows');
   }
 });
-
-
 
 
 //Favorites Page

@@ -11,31 +11,6 @@
 
 
 
-<div class="container center">
-    <div class="container row text-center">
-<% if (typeof popularShows !== 'undefined' && popularShows.length > 0) { %>
-    <% popularShows.forEach(function(show) { %>
-        <div class="card">
-            <div class="overlay">
-                <div class="show">
-                    <h2><%= show.name %></h2>
-                    <p id="p_rating"><strong>Rating:</strong> <span><%= show.vote_average %> / 10</span></p>
-                    <a href="/show/<%= show.id %>">Details</a>
-                </div>
-            </div>
-            <img src="http://image.tmdb.org/t/p/w400/<%= show.poster_path %>" onerror="this.onerror=null;this.src='../images/imageNotFound.png';">
-        </div>
-    <% }); %>
-<% } else { %>
-    <p>No popular shows found.</p>
-<% } %>
-
-
-
-
-
-</body>
-
 
 
 <%- include('../partials/footer') %>
