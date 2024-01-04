@@ -1,10 +1,11 @@
 <%- include('../partials/header.ejs'); %>
+<script src="/data.js"></script> 
     <h1>Popular TV Shows</h1>
     <div class="show-list">
         <% shows.forEach(show => { %>
             <div id="show_<%= show.id %>" class="show">
                 <!-- Check if the show has a poster image -->
-                <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
+                <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>" onclick="openModal('<%= show.id %>')">
                 <h2><%= show.name %></h2>
                 <form action="/add-tv-show" method="post">
                     <input type="hidden" name="title" value="<%= show.name %>">
@@ -16,3 +17,7 @@
     </div>
 </body>
 </html>
+
+
+<%- include('../partials/modal') %>
+<%- include('../partials/footer') %>

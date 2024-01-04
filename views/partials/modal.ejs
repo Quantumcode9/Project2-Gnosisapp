@@ -1,0 +1,35 @@
+ <script src="/data.js"></script> 
+
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle"></h2>
+        <p id="modalOverview"></p>
+        <!-- Add other fields like vote_average, vote_count -->
+        <a href="/pages/show" class="button">More Details</a>
+    </div>
+</div>     
+
+<script>
+function openModal(showId) {        
+       const show = shows.find(s => s.id === showId);
+    // Check if the show is found
+    if (show) {
+        // Populate the modal with show details
+        document.getElementById('modalTitle').textContent = show.title;
+        document.getElementById('modalOverview').textContent = show.overview;
+        // ... populate other fields like vote_average, vote_count
+
+        // Display the modal
+        document.getElementById('myModal').style.display = 'block';
+    } else {
+        console.error('Show not found');
+    }
+}
+
+function closeModal() {
+    document.getElementById('myModal').style.display = 'none';
+}
+</script>
+
+

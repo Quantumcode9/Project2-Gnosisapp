@@ -1,5 +1,9 @@
 
 
+
+
+
+
 document.addEventListener('click', function(event) {
   if (event.target.matches('.add-to-watched-btn')) {
     const showId = event.target.getAttribute('data-show-id');
@@ -34,6 +38,10 @@ document.addEventListener('click', function(event) {
 // });
 
 
+
+
+
+
 // STAR RATING
 
 document.getElementById('ratingOptions').addEventListener('click', function(event) {
@@ -55,7 +63,6 @@ function highlightStars(rating) {
 }
 
 //RATING MODAL
-
 
 function addToWatched(showId) {
   openRatingModal(showId);  // Open the rating modal when a show is marked as watched

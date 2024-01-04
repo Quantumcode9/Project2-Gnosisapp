@@ -73,6 +73,38 @@ res.render('pages/latest', { shows: apiRes.data.results, username, loggedIn, use
 }
 });
 
+// a function that will get the show details from the api
+// a route that will render the show details page
+
+
+
+router.get('/pages/show/:id', async (req, res) => {
+  const { username, loggedIn, userId } = req.session;
+  const { id } = req.params;
+  try {
+    const response = await axios.get(`${API_BASE_URL}/tv/${id}?language=en-US`, { headers: HEADERS });
+    const show = response.data;
+    res.render('pages/show', { show , username, loggedIn, userId });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error fetching show details');
+  }
+});
+
+router.get('/partials/modal/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await axios.get(`${API_BASE_URL}/tv/${id}?language=en-US`, { headers: HEADERS });
+    const show = response.data;
+    res.render('partials/modal', { id, show });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error fetching show details');
+  }
+});
+
+
+
 
 
 

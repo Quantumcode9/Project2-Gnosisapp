@@ -223,13 +223,6 @@ fieldset {
 
 
 
-
-
-
-
-
-
-
       .recommendation .recommendation-buttons {
         opacity: 0;
         visibility: hidden;
@@ -282,6 +275,12 @@ fieldset {
         padding: 20px;
         border: 1px solid #888;
         width: 80%; /* Could be more or less, depending on screen size */
+      }
+
+      .modal-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
       }
       
       .close {
@@ -348,16 +347,3 @@ fieldset {
         }
 
 
-        /* .container center {
-            width: 30%;
-
-        }
-
-       .card {
-            width: 30%;
-
-        }
-
-        .card img {
-            max-width: 50%;
-        }  */

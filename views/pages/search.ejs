@@ -9,8 +9,6 @@
 
 <div id="searchResults"></div>
 
-
-
 <script>
     document.getElementById('searchInput').addEventListener('keyup', function(event) {
         const query = event.target.value;
@@ -22,7 +20,10 @@
                     // Display the results with poster images
                     document.getElementById('searchResults').innerHTML = data.map(show => `
     <div class="show">  
-        <img src="https://image.tmdb.org/t/p/w500${show.poster_path}" alt="${show.name}" class= "img"> 
+        <a href="/pages/show/${show.id}">
+         <img src="https://image.tmdb.org/t/p/w500${show.poster_path}" alt="${show.name}" class="img">
+          </a>
+
         <div class="show-icons">
             <img src="/images/Favorites.png" alt="Add to Favorites" onclick="addToFavorites('${show.id}')" class="icon">
             <img src="/images/Watching.png" alt="Add to Watch List" onclick="addToWatchList('${show.id}')" class="icon">
@@ -36,6 +37,8 @@
     });
 </script>
 
+<%- include('../partials/modal') %>
+<%- include('../partials/footer') %>
 
 
 
