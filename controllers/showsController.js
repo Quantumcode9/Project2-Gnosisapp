@@ -21,6 +21,10 @@ const HEADERS = {
 
 
 
+
+
+
+
 // Fetch shows by genre
 
  router.get('/pages/browse', async (req, res) => {
@@ -149,6 +153,43 @@ router.get('/home', async (req, res) => {
 
 
 
+
+router.post('/shows/add', (req, res) => {
+  const showData = req.body;
+
+  const show = new Show({
+    id: showData.id,
+    name: showData.name,
+    poster_path: showData.poster_path,
+    last_episode_to_air: showData.last_episode_to_air ? JSON.parse(showData.last_episode_to_air) : {},
+    next_episode_to_air: showData.next_episode_to_air ? JSON.parse(showData.next_episode_to_air) : {},
+    number_of_episodes: showData.number_of_episodes ? Number(showData.number_of_episodes) : 0,
+    number_of_seasons: showData.number_of_seasons ? Number(showData.number_of_seasons) : 0,
+    seasons: showData.seasons,
+    vote_average: showData.vote_average,
+    vote_count: showData.vote_count,
+    overview: showData.overview,
+    tagline: showData.tagline,
+    genres: showData.genres,
+    in_production: showData.in_production,
+    networks: showData.networks,
+    status: showData.status,
+    type: showData.type,
+    homepage: showData.homepage,
+    first_air_date: new Date(showData.air_date),
+
+  });
+
+  show.save()
+    .then(() => res.redirect('/pages/latest'))
+    .catch(error => {
+      console.error('Error saving show:', error);
+      res.status(500).send('Error saving show');
+    });
+});
+
+
+
 router.post('/add-tv-show', async (req, res) => {
   try {
       await client.connect();
@@ -165,6 +206,8 @@ router.post('/add-tv-show', async (req, res) => {
       await client.close();
   }
 });
+
+
 
 
 console.log('showController is connected')

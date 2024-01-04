@@ -34,8 +34,7 @@ const seasonSchema = new mongoose.Schema({
 
 const showSchema = new mongoose.Schema({
   poster_path: String,
-  first_air_date: Date,
-  genres: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Genre' }], // Assuming you have a Genre model
+  genres: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Genre' }],
   homepage: String,
   id: { type: Number, unique: true, required: true },
   in_production: Boolean,
