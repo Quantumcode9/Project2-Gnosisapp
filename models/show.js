@@ -17,7 +17,6 @@ const episodeSchema = new mongoose.Schema({
 
 const networkSchema = new mongoose.Schema({
   id: Number,
-  logo_path: String,
   name: String,
   origin_country: String
 });
@@ -27,7 +26,6 @@ const seasonSchema = new mongoose.Schema({
   id: Number,
   name: String,
   overview: String,
-  poster_path: String,
   season_number: Number,
   vote_average: Number
 });
@@ -38,8 +36,11 @@ const showSchema = new mongoose.Schema({
   homepage: String,
   id: { type: Number, unique: true, required: true },
   in_production: Boolean,
-  languages: [String],
-  last_air_date: Date,
+  rating: [String],
+  last_air_date: {
+    type: Date,
+    required: false 
+  },
   last_episode_to_air: episodeSchema,
   name: String,
   next_episode_to_air: episodeSchema,

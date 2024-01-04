@@ -24,6 +24,7 @@ const middleware = (app) => {
         next();
     });
     app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(bodyParser.json());
     // Other middlewares
     app.use(methodOverride('_method'));
     app.use(express.json());

@@ -5,7 +5,7 @@
         <% favorites.forEach(show => { %>
             <div class="show">
                 <% if (show.poster_path) { %>
-                    <img src="https://image.tmdb.org/t/p/w500<%= favorite.posterPath %>" alt="<%= favorite.title %>">
+                    <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= favorite.title %>">
                 <% } else { %>
                     <img src="/images/Untitled.png" alt="No image available">
                 <% } %>

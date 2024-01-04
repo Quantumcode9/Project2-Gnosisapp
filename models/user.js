@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const Schema = mongoose.Schema;
 require('dotenv').config();
+const Show = require('./show'); 
+
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -13,24 +16,29 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  watched: [String],
-  wantToWatch: [String],
-  ratedShows: [{
-    showId: String,
-    rating: Number, 
+  favorites: [{
+    id: String,
+    name: String,
+    poster_path: String,
+    rating: String,
+    last_air_date: Date
   }],
-  favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Show' }]
+watched: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Show'
+}],
+wantToWatch: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Show'
+}],
+ratedShows: [{
+    show: {
+        type: Schema.Types.ObjectId,
+        ref: 'Show'
+    },
+    rating: Number
+}]
 });
-
-
-
-// favorites: { type: [String], default: [] },
-// });
-
-
-
-
-
 
 const User = mongoose.model('User', userSchema);
 

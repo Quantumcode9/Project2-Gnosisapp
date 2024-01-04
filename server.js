@@ -3,37 +3,35 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('./utils/connection');
 const axios = require('axios');
-const TMDB_API_KEY = process.env.TMDB_API_KEY;
 const UserRouter = require('./controllers/userController');
 const ShowRouter = require('./controllers/showsController');
-const { addShowToFavorites } = require('./services/showService');
-const User = require('./models/user');
 const middleware = require('./utils/middleware');
-const showsController = require('./controllers/showsController');
+const showsController = require('./controllers/showsController')
 
+const TMDB_API_KEY = process.env.TMDB_API_KEY;
 const API_BASE_URL = 'https://api.themoviedb.org/3';
 const POPULAR_TV_SHOWS_URL = '/tv/popular?language=en-US&page=1';
 const HEADERS = {
     'Accept': 'application/json',
-    'Authorization': `Bearer ${TMDB_API_KEY}`,
-    'Host': 'api.themoviedb.org'
+    'Authorization': `Bearer ${TMDB_API_KEY}`
 };
-
 
 const app = express();
 
-
+// Middleware setup
+middleware(app);
 
 // Static files
-app.use(express.static('node_modules/bootstrap/dist'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // EJS view engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Middleware 
-middleware(app)
+// Routes
+app.use('/users', UserRouter);
+app.use('/shows', ShowRouter);
+app.use('/', showsController);
 
 // Home route
 app.get('/', (req, res) => {
@@ -41,9 +39,14 @@ app.get('/', (req, res) => {
   res.render('pages/home', { username, loggedIn, userId });
 });
 
-//////////////////////////////
-//ADD TO CONTROLLER FILE//
-/////////////////////////////
+
+// search tv shows
+
+app.get('/pages/search', (req, res) => {
+  res.render('pages/search');
+});
+
+
 // Middleware to fetch genres
 app.use(async (req, res, next) => {
   try {
@@ -60,6 +63,37 @@ app.use(async (req, res, next) => {
     res.status(500).send('Error fetching genres');
   }
  });
+
+
+// Genre routes
+app.get('/pages/browse', (req, res) => {
+  res.render('pages/browse', { genres: req.genres });
+});
+
+app.get('/pages/genre', (req, res) => {
+  res.render('pages/genre', { genres: req.genres });
+});
+
+
+app.get('/pages/genre/:genreId', async (req, res) => {
+  const genreId = req.params.genreId; // Get the genre ID from the URL parameter
+
+  const url = `${API_BASE_URL}/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=1&sort_by=popularity.desc&with_genres=${genreId}`;
+
+  try {
+    const response = await axios.get(url, { headers: HEADERS });
+    // Render a template with the fetched TV shows
+    res.render('pages/genre', { shows: response.data.results, });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error fetching TV shows for the genre');
+  }
+});
+
+////////////////////////////////////
+////////////////////////////////////
+////////////////////////////////////
+////////////////////////////////////
 
 // add to favorites///////////////////////////
 
@@ -98,48 +132,8 @@ app.post('/add-to-favorites', async (req, res) => {
     res.status(500).send('Error processing request');
   }
 });
-
-
-
-
-
-// Routes
-app.use('/users', UserRouter);
-app.use('/shows', ShowRouter);
-
-
-// Genre routes
-app.get('/pages/browse', (req, res) => {
-  res.render('pages/browse', { genres: req.genres });
-});
-
-app.get('/pages/genre', (req, res) => {
-  res.render('pages/genre', { genres: req.genres });
-});
-
-//////////////////////////////
-
-
-
-app.get('/pages/genre/:genreId', async (req, res) => {
-  const genreId = req.params.genreId; // Get the genre ID from the URL parameter
-
-  const url = `${API_BASE_URL}/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=1&sort_by=popularity.desc&with_genres=${genreId}`;
-
-  try {
-    const response = await axios.get(url, { headers: HEADERS });
-    // Render a template with the fetched TV shows
-    res.render('pages/genre', { shows: response.data.results, });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Error fetching TV shows for the genre');
-  }
-});
-
-
-
-//////////////////////////////
-
+////////////////////////////////////
+////////////////////////////////////
 
 
 // Fetch recommendations
@@ -156,15 +150,6 @@ app.get('/get-recommendations/:showId', async (req, res) => {
     console.error('Error fetching recommendations:', error);
     res.status(500).send('Error fetching recommendations');
   }
-});
-
-
-
-
-// search tv shows
-
-app.get('/pages/search', (req, res) => {
-  res.render('pages/search');
 });
 
 
@@ -187,21 +172,6 @@ app.post('/add-rated-show', async (req, res) => {
     res.status(500).send('Error processing request');
   }
 });
-app.get('/pages/popular', async (req, res) => {
-  const { username, loggedIn, userId } = req.session;
-  const url = `${API_BASE_URL}${POPULAR_TV_SHOWS_URL}`;
-
-  try {
-    const response = await axios.get(url, { headers: HEADERS });
-    // Render your EJS view here, passing the TV shows data
-    res.render('pages/popular', { shows: response.data.results });
-  } catch (error) {
-    console.error('error:', error);
-    res.status(500).send('Error fetching TV shows');
-  }
-});
-
-app.use('/', showsController);
 
 
 app.get('/home', async (req, res) => {

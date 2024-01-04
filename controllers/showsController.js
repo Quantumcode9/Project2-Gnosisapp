@@ -3,6 +3,7 @@ const axios = require('axios');
 const Show = require('../models/show');
 require('dotenv').config();
 const client = require('../utils/connection');
+const User = require('../models/user');
 
 const router = express.Router();
 const TMDB_API_KEY = process.env.TMDB_API_KEY;
@@ -16,12 +17,6 @@ const HEADERS = {
     // 'Authorization': `Bearer ${TMDB_API_KEY}`,
     'Host': 'api.themoviedb.org'
 };
-
-
-
-
-
-
 
 
 
@@ -43,7 +38,6 @@ const HEADERS = {
 
 
 
-
 //Fetch latest TV shows
 
 
@@ -51,7 +45,7 @@ router.get('/pages/latest', (req, res) => {
 const { username, loggedIn, userId } = req.session;
 axios(`${API_BASE_URL}${LATEST_TV_SHOWS_URL}`, { headers: HEADERS })
   .then(apiRes => {
-// console.log('this came back from the api: \n', apiRes.data)
+ console.log('this came back from the api: \n', apiRes.data)
 // 
 res.render('pages/latest', { shows: apiRes.data.results, username, loggedIn, userId });
 })
@@ -63,6 +57,7 @@ res.render('pages/latest', { shows: apiRes.data.results, username, loggedIn, use
 }
  )
  })
+ 
 
 
  router.get('/search-tv-shows', async (req, res) => {
@@ -76,9 +71,6 @@ res.render('pages/latest', { shows: apiRes.data.results, username, loggedIn, use
      res.status(500).send('Error during search');
 }
 });
-
-// a function that will get the show details from the api
-// a route that will render the show details page
 
 
 
@@ -108,30 +100,20 @@ router.get('/partials/modal/:id', async (req, res) => {
 });
 
 
+router.get('/pages/popular', async (req, res) => {
+  const { username, loggedIn, userId } = req.session;
+  const url = `${API_BASE_URL}${POPULAR_TV_SHOWS_URL}`;
 
-
-
-
-
-
-//   router.get('/pages/search', (req, res) => {
-//   const query = req.query.q;
-//   const { username, loggedIn, userId } = req.session;
-//   const { name } = req.params;
-//   axios(`${API_BASE_URL}${SEARCH}${name}`, { headers: HEADERS })
-//     .then(apiRes => {
-//      res.render('pages/search', { shows: apiRes.data.results, username, loggedIn, userId });
-//       res.json(response.data.results);
-//    })
-//     .catch(err => {
-//        console.log(err)
-//        res.send('error')
-//     })
-//  })
-
-
-
-
+  try {
+    const response = await axios.get(url, { headers: HEADERS });
+    console.log(response.data.results);
+    // Render your EJS view here, passing the TV shows data
+    res.render('pages/popular', { shows: response.data.results, userId: req.session.userId});
+  } catch (error) {
+    console.error('error:', error);
+    res.status(500).send('Error fetching TV shows');
+  }
+});
 
 
 
@@ -153,16 +135,24 @@ router.get('/home', async (req, res) => {
 
 
 
+router.post('/shows/add/:userId', async (req, res) => {
+  console.log('Received request body:', req.body);
 
-router.post('/shows/add', (req, res) => {
+  try{
+
   const showData = req.body;
+  const userId = req.params.userId;
+  const lastEpisodeToAir = showData.last_episode_to_air ? JSON.parse(showData.last_episode_to_air) : {};
+   const nextEpisodeToAir = showData.next_episode_to_air ? JSON.parse(showData.next_episode_to_air) : {};
+   let show = await Show.findOne({ id: showData.id });
 
-  const show = new Show({
+ if (!show) {
+ show = new Show({
     id: showData.id,
     name: showData.name,
     poster_path: showData.poster_path,
-    last_episode_to_air: showData.last_episode_to_air ? JSON.parse(showData.last_episode_to_air) : {},
-    next_episode_to_air: showData.next_episode_to_air ? JSON.parse(showData.next_episode_to_air) : {},
+    last_episode_to_air: lastEpisodeToAir,
+    next_episode_to_air: nextEpisodeToAir,
     number_of_episodes: showData.number_of_episodes ? Number(showData.number_of_episodes) : 0,
     number_of_seasons: showData.number_of_seasons ? Number(showData.number_of_seasons) : 0,
     seasons: showData.seasons,
@@ -174,19 +164,41 @@ router.post('/shows/add', (req, res) => {
     in_production: showData.in_production,
     networks: showData.networks,
     status: showData.status,
-    type: showData.type,
     homepage: showData.homepage,
-    first_air_date: new Date(showData.air_date),
+    last_air_date: showData.last_air_date ? new Date(showData.last_air_date) : null,
 
   });
 
-  show.save()
-    .then(() => res.redirect('/pages/latest'))
-    .catch(error => {
-      console.error('Error saving show:', error);
-      res.status(500).send('Error saving show');
-    });
+  await show.save();
+      console.log('Show saved successfully');
+    }
+
+    const user = await User.findById(userId);
+    if (!user) throw new Error('User not found');
+
+    const isShowAlreadyFavorited = user.favorites.some(favorite => favorite.id === show.id);
+
+    if (!isShowAlreadyFavorited) {
+      user.favorites.push({
+        id: show.id, // not MongoDB ObjectId
+        name: show.name,
+        poster_path: showData.poster_path,
+        last_air_date: show.last_air_date
+      });
+
+      await user.save();
+      console.log('User updated with new favorite');
+    }
+
+    // Send a success response
+    res.json({ message: 'Show added to favorites', user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'An error occurred', error: err.toString() });
+  }
 });
+
+
 
 
 
@@ -206,8 +218,6 @@ router.post('/add-tv-show', async (req, res) => {
       await client.close();
   }
 });
-
-
 
 
 console.log('showController is connected')
