@@ -4,12 +4,12 @@
 
 
 
-document.addEventListener('click', function(event) {
-  if (event.target.matches('.add-to-watched-btn')) {
-    const showId = event.target.getAttribute('data-show-id');
-    openRatingModal(showId);
-  }
-});
+// document.addEventListener('click', function(event) {
+//   if (event.target.matches('/shows/watched/add/:showId')) {
+//     const showId = event.target.getAttribute('data-show-id');
+//     openRatingModal(showId);
+//   }
+// });
 
 //event listener 
 document.addEventListener('click', function(event) {
@@ -29,14 +29,13 @@ document.addEventListener('click', function(event) {
 
 
 // document.addEventListener('click', function(event) {
-//   if (event.target.matches('.add-to-watched-btn')) {
-//     const showId = event.target.getAttribute('data-show-id');
+//   if (event.target.matches('/shows/watched/add/:showId')) {
+//          const showId = event.target.getAttribute('data-show-id');
 //     openRatingModal(showId);
-//   } else if (event.target.matches('.close') || event.target.matches('#submitRating')) {
+//    } else if (event.target.matches('.close') || event.target.matches('#submitRating')) {
 //     closeRatingModal();
 //   }
-// });
-
+//  });
 
 
 

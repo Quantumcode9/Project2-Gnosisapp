@@ -79,7 +79,7 @@ form {
 
 form input[type='text'],
 form input[type='password'],
-form button {
+/* form button {
     padding: 10px;
     margin: 20px 10px;
     width: 80%;
@@ -99,7 +99,7 @@ form button {
 
 form .btn:hover {
     background: #0056b3; 
-}
+} */
 
 h1 {
     margin: 20px 0;
@@ -354,6 +354,13 @@ fieldset {
             transition: ease-in-out 0.1s;
         }
 
+        .icon-button {
+          border: none;
+          background: none;
+          outline: none;
+          padding: 0;
+          margin: 0;
+        }
 /* show details page  */
 
 /* .show-page {

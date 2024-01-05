@@ -97,41 +97,41 @@ app.get('/pages/genre/:genreId', async (req, res) => {
 
 // add to favorites///////////////////////////
 
-const axiosConfig = {
-  headers: {
-    'Content-Type': 'application/json'
-  }
-};
+// const axiosConfig = {
+//   headers: {
+//     'Content-Type': 'application/json'
+//   }
+// };
 
-app.post('/add-to-favorites', async (req, res) => {
-  console.log(req.body);
+// app.post('/add-to-favorites', async (req, res) => {
+//   console.log(req.body);
 
-  const userId = req.session.userId;
-  const { id, name, poster_path } = req.body; // Adjusted to match the client-side
+//   const userId = req.session.userId;
+//   const { id, name, poster_path } = req.body; // Adjusted to match the client-side
 
-  try {
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).send('User not found');
-    }
+//   try {
+//     const user = await User.findById(userId);
+//     if (!user) {
+//       return res.status(404).send('User not found');
+//     }
 
-    const isAlreadyFavorite = user.favorites.some(favorite => favorite.showId === id);
-    if (!isAlreadyFavorite) {
-      user.favorites.push({ showId: id, title: name, posterPath: poster_path });
-      await user.save();
+//     const isAlreadyFavorite = user.favorites.some(favorite => favorite.showId === id);
+//     if (!isAlreadyFavorite) {
+//       user.favorites.push({ showId: id, title: name, posterPath: poster_path });
+//       await user.save();
 
-      // Send the data to the server using axios
-      const response = await axios.post('/api/add-to-favorites', { id, name, poster_path }, axiosConfig);
+//       // Send the data to the server using axios
+//       const response = await axios.post('/api/add-to-favorites', { id, name, poster_path }, axiosConfig);
 
-      res.json({ message: response.data.message });
-    } else {
-      res.json({ message: 'Show is already in favorites' });
-    }
-  } catch (error) {
-    console.error('Error processing request:', error);
-    res.status(500).send('Error processing request');
-  }
-});
+//       res.json({ message: response.data.message });
+//     } else {
+//       res.json({ message: 'Show is already in favorites' });
+//     }
+//   } catch (error) {
+//     console.error('Error processing request:', error);
+//     res.status(500).send('Error processing request');
+//   }
+// });
 ////////////////////////////////////
 ////////////////////////////////////
 
@@ -154,24 +154,24 @@ app.get('/get-recommendations/:showId', async (req, res) => {
 
 
 
-// Submit rating
-app.post('/add-rated-show', async (req, res) => {
-  const { showId, rating } = req.body;
-  const userId = req.session.userId;
+// // Submit rating
+// app.post('/add-rated-show', async (req, res) => {
+//   const { showId, rating } = req.body;
+//   const userId = req.session.userId;
 
-  try {
-    const user = await User.findById(userId);
-    if (user) {
-      // Add logic to update user's schema with the rated show
-      res.json({ message: 'Show rating added' });
-    } else {
-      res.status(404).send('User not found');
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Error processing request');
-  }
-});
+//   try {
+//     const user = await User.findById(userId);
+//     if (user) {
+//       // Add logic to update user's schema with the rated show
+//       res.json({ message: 'Show rating added' });
+//     } else {
+//       res.status(404).send('User not found');
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send('Error processing request');
+//   }
+// });
 
 
 app.get('/home', async (req, res) => {
