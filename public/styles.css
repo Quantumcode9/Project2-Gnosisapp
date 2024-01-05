@@ -346,4 +346,55 @@ fieldset {
             transition: ease-in-out 0.1s;
         }
 
+/* show details page  */
+
+/* .show-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 20px;
+  background-color: black;
+} */
+
+.show-details {
+  width: 80%;
+  margin: 20px auto;
+  padding: 20px;
+  background: #050101;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+
+
+.banner img {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  background: #333;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+
+
+.show-details h1, .show-details h2 {
+  color: #e6e6e6;
+  margin-bottom: 10px;
+}
+
+.image-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.image-container img {
+  max-width: 20%;
+  height: auto;
+  border-radius: 4px;
+}
+      
 

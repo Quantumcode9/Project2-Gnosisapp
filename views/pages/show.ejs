@@ -1,4 +1,51 @@
-<!-- create a page that rendors show details from the api -->
+<%- include('../partials/header.ejs'); %>
+<body class="show-page">
+    <div class="show-details">
+        <div class = "banner">   
+        <img src="https://image.tmdb.org/t/p/w500<%= show.backdrop_path %>" alt=".hidden">  
+        <h1><%= show.name %></h1>
+    </div>
+    <p><strong>Overview:</strong> <%= show.overview %></p>
 
+        <div class="image-container">
+            <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
+        </div>
+        <p><strong>First Air Date:</strong> <%= show.first_air_date %></p>
+        <p><strong>Status:</strong> <%= show.status %></p>
+        <p><strong>Rating:</strong> <%= show.vote_average %> (Based on <%= show.vote_count %> votes)</p>
 
+        <h2>Created By</h2>
+        <ul>
+            <% show.created_by.forEach(function(creator) { %>
+                <li><%= creator.name %></li>
+            <% }); %>
+        </ul>
 
+        <h2>Genres</h2>
+        <ul>
+            <% show.genres.forEach(function(genre) { %>
+                <li><%= genre.name %></li>
+            <% }); %>
+        </ul>
+
+        <p><strong>Number of Seasons:</strong> <%= show.number_of_seasons %></p>
+        <p><strong>Number of Episodes:</strong> <%= show.number_of_episodes %></p>
+
+        <h2>Seasons</h2>
+        <ul>
+            <% show.seasons.forEach(function(season) { %>
+                <li>
+                    <strong><%= season.name %>:</strong> <%= season.episode_count %> Episodes
+                </li>
+            <% }); %>
+        </ul>
+
+        <h2>Networks</h2>
+        <ul>
+            <% show.networks.forEach(function(network) { %>
+                <li><%= network.name %></li>
+            <% }); %>
+        </ul>
+    </div>
+</body>
+</html>

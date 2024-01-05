@@ -57,6 +57,24 @@ res.render('pages/latest', { shows: apiRes.data.results, username, loggedIn, use
 }
  )
  })
+
+ // rendor the details page
+  router.get('/pages/show/:id', (req, res) => {
+    const { username, loggedIn, userId } = req.session;
+    const { id } = req.params;
+    axios(`${API_BASE_URL}/tv/${id}?language=en-US`, { headers: HEADERS })
+    .then(apiRes => {
+      console.log('this came back from the api: \n', apiRes.data)
+      res.render('pages/show', { show: apiRes.data, username, loggedIn, userId });
+    })
+    .catch(err => {
+      console.log(err)
+      res.send('error')
+    } 
+      )
+  })
+
+
  
 
 

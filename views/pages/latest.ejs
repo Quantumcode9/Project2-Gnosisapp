@@ -5,25 +5,22 @@
         <div id="show_<%= show.id %>" class="show">
                 <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
                 <h2><%= show.name %></h2>
-                <form action="/shows/add" method="POST">
-                    <input type="hidden" name="id" value="<%= show.id %>">
-                    <input type="hidden" name="name" value="<%= show.name %>">
-                      <input type="hidden" name="image" value="<%= show.poster_path %>">
-                      <input type="hidden" name="rating" value="<%= show.vote_average %>">
-                      <input type="hidden" name="overview" value="<%= show.overview %>">
-                      <input type="hidden" name="overview" value="<%= show.overview %>">
-                      <input type="hidden" name="homepage" value="<%= show.homepage %>">
-                      <input type="hidden" name="numberepisodes" value="<%= show.number_of_episodes %>">
-                      <input type="hidden" name="numberseasons" value="<%= show.number_of_seasons %>">
-                      <input type="hidden" name="air_date" value="<%= show.air_date %>">
-                      <input type="hidden" name="last_episode_to_air" value='<%= JSON.stringify(show.last_episode_to_air) %>'>
-                      <input type="hidden" name="next_episode_to_air" value='<%= JSON.stringify(show.next_episode_to_air) %>'>
-                      <input type="hidden" name="status" value="<%= show.status %>">
-                      <input type="hidden" name="type" value="<%= show.type %>">
-                      <input type="hidden" name="popularity" value="<%= show.popularity %>">
-                      <input type="hidden" name="nexepisoden" value="<%= show.next_episode_to_air%>">
-                    <button type="submit"><%= show.name %></button>
-                  </form>
+                <form action="/shows/add/<%= userId %>" method="post">
+                <input type="hidden" name="id" value="${show.id}">
+                <input type="hidden" name="name" value="${show.name}">
+                <input type="hidden" name="poster_path" value="${show.poster_path}">
+                <input type="hidden" name="rating" value="${show.vote_average}">
+                <input type="hidden" name="overview" value="${show.overview}">
+                <input type="hidden" name="homepage" value="${show.homepage}">
+                <input type="hidden" name="numberepisodes" value="${show.number_of_episodes}">
+                <input type="hidden" name="numberseasons" value="${show.number_of_seasons}">
+                <input type="hidden" name="air_date" value="${show.air_date}">
+                <input type="hidden" name="last_episode_to_air" value='${JSON.stringify(show.last_episode_to_air)}'>
+                <input type="hidden" name="next_episode_to_air" value='${JSON.stringify(show.next_episode_to_air)}'>
+                <input type="hidden" name="status" value="${show.status}">
+                <input type="hidden" name="popularity" value="${show.popularity}">
+                <button type="submit">Add </button>
+              </form>
         </div>
     <% }) %>
 </div>
