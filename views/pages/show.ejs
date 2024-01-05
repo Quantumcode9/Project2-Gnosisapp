@@ -1,51 +1,99 @@
-<%- include('../partials/header.ejs'); %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gnosis </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<%- include('../partials/navbarScroll') %>
+    
 <body class="show-page">
     <div class="show-details">
-        <div class = "banner">   
-        <img src="https://image.tmdb.org/t/p/w500<%= show.backdrop_path %>" alt=".hidden">  
-        <h1><%= show.name %></h1>
+        <div class="card mb-3 top-card">
+        <img src="https://image.tmdb.org/t/p/w500<%= show.backdrop_path %>" class="card-img-top"  alt=".hidden">  
+        <div class="card-img-overlay"><%= show.name %> </div>
+        <div class="card-body">  
+            <h5 class="card-title">Add Buttons here</h5>
+            <p class="card-text"><%= show.name %> </p>
+        <p class="card-text"><%= show.tagline %> </p>
+        <p class="card-text"><small class="text-body-secondary"> <strong>Rating:</strong> <%= show.vote_average %> (Based on <%= show.vote_count %> votes)</small></p>
+        </div>
+        </div>
     </div>
+
     <p><strong>Overview:</strong> <%= show.overview %></p>
 
-        <div class="image-container">
+    <div class="container text-center">
+    <div class="row">
+        <div class="col-md-6 col-lg-4">
+            <div class="card">
+<div class ="image-container">
             <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
         </div>
-        <p><strong>First Air Date:</strong> <%= show.first_air_date %></p>
-        <p><strong>Status:</strong> <%= show.status %></p>
-        <p><strong>Rating:</strong> <%= show.vote_average %> (Based on <%= show.vote_count %> votes)</p>
+        </div>
 
+        <div class="col-md-6 col-lg-4">
+            <div class="card">
+            <h1><%= show.name %></h1>
+            <p><strong>First Air Date:</strong> <%= show.first_air_date %></p>
+            <p><strong>Status:</strong> <%= show.status %></p>
+            <p><strong>Number of Seasons:</strong> <%= show.number_of_seasons %></p>
+            <p><strong>Number of Episodes:</strong> <%= show.number_of_episodes %></p>
+        <p><strong>Last Air Date:</strong> <%= show.last_air_date %></p>
+        <p><strong>Status:</strong> <%= show.status %></p>
+        </div>
+        </div>
+
+       <div class="col-md-12 col-lg-4">
+            <div class="card">
         <h2>Created By</h2>
-        <ul>
+        <p>
             <% show.created_by.forEach(function(creator) { %>
                 <li><%= creator.name %></li>
             <% }); %>
-        </ul>
-
+        </p>
         <h2>Genres</h2>
-        <ul>
+        <p>
             <% show.genres.forEach(function(genre) { %>
                 <li><%= genre.name %></li>
             <% }); %>
-        </ul>
+            </p>
+        </div>
+        </div>
 
-        <p><strong>Number of Seasons:</strong> <%= show.number_of_seasons %></p>
-        <p><strong>Number of Episodes:</strong> <%= show.number_of_episodes %></p>
-
+        <div class="col-md-6 col-lg-4">
+            <div class="card">
         <h2>Seasons</h2>
-        <ul>
+        <p>
             <% show.seasons.forEach(function(season) { %>
                 <li>
                     <strong><%= season.name %>:</strong> <%= season.episode_count %> Episodes
                 </li>
             <% }); %>
-        </ul>
-
+            </p>
+    </div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+        <div class="card">
+        <h2>Production Companies</h2>
+        <p>
+            <% show.production_companies.forEach(function(company) { %>
+                <li><%= company.name %></li>
+            <% }); %>
+        </p>
         <h2>Networks</h2>
-        <ul>
+        <p>
             <% show.networks.forEach(function(network) { %>
                 <li><%= network.name %></li>
             <% }); %>
-        </ul>
+            </p>
+        </div> 
     </div>
+    </div>
+    </div>
+    </div> 
 </body>
 </html>
+<%- include('../partials/footer.ejs'); %>
