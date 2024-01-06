@@ -42,7 +42,10 @@
             </button>
             </form>
 
-          <div id="recommendations-container"></div>
+            <div id="recommendations-container"></div>
+
+
+        
 
           <form action="/shows/watchlist/add/<%= userId %>" method="post">
             <input type="hidden" name="id" value="<%= show.id %>">
@@ -62,58 +65,52 @@
              <button type="submit" class="icon-button">
                 <img class="icon" src="/images/Watching.png" alt="Add to Watchlist">
                </button>
-          </form>
+          </form>   
           <div id="recommendations-container"></div>
-
-
-
-
-
           <div id="ratingModal" class="modal">
             <div class="modal-content">
               <span class="close">&times;</span>
               <h2>Rate the Show</h2>
-              <div id="ratingOptions"> 
+              <div>
+                <label for="userRatingInput">Rating (1-10):</label>
+            <input type="number" id="userRatingInput" min="1" max="10">
               </div>
               <button id="submitRating">Submit Rating</button>
             </div>
-          </div>
-      </div>
-            
+        </div>
 
-
+</div>
     <script>
-
 document.getElementById('watchedForm').addEventListener('submit', function(event) {
-    console.log("Form submit event triggered");
     event.preventDefault(); 
     openRatingModal(); 
 });
-
-function openRatingModal() {
-    console.log("Opening modal");
-    const modal = document.getElementById('ratingModal');
-    if (modal) {
-        modal.style.display = 'block';
-    } else {
-        console.log("Modal element not found");
-    }
-}
-
 
 function openRatingModal() {
     const modal = document.getElementById('ratingModal');
     modal.style.display = 'block';
 }
 
-function submitRating(rating) {
-    document.getElementById('userRatingInput').value = rating; 
-    closeRatingModal();
-    
-    document.getElementById('watchedForm').submit(); 
+document.getElementById('submitRating').addEventListener('click', function() {
+    const rating = document.getElementById('userRatingInput').value;
+    if (rating && rating >= 1 && rating <= 10) {
+        document.getElementById('userRatingInput').value = rating;
+        closeRatingModal();
+        document.getElementById('watchedForm').submit();
+    } else {
+        alert('Please enter a valid rating between 1 and 10.');
+    }
+});
+
+function closeRatingModal() {
+    const modal = document.getElementById('ratingModal');
+    modal.style.display = 'none';    
 }
 
 </script>
+
+
+
 
 
 

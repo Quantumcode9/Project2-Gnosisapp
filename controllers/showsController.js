@@ -328,34 +328,34 @@ router.post('/shows/watched/add/:userId', async (req, res) => {
 
 
 
-router.post('/submit-rating', (req, res) => {
-  const { userId, showId, rating } = req.body;
+// router.post('/submit-rating', (req, res) => {
+//   const { userId, showId, rating } = req.body;
 
-  User.findById(userId, (err, user) => {
-      if (err) {
-          return res.status(500).send(err);
-      }
-      if (!user) {
-          return res.status(404).send('User not found');
-      }
+//   User.findById(userId, (err, user) => {
+//       if (err) {
+//           return res.status(500).send(err);
+//       }
+//       if (!user) {
+//           return res.status(404).send('User not found');
+//       }
 
-      // Find the show in the watched list and update the rating
-      const showIndex = user.watched.findIndex(s => s.id === showId);
-      if (showIndex > -1) {
-          user.watched[showIndex].user_rating = rating;
-          user.markModified('watched'); // Mark the 'watched' path as modified
-      } else {
-          return res.status(404).send('Show not found in watched list');
-      }
+//       // Find the show in the watched list and update the rating
+//       const showIndex = user.watched.findIndex(s => s.id === showId);
+//       if (showIndex > -1) {
+//           user.watched[showIndex].user_rating = rating;
+//           user.markModified('watched'); // Mark the 'watched' path as modified
+//       } else {
+//           return res.status(404).send('Show not found in watched list');
+//       }
 
-      user.save((err) => {
-          if (err) {
-              return res.status(500).send(err);
-          }
-          res.json({ message: 'Rating updated successfully' });
-      });
-  });
-});
+//       user.save((err) => {
+//           if (err) {
+//               return res.status(500).send(err);
+//           }
+//           res.json({ message: 'Rating updated successfully' });
+//       });
+//   });
+// });
 
 
 
