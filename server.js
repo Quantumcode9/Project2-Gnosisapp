@@ -95,43 +95,7 @@ app.get('/pages/genre/:genreId', async (req, res) => {
 ////////////////////////////////////
 ////////////////////////////////////
 
-// add to favorites///////////////////////////
 
-// const axiosConfig = {
-//   headers: {
-//     'Content-Type': 'application/json'
-//   }
-// };
-
-// app.post('/add-to-favorites', async (req, res) => {
-//   console.log(req.body);
-
-//   const userId = req.session.userId;
-//   const { id, name, poster_path } = req.body; // Adjusted to match the client-side
-
-//   try {
-//     const user = await User.findById(userId);
-//     if (!user) {
-//       return res.status(404).send('User not found');
-//     }
-
-//     const isAlreadyFavorite = user.favorites.some(favorite => favorite.showId === id);
-//     if (!isAlreadyFavorite) {
-//       user.favorites.push({ showId: id, title: name, posterPath: poster_path });
-//       await user.save();
-
-//       // Send the data to the server using axios
-//       const response = await axios.post('/api/add-to-favorites', { id, name, poster_path }, axiosConfig);
-
-//       res.json({ message: response.data.message });
-//     } else {
-//       res.json({ message: 'Show is already in favorites' });
-//     }
-//   } catch (error) {
-//     console.error('Error processing request:', error);
-//     res.status(500).send('Error processing request');
-//   }
-// });
 ////////////////////////////////////
 ////////////////////////////////////
 

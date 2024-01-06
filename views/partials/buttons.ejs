@@ -45,8 +45,6 @@
             <div id="recommendations-container"></div>
 
 
-        
-
           <form action="/shows/watchlist/add/<%= userId %>" method="post">
             <input type="hidden" name="id" value="<%= show.id %>">
             <input type="hidden" name="name" value="<%= show.name %>">
@@ -67,6 +65,8 @@
                </button>
           </form>   
           <div id="recommendations-container"></div>
+          
+
           <div id="ratingModal" class="modal">
             <div class="modal-content">
               <span class="close">&times;</span>

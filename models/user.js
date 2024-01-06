@@ -31,9 +31,12 @@ watched: [{
   last_air_date: Date,
   user_rating: Number
 }],
-wantToWatch: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Show'
+watchlist: [{
+  id: String,
+  name: String,
+  poster_path: String,
+  rating: String,
+  last_air_date: Date
 }],
 
 });

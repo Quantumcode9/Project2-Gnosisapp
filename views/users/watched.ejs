@@ -1,8 +1,10 @@
 <%- include('../partials/header') %>
 <body>
-    <h2>Your Favorite Shows</h2>
+
+    <h2>Your Watched Shows</h2>
+    <h1>You have watched <%= watchedMovies.length %> movies</h1>
     <div class="show-list">
-        <% favorites.forEach(show => { %>
+        <% Watched.forEach(show => { %>
             <div class="show">
                 <% if (show.poster_path) { %>
                     <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">

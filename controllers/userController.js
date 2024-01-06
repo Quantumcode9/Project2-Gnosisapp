@@ -5,7 +5,6 @@ const express = require('express')
 const User = require('../models/user')
 const bcrypt = require('bcryptjs')
 require('dotenv').config()
-const showService = require('../services/showService');
 
 ///////////////////////
 //// Create Router ////
@@ -133,6 +132,56 @@ router.get('/favorites', async (req, res) => {
       res.status(500).send('Error loading favorites page');
     }
   });
+
+  // get the user watched shows
+
+    router.get('/watched', async (req, res) => {
+
+        try {
+const userId = req.session.userId; 
+const user = await User.findById(userId);
+  
+      if (!user) {
+        return res.status(404).send('User not found');
+      }
+
+res.render('users/watched', { watched: user.watched });
+
+        } catch (error) {
+            console.error('Error fetching watched:', error);
+            res.status(500).send('Error loading watched page');
+        }
+    });
+
+
+
+
+    // USER HUB
+
+    router.get('/hub', async (req, res) => {
+
+      const userId = req.session.userId; 
+const user = await User.findById(userId);
+  
+      if (!user) {
+        return res.status(404).send('User not found');
+      }
+            res.render('users/hub', {
+                favorites: user.favorites,
+                watched: user.watched,
+                watchlist: user.watchlist
+            });
+        });
+
+
+
+
+
+
+
+
+
+
 
 
 

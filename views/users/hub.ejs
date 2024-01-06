@@ -1,15 +1,73 @@
 <%- include('../partials/header') %>
 
-<h1>Hub</h1>
-<% for(let show of popularShows) { %>
-    <div class="card">
-        <div class="overlay">
-            <div class="show">
-                <h2><%= show.name %></h2>
-                <p id="p_rating"><strong>Rating:</strong> <span><%= show.vote_average %> / 10</span></p>
-                <a href="/show/<%= show.id %>">Details</a>
+<div class="container-fluid">
+    <!-- Favorite Shows -->
+    <h3>Favorite Shows</h3>
+    <div class="scroll-container">
+        <div class="d-flex">
+            <% favorites.forEach(show => { %>
+                <div class="hub-card">
+<img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
+<h4><%= show.name %></h4>
+                    <p>Rating: <%= show.rating %></p>
+                    <p>Last Air Date: <%= show.last_air_date %></p>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+                              <!-- Watchlist -->
+    <h3>Watchlist</h3>
+    <div class="scroll-container">
+        <div class="d-flex">
+            <% watchlist.forEach(show => { %>
+                <div class="hub-card">
+                    <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>"> 
+                    <h4><%= show.name %></h4>
+                    <p>Rating: <%= show.rating %></p>
+                    <p>Last Air Date: <%= show.last_air_date %></p>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+
+       <!-- Watched Shows -->
+
+       <h3>Watched Shows</h3>
+       <div class="scroll-container">
+           <div class="d-flex">
+               <% watched.forEach(show => { %>
+                   <div class="hub-card">
+                       <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>" class="hub-image">
+                       <h4><%= show.name %></h4>
+                       <p>User Rating: <%= show.user_rating %>/10</p>
+                       <p>Last Air Date: <%= show.last_air_date %></p>
+                   </div>
+               <% }); %>
+           </div>
+       </div> 
+
+
+
+        <!-- Change This -->
+        <h3>Recent</h3>
+        <div class="scroll-container">
+            <div class="d-flex flex-nowrap">
+                <% watched.forEach(show => { %>
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                 <div class="hub-card">
+                        <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>" class="hub-image">
+                        <h4><%= show.name %></h4>
+                        <p>User Rating: <%= show.user_rating %>/10</p>
+                        <p>Last Air Date: <%= show.last_air_date %></p>
+                    </div>
+                </div>
+                <% }); %>
             </div>
         </div>
-        <img src="http://image.tmdb.org/t/p/w400/<%= show.poster_path %>" onerror="this.onerror=null;this.src='../images/imageNotFound.png';">
-    </div>
-<% } %>
+
+<%- include('../partials/footer') %>
+
+
+
+
+
