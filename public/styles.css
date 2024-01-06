@@ -19,9 +19,6 @@ body {
 }
 
 
-
-
-
 /* Container for page elements */
 .container {
     width: 80%;
@@ -30,13 +27,14 @@ body {
 }
 
 .container-center {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 10px;
 }
+
 
 header {
     background: #333;
@@ -135,18 +133,7 @@ fieldset {
     text-align: center;
 }
 
-.container-sm {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 50vh;
-}
 
-
-.container-sm > * {
-    text-align: center;
-}
 
 .btn {
     margin: 10px;
@@ -162,6 +149,17 @@ fieldset {
 /* Show Title */
 
 
+.show {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 20px;
+
+}
+
 .show-list {
     display: flex;
     flex-wrap: wrap;
@@ -171,7 +169,6 @@ fieldset {
     margin: 20px;
 
   }
-
 
 
 .show img {
@@ -188,15 +185,8 @@ fieldset {
     }
   }
 
-    .show {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        margin: 20px;
-    }
+ 
+  
     #searchResults {
       display: flex;
       flex-wrap: wrap;
@@ -251,16 +241,6 @@ fieldset {
       .recommendation:hover .recommendation-buttons {
         opacity: 1;
         visibility: visible;
-      }
-
-
-      .add-to-favorites-btn {
-        padding: 5px 10px;
-        margin: 5px;
-        background-color: blue;
-        color: white;
-        border: none;
-        cursor: pointer;
       }
 
       /* MODAL */
@@ -363,30 +343,8 @@ fieldset {
         }
 /* show details page  */
 
-/* .show-page {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  margin: 20px;
-  background-color: black;
-} */
-
-/* .show-details {
-  width: 80%;
-  margin: 20px auto;
-  padding: 20px;
-  background: #050101;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-} */
 
 
-.top-card {
-  max-height: 250px; /* Adjust as needed to make the card slimmer */
-  overflow: hidden;
-}
 
 
 
@@ -397,13 +355,13 @@ fieldset {
   max-width: 100%;
 }
 
-.overlay-text {
+/* .overlay-text {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   
-}
+} */
 
 
 .image-container {
@@ -421,13 +379,14 @@ fieldset {
 }
 
 
+
 /* show page */
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-}
+} 
 
 /* Card Overlay */
 .card-img-overlay {
@@ -440,16 +399,15 @@ fieldset {
 }
 
 
+
 /* Row and Column Layout */
-.row {
+
+/* .row {
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: 20px;
-}
-
-.col-md-4, .col-md-8 {
-  padding: 10px;
-}
+  margin-right: -15px;
+  margin-left: -15px;
+} */
 
 /* For medium devices and up */
 @media (min-width: 768px) {
@@ -482,11 +440,13 @@ ul li {
 }
 
 /* Utility Classes */
+
 .mt-4 {
   display:flex;
   margin-top: 1.5rem;
  flex-wrap: wrap;
 }
+
 
 .creator-info {
   display: flex;
@@ -499,16 +459,54 @@ ul li {
 }
 
 
-.image-profile {
-  width: 20%;
-  height: auto;
-  border-radius: 5px;
+.card-img-top {
+  width: 108%; 
+  border-top-left-radius: calc(0.25rem - 1px); 
+  border-top-right-radius: calc(0.25rem - 1px);
 }
 
+.card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  margin-bottom: 20px; 
+  background-color: rgba(0,0,0,0.1);
+  border-radius: 10px;
+  margin: 20px;
+
+}
+
+.details-card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  margin-bottom: 20px; 
+  background-color: rgba(0,0,0,0.1);
+  border-radius: 10px;
+  margin: 20px;
+
+}
+
+.card-body {
+  padding: 20px; 
+  color: rgb(217, 217, 217);
+
+}
+
+
+
+/* logo card */
+
+.logo-card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  margin-bottom: 15px; 
+  text-align: center; 
+  background-color: white; 
+}
+
+
 .logo-image {
-  width: 50%;
+  max-width: 100%;
   height: auto;
-  border-radius: 5px;
+  display: block; 
+  margin: 0 auto; 
 }
 
 .hidden {
@@ -520,7 +518,7 @@ h3 {
   font-size: 30px;
   text-align: center;
 }
-
+/* season-card */
 
 .season-card {
   margin-bottom: 20px;
@@ -529,14 +527,40 @@ h3 {
   transition: transform 0.3s ease-in-out;
 }
 
-.season-image {
+
+.season-card:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease-in-out;
+
+}
+
+.season-image , .still-image {
+  border-radius: 8px;
   width: 100%; 
   height: auto; 
   margin-bottom: 10px; 
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-in-out; 
 }
 
-.still-image {
-  width: 100%; 
-  height: auto; 
-  margin-bottom: 10px; /
+/* creator card */
+
+.creator-card {
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  margin-bottom: 20px; 
+  text-align: center; 
+  background-color: rgb(121, 121, 121); 
+  border-radius: 10px; 
+}
+
+.image-profile {
+  width: 100px; 
+  height: auto;
+  margin-bottom: 10px;
+  border-radius: 80%; 
 }
