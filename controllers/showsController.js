@@ -348,6 +348,27 @@ router.post('/shows/watchlist/add/:userId', async (req, res) => {
   }
 });
 
+// user delete a show from their watchlist
+
+router.delete('/shows/watchlist/remove/:userId/:showId', async (req, res) => {
+  try {
+    const { userId, showId } = req.params;
+
+    const user = await User.findById(userId);
+    if (!user) throw new Error('User not found');
+
+    user.watchlist = user.watchlist.filter(show => show.id !== showId);
+
+    await user.save();
+    console.log('Show removed from watchlist');
+
+    res.json({ message: 'Show removed from watchlist', user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'An error occurred', error: err.toString() });
+  }
+});
+
 
 
 

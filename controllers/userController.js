@@ -176,15 +176,6 @@ const user = await User.findById(userId);
 
 
 
-
-
-
-
-
-
-
-
-
 // GET -> Logout - /users/logout
 router.get('/logout', (req, res) => {
     const { username, loggedIn, userId } = req.session
@@ -198,6 +189,13 @@ router.delete('/logout', (req, res) => {
         res.redirect('/')
     })
 })
+
+
+
+
+
+
+
 
 
 

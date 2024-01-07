@@ -7,7 +7,7 @@ const UserRouter = require('./controllers/userController');
 const ShowRouter = require('./controllers/showsController');
 const middleware = require('./utils/middleware');
 const showsController = require('./controllers/showsController')
-
+const deleteController = require('./controllers/delete')
 const TMDB_API_KEY = process.env.TMDB_API_KEY;
 const API_BASE_URL = 'https://api.themoviedb.org/3';
 const POPULAR_TV_SHOWS_URL = '/tv/popular?language=en-US&page=1';
@@ -32,6 +32,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use('/users', UserRouter);
 app.use('/shows', ShowRouter);
 app.use('/', showsController);
+app.use('/', deleteController);
 
 // Home route
 app.get('/', (req, res) => {
