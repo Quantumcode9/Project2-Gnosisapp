@@ -153,6 +153,14 @@ res.render('users/watched', { watched: user.watched });
         }
     });
 
+// RATE a show in the watched list
+
+
+
+
+
+
+
 
 
 
@@ -167,6 +175,7 @@ const user = await User.findById(userId);
         return res.status(404).send('User not found');
       }
             res.render('users/hub', {
+                userId: userId,
                 favorites: user.favorites,
                 watched: user.watched,
                 watchlist: user.watchlist

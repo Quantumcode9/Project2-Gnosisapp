@@ -134,6 +134,33 @@ router.get('/pages/popular', async (req, res) => {
 });
 
 
+// 
+
+router.post('/update-rating', async (req, res) => {
+  const { userId, showId, rating } = req.body;
+
+  try {
+    // Assuming you have a User model with a 'watched' array
+    const user = await User.findById(userId);
+
+    // Find the show in the 'watched' array and update the rating
+    const showToUpdate = user.watched.find(show => show.id === showId);
+    if (showToUpdate) {
+      showToUpdate.user_rating = Number(rating); // Make sure it's a number
+      await user.save(); // Save the updated user document
+    }
+
+    res.redirect('/users/hub');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred while updating the rating.');
+  }
+});
+
+
+
+
+
 
 router.get('/home', async (req, res) => {
   try {
