@@ -1,15 +1,7 @@
-<!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gnosis</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"> 
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body>
-    <%- include('../partials/navbarScroll') %>
 
+
+    <%- include('../partials/navbarScroll') %>
+<body>
     <!-- Jumbotron -->
     <div class="jumbotron jumbotron-fluid text-white" style="background: url('https://image.tmdb.org/t/p/w500<%= show.poster_path %>') no-repeat center center; background-size: cover;">
         <div class="container">
@@ -18,58 +10,60 @@
         </div>
     </div>
 
+
     <!-- Show Details -->
-    <div class="d-flex justify-content-evenly">...</div>
-        <div class="row">
+    <div class="row">
             <!-- Image Card -->
-            <div class="col-md-4">
-                <div class="card">
+            <div class="col-md-6">
+                <div class="main-card">
                     <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>" class="card-img-top">
+                     <%- include('../partials/buttons', { show: show, userId: userId }) %> 
                 </div>
             </div>
-            <div class="col-md-8">
-                <div class="details-card">
-                    <div class="card-body">
-                        <h3 class="card-title">Details</h3>
-                        <p class="card-text">Overview: <%= show.overview %></p>
-                        <p><strong>Genres:</strong> 
-                            <% show.genres.forEach(function(genre) { %>
-                                <%= genre.name %><% if(!genre.last) { %>, <% } %>
-                            <% }); %>
-                        </p>
-                        <p><strong>Rating:</strong> <%= show.vote_average %> (Based on <%= show.vote_count %> votes)</p>
-                        <p><strong>Air Date:</strong> <%= show.first_air_date %> - <%= show.last_air_date %></p>
-                        <p><strong>Seasons:</strong> <%= show.number_of_seasons %>, <strong>Episodes:</strong> <%= show.number_of_episodes %></p>
-                        <p><strong>Status:</strong> <%= show.status %></p>
-                        <p><strong>Popularity:</strong> <%= show.popularity %></p>
-                    </div>
-                </div>
+               <!-- Details Cards -->
+    <div class="col-md-6">
+        <div class="details-card">
+            <div class="card-body">
+                <h3 class="">Overview</h3>
+                <p class=""><%= show.overview %></p>
+            </div> 
+        </div> 
+
+        <div class="details-card">
+            <div class="card-body"> 
+                <p><strong>Genres:</strong> 
+                    <% show.genres.forEach(function(genre, index) { %>
+                        <%= genre.name %><% if(index < show.genres.length - 1) { %>,<% } %>
+                    <% }); %>
+                </p>
+                <p><strong>Rating:</strong> <%= show.vote_average %> (Based on <%= show.vote_count %> votes)</p>
+                <p><strong>Air Date:</strong> <%= show.first_air_date %> - <%= show.last_air_date %></p>
+                <p><strong>Seasons:</strong> <%= show.number_of_seasons %>, <strong>Episodes:</strong> <%= show.number_of_episodes %></p>
+                <p><strong>Status:</strong> <%= show.status %></p>
+                <p><strong>Popularity:</strong> <%= show.popularity %></p>
             </div>
         </div>
-    </div>
-    
-    
-
- <!-- Additional Details -->
-<!-- Networks -->
-<div class="container mt-4">
-    <h3>Networks</h3>
-    <div class="row">
-        <% show.networks.forEach(function(network) { %>
-            <div class="col-md-4 col-sm-6">
-                <div class="logo-card">
-                    <img src="https://image.tmdb.org/t/p/w500<%=network.logo_path %>" alt="<%= network.name %>" class="logo-image">
-                </div>
-            </div>
-        <% }); %>
-    </div>
+    </div>   
 </div>
-
-   
     
+    
+<div class="row">
+    <!-- Networks -->
+    <div class="col-md-6">
+        <h3>Networks</h3>
+        <div class="row">
+            <% show.networks.forEach(function(network) { %>
+                <div class="col-md-4 col-sm-6">
+                    <div class="logo-card">
+                        <img src="https://image.tmdb.org/t/p/w500<%=network.logo_path %>" alt="<%= network.name %>" class="logo-image">
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </div>
 
     <!-- Production Companies -->
-    <div class="container mt-4">
+    <div class="col-md-6">
         <h3>Production Companies</h3>
         <div class="row">
             <% show.production_companies.forEach(function(company) { %>
@@ -81,6 +75,7 @@
             <% }); %>
         </div>
     </div>
+</div>
     
     
 
@@ -148,10 +143,10 @@
     </div>
 </div>
 
-</body>
-</html>
-<%- include('../partials/footer.ejs'); %>
-
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</body>
+</html>
+<%- include('../partials/footer.ejs'); %>

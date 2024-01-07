@@ -44,11 +44,9 @@ router.get('/pages/latest', (req, res) => {
 const { username, loggedIn, userId } = req.session;
 axios(`${API_BASE_URL}${LATEST_TV_SHOWS_URL}`, { headers: HEADERS })
   .then(apiRes => {
- console.log('this came back from the api: \n', apiRes.data)
-// 
+
 res.render('pages/latest', { shows: apiRes.data.results, username, loggedIn, userId });
 })
-
 
 .catch(err => {
  console.log(err)
@@ -56,15 +54,17 @@ res.render('pages/latest', { shows: apiRes.data.results, username, loggedIn, use
 }
  )
  })
+///////////////////////////////////////////
 
- // rendor the details page
-  router.get('/pages/show/:id', (req, res) => {
+   // more duplicate code
+
+   router.get('/users/hub', (req, res) => {
     const { username, loggedIn, userId } = req.session;
     const { id } = req.params;
     axios(`${API_BASE_URL}/tv/${id}?language=en-US`, { headers: HEADERS })
     .then(apiRes => {
       console.log('this came back from the api: \n', apiRes.data)
-      res.render('pages/show', { show: apiRes.data, username, loggedIn, userId });
+      res.render('users/hub', { show: apiRes.data, username, loggedIn, userId });
     })
     .catch(err => {
       console.log(err)
@@ -72,6 +72,44 @@ res.render('pages/latest', { shows: apiRes.data.results, username, loggedIn, use
     } 
       )
   })
+//////////////////////////////////////////////
+
+
+
+ //SHOW DETAILS PAGE
+
+ router.get('/pages/show/:id', async (req, res) => {
+  const { username, loggedIn, userId } = req.session;
+  const { id } = req.params;
+  try {
+    const response = await axios.get(`${API_BASE_URL}/tv/${id}?language=en-US`, { headers: HEADERS });
+    const show = response.data;
+    res.render('pages/show', { show , username, loggedIn, userId });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error fetching show details');
+  }
+});
+
+
+////////////////////////////////////
+ // render the details page
+ router.get('/pages/show/:id', (req, res) => {
+  const { username, loggedIn, userId } = req.session;
+  const { id } = req.params;
+  axios(`${API_BASE_URL}/tv/${id}?language=en-US`, { headers: HEADERS })
+  .then(apiRes => {
+    res.render('pages/show', { show: apiRes.data, username, loggedIn, userId });
+  })
+  .catch(err => {
+    console.log(err)
+    res.send('error')
+  } 
+    )
+})
+//////////////////////////////////////////////
+
+
 
 
  
@@ -89,20 +127,7 @@ res.render('pages/latest', { shows: apiRes.data.results, username, loggedIn, use
 }
 });
 
-//SHOW DETAILS PAGE
 
-router.get('/pages/show/:id', async (req, res) => {
-  const { username, loggedIn, userId } = req.session;
-  const { id } = req.params;
-  try {
-    const response = await axios.get(`${API_BASE_URL}/tv/${id}?language=en-US`, { headers: HEADERS });
-    const show = response.data;
-    res.render('pages/show', { show , username, loggedIn, userId });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Error fetching show details');
-  }
-});
 
 router.get('/partials/modal/:id', async (req, res) => {
   const { id } = req.params;
@@ -374,28 +399,6 @@ router.post('/shows/watchlist/add/:userId', async (req, res) => {
     res.status(500).json({ message: 'An error occurred', error: err.toString() });
   }
 });
-
-// user delete a show from their watchlist
-
-router.delete('/shows/watchlist/remove/:userId/:showId', async (req, res) => {
-  try {
-    const { userId, showId } = req.params;
-
-    const user = await User.findById(userId);
-    if (!user) throw new Error('User not found');
-
-    user.watchlist = user.watchlist.filter(show => show.id !== showId);
-
-    await user.save();
-    console.log('Show removed from watchlist');
-
-    res.json({ message: 'Show removed from watchlist', user });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'An error occurred', error: err.toString() });
-  }
-});
-
 
 
 

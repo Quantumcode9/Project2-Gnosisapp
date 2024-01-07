@@ -1,3 +1,4 @@
+
 <%- include('../partials/header') %>
 <body>
 
@@ -36,7 +37,6 @@
                      </a>     
         <h4><%= show.name %></h4>
             <p>Rating: <%= show.rating %></p>
-                   <p>Last Air Date: <%= show.last_air_date %></p>
                    <form action="/delete-show/<%= show.id %>" method="POST">
                     <button type="submit" class="btn btn-danger icon-button">
                         <i class="bi bi-trash"></i>
@@ -46,7 +46,9 @@
                                       <% }); %>
                                   </div>
                               </div>
-                          
+
+
+
 
 
       
@@ -78,9 +80,11 @@
                           </button>
                       </form>
 
-                      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#rateModal<%= show.id %>">
-                        <i class="bi bi-star-fill"></i> Rate this
-                      </button>
+                      <% if(typeof show.user_rating === 'undefined' || show.user_rating === null) { %>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#rateModal<%= show.id %>">
+                          <i class="bi bi-star-fill"></i> Add Rating
+                        </button>
+                      <% } %>
                       </div>
                       
 
@@ -133,7 +137,7 @@
                                 <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>" class="hub-image">
                             </a>
                             <h4><%= show.name %></h4>
-                            <p>User Rating: <%= show.user_rating %>/10</p>
+                            <p>User Rating: <%= show.user_rating %>/5</p>
                             <p>Last Air Date: <%= show.last_air_date %></p>
                         </div>
                     </div>

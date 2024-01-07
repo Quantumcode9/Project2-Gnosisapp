@@ -1,14 +1,15 @@
 <!-- create a search bar for searching for tv shows -->
 <%- include('../partials/header') %> 
-<div class ="container-center">
-<form action="/search" method="get"> 
-    <input type="text" name="search" id="searchInput"  placeholder="Search for a TV show">
-    <button type="submit">Search</button>
-</form>
-</div>
+<body>
+    <div class="container-center">
+        <form action="/search" method="get" class="d-flex justify-content-center"> 
+            <input type="text" name="search" id="searchInput" class="form-control me-2" placeholder="Search for a TV show" style="width: 300px;">
+            <button type="submit" class="btn btn-outline-primary">Search</button>
+        </form>
+    </div>
 
 <div id="searchResults"></div>
-
+</body>
 <script>
     document.getElementById('searchInput').addEventListener('keyup', function(event) {
         const query = event.target.value;

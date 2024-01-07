@@ -18,24 +18,6 @@ body {
     background-color: black;
 }
 
-
-/* Container for page elements */
-.container {
-    width: 80%;
-    margin: auto;
-    overflow: hidden;
-}
-
-.container-center {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  margin-top: 10px;
-}
-
-
 header {
     background: #333;
     color: #fff;
@@ -77,6 +59,7 @@ main {
 
 form input[type='text'],
 form input[type='password'],
+
 /* form button {
     padding: 10px;
     margin: 20px 10px;
@@ -99,6 +82,7 @@ form .btn:hover {
     background: #0056b3; 
 } */
 
+
 h1 {
     margin: 20px 0;
     font-size: 30px;
@@ -109,8 +93,9 @@ p {
     text-align: center;
 }
 
+
 a {
-    color: #007bff;
+  color: #007bff;
 }
 
 /* Responsive */
@@ -148,7 +133,28 @@ fieldset {
 
 .form .btn:hover {
   background: #0056b3; 
+} 
+
+
+
+
+
+/* Container for page elements */
+.container {
+  width: 80%;
+  margin: auto;
+  overflow: hidden;
 }
+
+.container-center {
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+text-align: center;
+margin-top: 10px;
+}
+
 
 
 /* Show Title */
@@ -251,23 +257,23 @@ fieldset {
       /* MODAL */
 
       .modal {
-        display: none; /* Hidden by default */
-        position: fixed; /* Stay in place */
-        z-index: 1; /* Sit on top */
+        display: none; 
+        position: fixed; 
+        z-index: 1; 
         left: 0;
         top: 0;
-        width: 100%; /* Full width */
-        height: 100%; /* Full height */
-        overflow: auto; /* Enable scroll if needed */
-        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        width: 100%; 
+        height: 100%; 
+        overflow: auto; 
+        background-color: rgba(0,0,0,0.4); 
       }
       
       .modal-content {
         background-color: #fefefe;
-        margin: 15% auto; /* 15% from the top and centered */
+        margin: 15% auto; 
         padding: 20px;
         border: 1px solid #888;
-        width: 80%; /* Could be more or less, depending on screen size */
+        width: 80%; 
       }
 
       .modal-content img {
@@ -349,10 +355,6 @@ fieldset {
 /* show details page  */
 
 
-
-
-
-
 .header-image {
   position: relative;
   text-align: center;
@@ -426,6 +428,36 @@ fieldset {
   }
 }
 
+
+.details-card .card-text, .card-title {
+  font-size: calc(1em + 1vw);
+
+}
+
+@media (max-width: 600px) {
+  .details-card .card-text, .card-title {
+    font-size: calc(1em + 0.5vw);
+  }
+}
+
+.row {
+  display: flex;
+  align-items: stretch;
+}
+
+.card, .details-card {
+  flex: 1;
+  max-width: 100%;
+}
+
+.card-body {
+  padding: 20px; 
+  color: rgb(217, 217, 217);
+
+}
+
+
+
 /* Typography */
 h2, h5, p {
   margin: 10px 0;
@@ -449,7 +481,6 @@ ul li {
 .mt-4 {
   display:flex;
   margin-top: 1.5rem;
- flex-wrap: wrap;
 }
 
 
@@ -491,6 +522,24 @@ ul li {
 .card-body {
   padding: 20px; 
   color: rgb(217, 217, 217);
+
+}
+
+.main-card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  margin-bottom: 15px; 
+  text-align: center; 
+  background-color: rgb(50, 50, 50); 
+  width: 95%;
+
+}
+
+.main-card img {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  max-width: 60%;
+  height: auto;
 
 }
 
@@ -634,4 +683,62 @@ h3 {
 .rating .bi {
   color: gold; /* Gold color for the stars */
   font-size: 20px; /* Size of the stars */
+}
+
+
+/* search */
+
+.container-center {
+  margin-top: 20px;
+  text-align: center;
+}
+
+#searchInput {
+  border-radius: 20px 0 0 20px; /* Rounded left corners */
+  border: 2px solid #b0a34e; /* Border color */
+}
+
+.btn-outline-primary {
+  border-radius: 0 20px 20px 0; 
+  border-color: #171717; 
+  background-color: #000000; 
+  color: rgb(58, 58, 58); 
+}
+
+.btn-outline-primary:hover {
+  background-color: #2a2a2a; /* Darker background on hover */
+  border-color: #8a8a8a; 
+}
+
+
+@media (max-width: 768px) {
+  #searchInput  {
+      width: 100%; 
+  }
+}
+
+@media (min-width: 769px) {
+  #searchInput   {
+      width: 300px; /* Fixed width on larger screens */
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .search-container {
+      flex-direction: column;
+      align-items: center;
+  }
+  #searchInput {
+      width: 100%;
+      margin-bottom: 20px;
+  }
+  .searchResults {
+      width: 100%;
+  }
+
+  .searchResults img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  } 
 }

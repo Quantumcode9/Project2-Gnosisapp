@@ -20,6 +20,30 @@
         </button>
         </form>
         <div id="recommendations-container"></div>
+
+
+
+        <form action="/shows/watchlist/add/<%= userId %>" method="post">
+            <input type="hidden" name="id" value="<%= show.id %>">
+            <input type="hidden" name="name" value="<%= show.name %>">
+              <input type="hidden" name="poster_path" value="<%= show.poster_path %>">
+              <input type="hidden" name="rating" value="<%= show.vote_average %>">
+              <input type="hidden" name="overview" value="<%= show.overview %>">
+              <input type="hidden" name="numberepisodes" value="<%= show.number_of_episodes %>">
+              <input type="hidden" name="numberseasons" value="<%= show.number_of_seasons %>">
+              <input type="hidden" name="air_date" value="<%= show.air_date %>">
+              <input type="hidden" name="last_episode_to_air" value='<%= JSON.stringify(show.last_episode_to_air) %>'>
+              <input type="hidden" name="next_episode_to_air" value='<%= JSON.stringify(show.next_episode_to_air) %>'>
+              <input type="hidden" name="status" value="<%= show.status %>">   
+              <input type="hidden" name="popularity" value="<%= show.popularity %>">
+              <input type="hidden" name="next_episode" value="<%= show.next_episode_to_air%>">
+             <input type="hidden" name="last_air_date" value="<%= show.last_air_date %>">
+             <button type="submit" class="icon-button">
+                <img class="icon" src="/images/Watching.png" alt="Add to Watchlist">
+               </button>
+          </form>   
+          <div id="recommendations-container"></div>
+
        
             <form id="watchedForm" action="/shows/watched/add/<%= userId %>" method="post">
             <input type="hidden" name="id" value="<%= show.id %>">
@@ -45,30 +69,6 @@
             <div id="recommendations-container"></div>
 
 
-          <form action="/shows/watchlist/add/<%= userId %>" method="post">
-            <input type="hidden" name="id" value="<%= show.id %>">
-            <input type="hidden" name="name" value="<%= show.name %>">
-              <input type="hidden" name="poster_path" value="<%= show.poster_path %>">
-              <input type="hidden" name="rating" value="<%= show.vote_average %>">
-              <input type="hidden" name="overview" value="<%= show.overview %>">
-              <input type="hidden" name="numberepisodes" value="<%= show.number_of_episodes %>">
-              <input type="hidden" name="numberseasons" value="<%= show.number_of_seasons %>">
-              <input type="hidden" name="air_date" value="<%= show.air_date %>">
-              <input type="hidden" name="last_episode_to_air" value='<%= JSON.stringify(show.last_episode_to_air) %>'>
-              <input type="hidden" name="next_episode_to_air" value='<%= JSON.stringify(show.next_episode_to_air) %>'>
-              <input type="hidden" name="status" value="<%= show.status %>">   
-              <input type="hidden" name="popularity" value="<%= show.popularity %>">
-              <input type="hidden" name="next_episode" value="<%= show.next_episode_to_air%>">
-             <input type="hidden" name="last_air_date" value="<%= show.last_air_date %>">
-             <button type="submit" class="icon-button">
-                <img class="icon" src="/images/Watching.png" alt="Add to Watchlist">
-               </button>
-          </form>   
-          <div id="recommendations-container"></div>
-
-
-
-
 
           <div id="ratingModal" class="modal">
             <div class="modal-content">
@@ -83,35 +83,6 @@
         </div>
 
 </div>
-    <script>
-document.getElementById('watchedForm').addEventListener('submit', function(event) {
-    event.preventDefault(); 
-    openRatingModal(); 
-});
-
-function openRatingModal() {
-    const modal = document.getElementById('ratingModal');
-    modal.style.display = 'block';
-}
-
-document.getElementById('submitRating').addEventListener('click', function() {
-    const rating = document.getElementById('userRatingInput').value;
-    if (rating && rating >= 1 && rating <= 10) {
-        document.getElementById('userRatingInput').value = rating;
-        closeRatingModal();
-        document.getElementById('watchedForm').submit();
-    } else {
-        alert('Please enter a valid rating between 1 and 10.');
-    }
-});
-
-function closeRatingModal() {
-    const modal = document.getElementById('ratingModal');
-    modal.style.display = 'none';    
-}
-
-</script>
-
 
 
 
