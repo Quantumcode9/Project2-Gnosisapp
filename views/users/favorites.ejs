@@ -5,13 +5,17 @@
         <% favorites.forEach(show => { %>
             <div class="show">
                 <% if (show.poster_path) { %>
+                    <a href="/pages/show/<%= show.id %>">
                     <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
-                <% } else { %>
+               </a>
+                    <% } else { %>
                     <img src="/images/Untitled.png" alt="No image available">
                 <% } %>
                 <h3><%= show.name %></h3>
+                
             </div>
         <% }); %>
     </div>
 </body>
 </html>
+<%- include('../partials/footer.ejs'); %>

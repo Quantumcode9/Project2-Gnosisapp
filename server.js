@@ -83,8 +83,9 @@ app.get('/pages/genre/:genreId', async (req, res) => {
 
   try {
     const response = await axios.get(url, { headers: HEADERS });
-    // Render a template with the fetched TV shows
-    res.render('pages/genre', { shows: response.data.results, });
+    const userId = req.session.userId; 
+
+    res.render('pages/genre', { shows: response.data.results, userId });
   } catch (error) {
     console.error(error);
     res.status(500).send('Error fetching TV shows for the genre');

@@ -18,14 +18,15 @@
         <div id="show_<%= show.id %>" class="show">
         <!-- Check if the show has a poster image -->
         <% if (show.poster_path) { %>
+          <a href="/pages/show/<%= show.id %>">
           <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
-        <% } else { %>
+       </a>
+          <% } else { %>
           <p>No image available.</p>
         <% } %>
         <div class="show-icons">
-            <img src="/images/Favorites.png" alt="Add to Favorites" onclick="addToFavorites('<%= show.id %>')" class="icon">
-            <img src="/images/Watching.png" alt="Add to Watch List" onclick="addToWatchList('<%= show.id %>')" class="icon">
-            <img src="/images/Watched.png" alt="Add to Watched" onclick="addToWatched('<%= show.id %>')" class="icon">
+          <%- include('../partials/buttons', { show: show, userId: userId }) %>
+         
           </div>
         </div>
       <div id="recommendations-container"></div>
@@ -45,3 +46,4 @@
 
 </body>
 </html>
+<%- include('../partials/footer') %>

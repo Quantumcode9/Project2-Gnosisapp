@@ -56,22 +56,29 @@ res.render('pages/latest', { shows: apiRes.data.results, username, loggedIn, use
  })
 ///////////////////////////////////////////
 
-   // more duplicate code
+   // more duplicate code remove
 
-   router.get('/users/hub', (req, res) => {
-    const { username, loggedIn, userId } = req.session;
-    const { id } = req.params;
-    axios(`${API_BASE_URL}/tv/${id}?language=en-US`, { headers: HEADERS })
-    .then(apiRes => {
-      console.log('this came back from the api: \n', apiRes.data)
-      res.render('users/hub', { show: apiRes.data, username, loggedIn, userId });
-    })
-    .catch(err => {
-      console.log(err)
-      res.send('error')
-    } 
-      )
-  })
+   router.get('/favorites', async (req, res) => {
+    try {
+      const userId = req.session.userId; // Get userId from the session
+      const userFavorites = await User.findById(userId).populate('favorites'); // Fetch user's favorite shows
+  
+      // Fetch additional data for each show
+      const favorites = await Promise.all(userFavorites.favorites.map(async show => {
+        const response = await axios.get(`${API_BASE_URL}/tv/${show.id}?language=en`, { headers: HEADERS });
+        return {
+          ...show._doc,
+          lastAirDate: response.data.last_air_date,
+          onAir: response.data.status === 'Returning Series'
+        };
+      }));
+  
+      res.render('favorites', { favorites }); // Pass the shows with additional data to the EJS template
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Error fetching favorite shows');
+    }
+  });
 //////////////////////////////////////////////
 
 
@@ -206,7 +213,7 @@ router.get('/home', async (req, res) => {
 
 // ADD TO FAVORITES AND SAVE TO DB AND USER
 router.post('/shows/add/:userId', async (req, res) => {
-  console.log('Received request body:', req.body);
+ // console.log('Received request body:', req.body);
 
   try{
 
@@ -240,7 +247,7 @@ router.post('/shows/add/:userId', async (req, res) => {
   });
 
   await show.save();
-      console.log('Show saved successfully');
+     // console.log('Show saved successfully');
     }
 
     const user = await User.findById(userId);
@@ -255,18 +262,17 @@ router.post('/shows/add/:userId', async (req, res) => {
         poster_path: showData.poster_path,
         last_air_date: show.last_air_date
       });
-
       await user.save();
-      console.log('User updated with new favorite');
-    }
+       console.log('User updated with new favorite');
+     }
 
     // Send a success response
-    res.json({ message: 'Show added to favorites', user });
-  } catch (err) {
+      // res.json({ message: 'Show added to favorites', user });
+   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'An error occurred', error: err.toString() });
+     res.status(500).json({ message: 'An error occurred', error: err.toString() });
   }
-});
+ });
 
 
 
@@ -393,7 +399,7 @@ router.post('/shows/watchlist/add/:userId', async (req, res) => {
     }
 
     // Send a success response
-    res.json({ message: 'Show added to watchlist', user });
+   // res.json({ message: 'Show added to watchlist', user });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'An error occurred', error: err.toString() });
@@ -404,22 +410,22 @@ router.post('/shows/watchlist/add/:userId', async (req, res) => {
 
 
 
-router.post('/add-tv-show', async (req, res) => {
-  try {
-      await client.connect();
-      const db = client.db('TVDB');
-      const collection = db.collection('shows');
-      const { title, imageUrl } = req.body;
+// router.post('/add-tv-show', async (req, res) => {
+//   try {
+//       await client.connect();
+//       const db = client.db('TVDB');
+//       const collection = db.collection('shows');
+//       const { title, imageUrl } = req.body;
 
-      await collection.insertOne({ title, imageUrl });
-      res.redirect('/tv-shows');
-  } catch (error) {
-      console.error('Error adding TV show:', error);
-      res.status(500).send('Error adding TV show');
-  } finally {
-      await client.close();
-  }
-});
+//       await collection.insertOne({ title, imageUrl });
+//       res.redirect('/tv-shows');
+//   } catch (error) {
+//       console.error('Error adding TV show:', error);
+//       res.status(500).send('Error adding TV show');
+//   } finally {
+//       await client.close();
+//   }
+// });
 
 
 console.log('showController is connected')
@@ -432,35 +438,6 @@ module.exports = router;
 
 
 
-
-// // Fetch popular TV shows
-// router.get('/popular-shows', async (req, res) => {
-//   try {
-//     const response = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${TMDB_API_KEY}`);
-//     res.render('popularShows', { shows: response.data.results });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send('Error fetching popular TV shows');
-//   }
-// })
-
-// console.log('showController is connected')
-
-
-
-
-
-
-
-
-// // Fetch genres
-// router.get('/genres', async (req, res) => {
-//   try {
-//     const response = await axios.get(`https://api.themoviedb.org/3/genre/tv/list?api_key=${TMDB_API_KEY}`);
-//     res.render('genres', { genres: response.data.genres });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send('Error fetching genres');
 
 
 

@@ -1,17 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Gnosis </title>
-    <link rel="stylesheet" href="/styles.css">
-  <title>Browse Genres</title>
-</head>
+<%- include('../partials/header') %>
 <body>
   <h1>TV Show Genres</h1>
   <div class="genre-list">
     <% genres.forEach(genre => { %>
       <div class="genre">
-        <!-- Update this line to create a link -->
+        
         <a href="/pages/genre/<%= genre.id %>"><h2><%= genre.name %></h2></a>
       </div>
     <% }); %>
