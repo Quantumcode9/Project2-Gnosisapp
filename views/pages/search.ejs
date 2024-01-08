@@ -1,6 +1,6 @@
-<!-- create a search bar for searching for tv shows -->
+
 <%- include('../partials/header') %> 
-<body>
+<main>
     <div class="container-center">
         <form action="/search" method="get" class="d-flex justify-content-center"> 
             <input type="text" name="search" id="searchInput" class="form-control me-2" placeholder="Search for a TV show" style="width: 300px;">
@@ -9,7 +9,8 @@
     </div>
 
 <div id="searchResults"></div>
-</body>
+</main>
+<%- include('../partials/footer') %>
 <script>
     document.getElementById('searchInput').addEventListener('keyup', function(event) {
         const query = event.target.value;
@@ -25,7 +26,7 @@
          <img src="https://image.tmdb.org/t/p/w500${show.poster_path}" alt="${show.name}" class="img">
           </a>
 
-        <div class="show-icons">
+          <div class="show-icons">
             <img src="/images/Favorites.png" alt="Add to Favorites" onclick="addToFavorites('${show.id}')" class="icon">
             <img src="/images/Watching.png" alt="Add to Watch List" onclick="addToWatchList('${show.id}')" class="icon">
             <img src="/images/Watched.png" alt="Add to Watched" onclick="addToWatched('${show.id}')" class="icon">
@@ -38,7 +39,9 @@
     });
 </script>
 
-<%- include('../partials/footer') %>
+
+
+
 
 
 

@@ -1,6 +1,6 @@
 
 <div class = "show-icons">
-        <form action="/shows/add/<%= userId %>" method="post">
+        <form action="/shows/add/<%= userId %>" method="post" class="add-to-favorites-form">
           <input type="hidden" name="id" value="<%= show.id %>">
           <input type="hidden" name="name" value="<%= show.name %>">
             <input type="hidden" name="poster_path" value="<%= show.poster_path %>">
@@ -67,7 +67,7 @@
             </form>
 
             <div id="recommendations-container"></div>
-
+      </div>
 
 
           <div id="ratingModal" class="modal">
@@ -82,7 +82,7 @@
             </div>
         </div>
 
-</div>
+
 
 
 

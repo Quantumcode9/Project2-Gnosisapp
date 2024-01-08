@@ -1,49 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Genre</title>
-    <link rel="stylesheet" href="/styles.css">
-    <%- include('../partials/header') %>
-  <!-- ... Head elements ... -->
-</head>
-<body>
-    <h1>TV Shows <br>
-    <button onclick="window.location.href='/pages/browse'">Back</button>
-    <button onclick="window.location.href='/users/hub';">Go to Hub</button>
-</h1>
+<%- include('../partials/header') %>
+<!-- ... Head elements ... -->
+<main>
+  <h1>TV Shows</h1> 
   <div class="show-list">
     <% shows.forEach(show => { %>
-        
-        <div id="show_<%= show.id %>" class="show">
+      <div id="show_<%= show.id %>" class="show">
         <!-- Check if the show has a poster image -->
         <% if (show.poster_path) { %>
           <a href="/pages/show/<%= show.id %>">
-          <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
-       </a>
-          <% } else { %>
+            <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
+          </a>
+          <%- include('../partials/buttons', { show: show, userId: userId }) %>
+          <h2><%= show.name %></h2>
+        <% } else { %>
           <p>No image available.</p>
         <% } %>
-        <div class="show-icons">
-          <%- include('../partials/buttons', { show: show, userId: userId }) %>
-         
-          </div>
-        </div>
-      <div id="recommendations-container"></div>
-    <% }); %>
-    <!-- back button redirect to browse -->
-    <div id="ratingModal" class="modal">
-        <div class="modal-content">
-          <span class="close">&times;</span>
-          <h2>Rate the Show</h2>
-          <div id="ratingOptions"> 
-          </div>
-          <button id="submitRating">Submit Rating</button>
-        </div>
       </div>
+    <% }); %>
   </div>
-    <script src="/script.js"></script>
-
-</body>
-</html>
-<%- include('../partials/footer') %>
+      
+  
+      </main>
+    <%- include('../partials/footer') %>

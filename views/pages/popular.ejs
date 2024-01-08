@@ -1,20 +1,17 @@
 <%- include('../partials/header.ejs'); %>
+<main>
     <h1>Popular TV Shows</h1>
     <div class="show-list">
+        
         <% shows.forEach(show => { %>
             <div id="show_<%= show.id %>" class="show">  
                 <a href="/pages/show/<%= show.id %>">
                     <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>" >
                 </a>
-                
-                <h2><%= show.name %></h2>
                 <%- include('../partials/buttons', { show: show, userId: userId }) %>
-                   
+                <h2><%= show.name %></h2>
             </div>
         <% }) %>
     </div>
-</body>
-</html>
-
-
+</main>
 <%- include('../partials/footer') %>

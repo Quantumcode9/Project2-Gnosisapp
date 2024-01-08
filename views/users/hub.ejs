@@ -1,158 +1,146 @@
 
 <%- include('../partials/header') %>
-<body>
+<main>
 
-<div class="container-fluid">
+  <div class="container-fluid">
     <!-- Favorite Shows -->
     <h3>Favorite Shows</h3>
-    <div class="scroll-container">
-        <div class="d-flex">
-            <% favorites.forEach(show => { %>
-                <div class="hub-card">
-                    <a href="/pages/show/<%= show.id %>">
-                    <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
-                </a>
-                    <h4><%= show.name %></h4>
-                    <p>Rating: <%= show.rating %></p>
-                    <p>Last Air Date: <%= show.last_air_date %></p>
-                    <form action="/delete-show-favorites/<%= show.id %>" method="POST">
-                        <button type="submit" class="btn btn-danger icon-button">
-                            <i class="bi bi-trash"></i>
-                          </button>
-                      </form>
-              
-                </div>
-            <% }); %>
-        </div>
-    </div>
-                              <!-- Watchlist -->
-  
-                <h3>Watchlist</h3>
-            <div class="scroll-container">
-                <div class="d-flex">
-            <% watchlist.forEach(show => { %>
-                     <div class="hub-card">
-         <a href="/pages/show/<%= show.id %>">
-     <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>"> 
-                     </a>     
+  </div>
+  <div class="scroll-container">
+    <div class="d-flex">
+      <% favorites.forEach(show => { %>
+      <div class="hub-card">
+        <a href="/pages/show/<%= show.id %>">
+          <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
+        </a>
         <h4><%= show.name %></h4>
-            <p>Rating: <%= show.rating %></p>
-                   <form action="/delete-show/<%= show.id %>" method="POST">
-                    <button type="submit" class="btn btn-danger icon-button">
-                        <i class="bi bi-trash"></i>
-                      </button>
-                  </form>
-                              </div>
-                                      <% }); %>
-                                  </div>
-                              </div>
+        </p>
+        <p> <%= show.last_air_date %></p>
+        <form action="/delete-show-favorites/<%= show.id %>" method="POST">
+          <button type="submit" class="btn btn-danger icon-button">
+            <i class="bi bi-trash"></i>
+          </button>
+        </form>
 
-
-
-
-
-      
-
-       <!-- Watched Shows -->
-
-       <h3>Watched Shows</h3>
-       <div class="scroll-container">
-           <div class="d-flex">
-               <% watched.forEach(show => { %>
-                   <div class="hub-card">
-                          <a href="/pages/show/<%= show.id %>">
-                       <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>" class="hub-image">
-                    </a> 
-                       <h4><%= show.name %></h4>                
-                       <p class="user-rating">
-                        <% for(let i = 1; i <= 5; i++) { %>
-                          <% if(i <= show.user_rating) { %>
-                            <i class="bi bi-star-fill"></i> 
-                          <% } else { %>
-                            <i class="bi bi-star"></i> 
-                          <% } %>
-                        <% } %>
-                      </p>
-                       <form action="/delete-show-watched/<%= show.id %>" method="POST">
-                       
-                        <button type="submit" class="btn btn-danger icon-button">
-                            <i class="bi bi-trash"></i>
-                          </button>
-                      </form>
-
-                      <% if(typeof show.user_rating === 'undefined' || show.user_rating === null) { %>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#rateModal<%= show.id %>">
-                          <i class="bi bi-star-fill"></i> Add Rating
-                        </button>
-                      <% } %>
-                      </div>
-                      
-
-
-                        <!-- Button trigger modal -->
-                        <div class="modal fade" id="rateModal<%= show.id %>" tabindex="-1" aria-labelledby="rateModalLabel<%= show.id %>" aria-hidden="true">
-                            <div class="modal-dialog">
-                              <div class="modal-content">
-                                <div class="modal-header">
-                                  <h5 class="modal-title" id="rateModalLabel<%= show.id %>">Rate "<%= show.name %>"</h5>
-                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                  <form action="/update-rating" method="POST">
-                                    <% for(let i = 1; i <= 5; i++) { %>
-                                      <input type="radio" id="star<%= show.id %>-<%= i %>" name="rating" value="<%= i %>" <%= i == show.user_rating ? 'checked' : '' %> class="star-rating-input">
-                                      <label for="star<%= show.id %>-<%= i %>" class="star-rating-label">
-                                        <i class="bi bi-star-fill"></i>
-                                      </label>
-                                    <% } %>
-                                    <input type="hidden" name="userId" value="<%= userId %>">
-                                    <input type="hidden" name="showId" value="<%= show.id %>">
-                                    <button type="submit" class="btn btn-success">Submit Rating</button>
-                                  </form>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                    
-                  <% }); %>
-           </div>
-       </div>
-   
-       
-
-
-
-
-
-
-
-        <!-- Change This -->
-        <h3>Recent</h3>
-        <div class="scroll-container">
-            <div class="d-flex flex-nowrap">
-                <% watched.forEach(show => { %>
-                    <div class="col-md-4 col-sm-6 col-xs-12">
-                        <div class="hub-card">
-                            <a href="/pages/show/<%= show.id %>" class="show-link" data-show-id="<%= show.id %>">
-                                <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>" class="hub-image">
-                            </a>
-                            <h4><%= show.name %></h4>
-                            <p>User Rating: <%= show.user_rating %>/5</p>
-                            <p>Last Air Date: <%= show.last_air_date %></p>
-                        </div>
-                    </div>
-                <% }); %>
-            </div>
-        </div>
+      </div>
+      <% }); %>
     </div>
+  </div>
+  <!-- Watchlist -->
+
+  <h3>Watchlist</h3>
+  <div class="scroll-container">
+    <div class="d-flex">
+      <% watchlist.forEach(show => { %>
+      <div class="hub-card">
+        <a href="/pages/show/<%= show.id %>">
+          <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
+        </a>
+        <h4><%= show.name %></h4>
+        <p>Rating: <%= show.rating %></p>
+        <form action="/delete-show/<%= show.id %>" method="POST">
+          <button type="submit" class="btn btn-danger icon-button">
+            <i class="bi bi-trash"></i>
+          </button>
+        </form>
+      </div>
+      <% }); %>
+    </div>
+  </div>
+
+  <!-- Watched Shows -->
+
+  <h3>Watched Shows</h3>
+  <div class="scroll-container">
+    <div class="d-flex">
+      <% watched.forEach(show => { %>
+      <div class="hub-card">
+        <a href="/pages/show/<%= show.id %>">
+          <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>" class="hub-image">
+        </a>
+        <h4><%= show.name %></h4>
+        <% if (show.user_rating) { %>
+        <p class="user-rating">
+          <% for(let i = 1; i <= 5; i++) { %>
+          <% if(i <= show.user_rating) { %>
+          <i class="bi bi-star-fill"></i>
+          <% } else { %>
+          <i class="bi bi-star"></i>
+          <% } %>
+          <% } %>
+        </p>
+        <% } %>
+
+        <% if(typeof show.user_rating === 'undefined' || show.user_rating === null) { %>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#rateModal<%= show.id %>">
+          <i class="bi bi-star-fill"></i> Add Rating
+        </button>
+        <form action="/delete-show-watched/<%= show.id %>" method="POST">
+
+          <button type="submit" class="btn btn-danger icon-button">
+            <i class="bi bi-trash"></i>
+          </button>
+        </form>
+
+        <% } %>
+      </div>
+
+      <!-- Button trigger modal -->
+      <div class="modal fade" id="rateModal<%= show.id %>" tabindex="-1" aria-labelledby="rateModalLabel<%= show.id %>" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="rateModalLabel<%= show.id %>">Rate "<%= show.name %>"</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form action="/update-rating" method="POST">
+                <% for(let i = 1; i <= 5; i++) { %>
+                <input type="radio" id="star<%= show.id %>-<%= i %>" name="rating" value="<%= i %>" <%= i == show.user_rating ? 'checked' : '' %> class="star-rating-input">
+                <label for="star<%= show.id %>-<%= i %>" class="star-rating-label">
+                  <i class="bi bi-star-fill"></i>
+                </label>
+                <% } %>
+                <input type="hidden" name="userId" value="<%= userId %>">
+                <input type="hidden" name="showId" value="<%= show.id %>">
+                <button type="submit" class="btn btn-success">Submit Rating</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <% }); %>
+    </div>
+  </div>
+
+  <!-- Change This -->
+  <h3>Recent</h3>
+  <div class="scroll-container">
+    <div class="d-flex flex-nowrap">
+      <% watched.forEach(show => { %>
+      <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="hub-card">
+          <a href="/pages/show/<%= show.id %>" class="show-link" data-show-id="<%= show.id %>">
+            <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>" class="hub-image">
+          </a>
+          <h4><%= show.name %></h4>
+          <p>User Rating: <%= show.user_rating %>/5</p>
+          <p>Last Air Date: <%= show.last_air_date %></p>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+  </div>
 
 
+  </main>
     <%- include('../partials/footer') %>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     
     
 
-    </body>
+
 
 
 
@@ -165,21 +153,15 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.show-link').forEach((link) => {
     let touchstartX = 0;
     let touchendX = 0;
-
     link.addEventListener('touchstart', (e) => {
       // Get the initial position of the touch
       touchstartX = e.changedTouches[0].screenX;
     });
-
     link.addEventListener('touchend', (e) => {
-      // Get the final position of the touch
       touchendX = e.changedTouches[0].screenX;
-      // Check if the touch moved more than a threshold, e.g., 10px
       if (Math.abs(touchstartX - touchendX) < 10) {
-        // If movement is less than 10px, it's a tap
         window.location.href = link.getAttribute('href');
       }
-      // Otherwise, it was a scroll, and we don't navigate
     });
   });
 });

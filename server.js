@@ -48,7 +48,7 @@ app.get('/pages/search', (req, res) => {
 });
 
 
-// Middleware to fetch genres
+ //fetch genres
 app.use(async (req, res, next) => {
   try {
     const response = await axios.get('https://api.themoviedb.org/3/genre/tv/list?language=en', {
@@ -57,14 +57,13 @@ app.use(async (req, res, next) => {
         'Accept': 'application/json'
       }
     });
-    req.genres = response.data.genres; // Attach genres to the req object
-    next(); // Proceed to the next middleware/route handler
+    req.genres = response.data.genres; 
+    next();
  } catch (error) {
     console.error(error);
     res.status(500).send('Error fetching genres');
   }
  });
-
 
 // Genre routes
 app.get('/pages/browse', (req, res) => {
@@ -76,28 +75,10 @@ app.get('/pages/genre', (req, res) => {
 });
 
 
-app.get('/pages/genre/:genreId', async (req, res) => {
-  const genreId = req.params.genreId; // Get the genre ID from the URL parameter
 
-  const url = `${API_BASE_URL}/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=1&sort_by=popularity.desc&with_genres=${genreId}`;
-
-  try {
-    const response = await axios.get(url, { headers: HEADERS });
-    const userId = req.session.userId; 
-
-    res.render('pages/genre', { shows: response.data.results, userId });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Error fetching TV shows for the genre');
-  }
-});
 
 ////////////////////////////////////
 ////////////////////////////////////
-////////////////////////////////////
-////////////////////////////////////
-
-
 ////////////////////////////////////
 ////////////////////////////////////
 
@@ -121,23 +102,6 @@ app.get('/get-recommendations/:showId', async (req, res) => {
 
 
 // // Submit rating
-// app.post('/add-rated-show', async (req, res) => {
-//   const { showId, rating } = req.body;
-//   const userId = req.session.userId;
-
-//   try {
-//     const user = await User.findById(userId);
-//     if (user) {
-//       // Add logic to update user's schema with the rated show
-//       res.json({ message: 'Show rating added' });
-//     } else {
-//       res.status(404).send('User not found');
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send('Error processing request');
-//   }
-// });
 
 
 app.get('/home', async (req, res) => {

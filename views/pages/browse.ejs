@@ -1,13 +1,12 @@
 <%- include('../partials/header') %>
-<body>
+<main>
   <h1>TV Show Genres</h1>
   <div class="genre-list">
     <% genres.forEach(genre => { %>
       <div class="genre">
-        
         <a href="/pages/genre/<%= genre.id %>"><h2><%= genre.name %></h2></a>
       </div>
     <% }); %>
   </div>
-</body>
-</html>
+</main>
+  <%- include('../partials/footer') %>

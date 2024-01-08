@@ -5,6 +5,16 @@ const express = require('express')
 const User = require('../models/user')
 const bcrypt = require('bcryptjs')
 require('dotenv').config()
+const axios = require('axios');
+require('dotenv').config();
+
+const API_BASE_URL = 'https://api.themoviedb.org/3';
+const HEADERS = {
+    'Accept': 'application/json',
+      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNzI0MmRmZmQ1ZTA3ZmFkNzFmYjc1MWFjZjY2MjY1MiIsInN1YiI6IjY1OGYwZjQ0MGQyZjUzNWNjZWQzZDRmOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.J-Rmx8CA0fnwbMwHLG5pTqTxjKE-1abuG1by44-kN1s',
+    // 'Authorization': `Bearer ${TMDB_API_KEY}`,
+    'Host': 'api.themoviedb.org'
+};
 
 ///////////////////////
 //// Create Router ////
@@ -63,7 +73,7 @@ router.post('/login', async (req, res) => {
                 if (result) {
                     req.session.username = username;
                     req.session.loggedIn = true;
-                    req.session.userId = user._id; // Use _id for MongoDB ObjectId
+                    req.session.userId = user._id; 
 
                     res.redirect('/');
                 } else {
@@ -74,79 +84,72 @@ router.post('/login', async (req, res) => {
             }
         })
         .catch(err => {
-            console.error('error', err); // Enhanced logging for debugging
+            console.error('error', err); 
             res.redirect(`/error?error=${err}`);
         });
 });
 
-
-
-
-
-router.get('/favorites', async (req, res) => {
+async function fetchUser(req, res) {
     try {
-      const userId = req.session.userId; 
-      const user = await User.findById(userId);
-  
-      if (!user) {
-        return res.status(404).send('User not found');
-      }
-  
-      res.render('users/favorites', { favorites: user.favorites });
+        const userId = req.session.userId;
+        const user = await User.findById(userId);
+
+        if (!user) {
+            res.status(404).send('User not found');
+            return null;
+        }
+
+        return user;
     } catch (error) {
-      console.error('Error fetching favorites:', error);
-      res.status(500).send('Error loading favorites page');
+        console.error('Error fetching user:', error);
+        res.status(500).send('Error processing request');
+        return null;
+    }
+}
+
+// get favorites
+router.get('/favorites', async (req, res) => {
+    const user = await fetchUser(req, res);
+    if (user) {
+        res.render('users/favorites', { favorites: user.favorites });
+    }
+});
+
+// get watched shows
+router.get('/watched', async (req, res) => {
+    const user = await fetchUser(req, res);
+    if (user) {
+        res.render('users/watched', { watched: user.watched });
+    }
+});
+
+// user hub
+router.get('/hub', async (req, res) => {
+    const user = await fetchUser(req, res);
+    if (user) {
+        res.render('users/hub', {
+            userId: req.session.userId,
+            favorites: user.favorites,
+            watched: user.watched,
+            watchlist: user.watchlist
+        });
+    }
+});
+
+// userhub data
+router.get('/users/hub', async (req, res) => {
+    console.log('Fetching show details');
+    const { username, loggedIn, userId } = req.session;
+    try {
+      const response = await axios.get(`${API_BASE_URL}/tv/on_the_air?language=en-US`, { headers: HEADERS });
+      const shows = response.data;
+      console.log(shows);
+      res.render('users/hub', { shows, username, loggedIn, userId });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Error fetching show details');
     }
   });
-
-  // get the user watched shows
-
-    router.get('/watched', async (req, res) => {
-
-        try {
-const userId = req.session.userId; 
-const user = await User.findById(userId);
-  
-      if (!user) {
-        return res.status(404).send('User not found');
-      }
-
-res.render('users/watched', { watched: user.watched });
-
-        } catch (error) {
-            console.error('Error fetching watched:', error);
-            res.status(500).send('Error loading watched page');
-        }
-    });
-
-// RATE a show in the watched list
-
-
-
-
-
-
-
-
-
-
-    // USER HUB
-
-    router.get('/hub', async (req, res) => {
-
-      const userId = req.session.userId; 
-const user = await User.findById(userId);
-  
-      if (!user) {
-        return res.status(404).send('User not found');
-      }
-            res.render('users/hub', {
-                userId: userId,
-                favorites: user.favorites,
-                watched: user.watched,
-                watchlist: user.watchlist
-            });
-        });
 
 
 
@@ -155,7 +158,7 @@ const user = await User.findById(userId);
 router.get('/logout', (req, res) => {
     const { username, loggedIn, userId } = req.session
 
-    res.render('users/logout', { username, loggedIn, userId }) // Adjusted the path to the view
+    res.render('users/logout', { username, loggedIn, userId }) 
 })
 
 // DELETE -> Logout - /logout
@@ -164,17 +167,6 @@ router.delete('/logout', (req, res) => {
         res.redirect('/')
     })
 })
-
-
-
-
-
-
-
-
-
-
-
 
 console.log('userController.js is connected')
 module.exports = router;
