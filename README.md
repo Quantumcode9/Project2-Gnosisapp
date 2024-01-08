@@ -11,7 +11,7 @@ _GNOSIS_ is an application designed to enhance the TV viewing experience for use
 
 
 ### The Build
-![Login or Sign Up Screenshot](Photos/readme/New1.png)
+![Login or Sign Up Screenshot](Photos/readme/screen.png)
 
 ## User Stories
 > - As a user, I want the ability to sign up.
