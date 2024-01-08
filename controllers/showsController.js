@@ -11,11 +11,9 @@ const API_BASE_URL = 'https://api.themoviedb.org/3';
 const POPULAR_TV_SHOWS_URL = '/tv/popular?language=en-US&page=1';
 const HEADERS = {
     'Accept': 'application/json',
-     // 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNzI0MmRmZmQ1ZTA3ZmFkNzFmYjc1MWFjZjY2MjY1MiIsInN1YiI6IjY1OGYwZjQ0MGQyZjUzNWNjZWQzZDRmOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.J-Rmx8CA0fnwbMwHLG5pTqTxjKE-1abuG1by44-kN1s',
      'Authorization': `Bearer ${TMDB_API_KEY}`,
     'Host': 'api.themoviedb.org'
 };
-
 
 // Fetch shows by genre
 
@@ -33,11 +31,9 @@ const HEADERS = {
    }
  });
 
-
+//////////////////////////////////////////////
 
 //Render Shows by genre
-
-
  router.get('/pages/genre/:genreId', async (req, res) => {
   const genreId = req.params.genreId; // Get the genre ID from the URL parameter
 
@@ -53,7 +49,7 @@ const HEADERS = {
     res.status(500).send('Error fetching TV shows for the genre');
   }
 });
-
+//////////////////////////////////////////////
 
 //Fetch latest TV shows
 
@@ -70,10 +66,9 @@ res.render('pages/latest', { shows: apiRes.data.results, username, loggedIn, use
  console.log(err)
   res.send('error')
 }
- )
- })
+)
+})
 ///////////////////////////////////////////
-
 //////////////////////////////////////////////
 
  //SHOW DETAILS PAGE
@@ -93,20 +88,6 @@ res.render('pages/latest', { shows: apiRes.data.results, username, loggedIn, use
 });
 
 ////////////////////////////////////
- // render the details page
- router.get('/pages/show/:id', (req, res) => {
-  const { username, loggedIn, userId } = req.session;
-  const { id } = req.params;
-  axios(`${API_BASE_URL}/tv/${id}?language=en-US`, { headers: HEADERS })
-  .then(apiRes => {
-    res.render('pages/show', { show: apiRes.data, username, loggedIn, userId });
-  })
-  .catch(err => {
-    console.log(err)
-    res.send('error')
-  } 
-    )
-})
 //////////////////////////////////////////////
 
 
@@ -154,20 +135,20 @@ router.get('/pages/popular', async (req, res) => {
 });
 
 
-// 
+/////////////////////////////////////////////////// 
 
 router.post('/update-rating', async (req, res) => {
   const { userId, showId, rating } = req.body;
 
   try {
-    // Assuming you have a User model with a 'watched' array
+
     const user = await User.findById(userId);
 
     // Find the show in the 'watched' array and update the rating
     const showToUpdate = user.watched.find(show => show.id === showId);
     if (showToUpdate) {
-      showToUpdate.user_rating = Number(rating); // Make sure it's a number
-      await user.save(); // Save the updated user document
+      showToUpdate.user_rating = Number(rating); 
+      await user.save(); 
     }
 
     res.redirect('/users/hub');
@@ -177,7 +158,7 @@ router.post('/update-rating', async (req, res) => {
   }
 });
 
-
+/////////////////////////////////////////////////// 
 
 
 // ADD TO FAVORITES AND SAVE TO DB AND USER
@@ -242,10 +223,8 @@ router.post('/shows/add/:userId', async (req, res) => {
      res.status(500).json({ message: 'An error occurred', error: err.toString() });
   }
  });
-
-
-
-// ADD TO WATCHLIST AND SAVE TO DB AND USER
+/////////////////////////////////////////////////// 
+// ADD TO WATCHED SHOWS AND SAVE TO DB AND USER
 
 router.post('/shows/watched/add/:userId', async (req, res) => {
    console.log('Received request body:', req.body);
@@ -311,7 +290,7 @@ router.post('/shows/watched/add/:userId', async (req, res) => {
   }
 });
 
-
+/////////////////////////////////////////////////// 
 //  ADD TO WATCHLIST AND SAVE TO DB AND USER
 
 router.post('/shows/watchlist/add/:userId', async (req, res) => {
@@ -357,7 +336,7 @@ router.post('/shows/watchlist/add/:userId', async (req, res) => {
 
     if (!isShowAlreadyInWatchlist) {
       user.watchlist.push({
-        id: show.id, // not MongoDB ObjectId
+        id: show.id, 
         name: show.name,
         poster_path: showData.poster_path,
         last_air_date: show.last_air_date
@@ -374,10 +353,6 @@ router.post('/shows/watchlist/add/:userId', async (req, res) => {
     res.status(500).json({ message: 'An error occurred', error: err.toString() });
   }
 });
-
-
-
-
 
 console.log('showController is connected')
 module.exports = router;

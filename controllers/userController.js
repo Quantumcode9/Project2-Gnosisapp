@@ -6,25 +6,20 @@ const User = require('../models/user')
 const bcrypt = require('bcryptjs')
 require('dotenv').config()
 const axios = require('axios');
-require('dotenv').config();
-
+const TMDB_API_KEY = process.env.TMDB_API_KEY;
 const API_BASE_URL = 'https://api.themoviedb.org/3';
 const HEADERS = {
-    'Accept': 'application/json',
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNzI0MmRmZmQ1ZTA3ZmFkNzFmYjc1MWFjZjY2MjY1MiIsInN1YiI6IjY1OGYwZjQ0MGQyZjUzNWNjZWQzZDRmOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.J-Rmx8CA0fnwbMwHLG5pTqTxjKE-1abuG1by44-kN1s',
-    // 'Authorization': `Bearer ${TMDB_API_KEY}`,
-    'Host': 'api.themoviedb.org'
+	'Accept': 'application/json',
+    'Authorization': `Bearer ${TMDB_API_KEY}`,
+	'Host': 'api.themoviedb.org'
 };
-
 ///////////////////////
 //// Create Router ////
 ///////////////////////
 const router = express.Router()
-
 //////////////////////////////
 //// Routes + Controllers ////
 //////////////////////////////
-// GET -> SignUp - /users/signup
 router.get('/signup', (req, res) => {
     const { username, loggedIn, userId } = req.session
 
@@ -32,35 +27,30 @@ router.get('/signup', (req, res) => {
 });
 
 // POST -> SignUp - /users/signup
-
 router.post('/signup', async (req, res) => {
     const newUser = req.body
     newUser.password = await bcrypt.hash(
         newUser.password, 
         await bcrypt.genSalt(10)
     );
-
     // we can now create our user
     User.create(newUser)
         .then(user => {
-            // the new user will be created and redirected to the login page
-            res.redirect('/users/login')
+// the new user will be created and redirected to the login page
+        res.redirect('/users/login')
         })
         .catch(err => {
             console.log('error')
-
-            res.redirect(`/error?error=${err}`)
-        })
+     res.redirect(`/error?error=${err}`)
+    })
 })
 
 
 // GET -> Login -> /users/login
 router.get('/login', (req, res) => {
     const { username, loggedIn, userId } = req.session
-
-    res.render('users/login', { username, loggedIn, userId })
+res.render('users/login', { username, loggedIn, userId })
 })
-
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
@@ -93,12 +83,10 @@ async function fetchUser(req, res) {
     try {
         const userId = req.session.userId;
         const user = await User.findById(userId);
-
-        if (!user) {
-            res.status(404).send('User not found');
-            return null;
-        }
-
+    if (!user) {
+         res.status(404).send('User not found');
+    return null;
+}
         return user;
     } catch (error) {
         console.error('Error fetching user:', error);
@@ -109,75 +97,80 @@ async function fetchUser(req, res) {
 
 // get favorites
 router.get('/favorites', async (req, res) => {
-    const user = await fetchUser(req, res);
-    if (user) {
-        res.render('users/favorites', { favorites: user.favorites });
-    }
+	const user = await fetchUser(req, res);
+	if (user) {
+		res.render('users/favorites', {
+			favorites: user.favorites
+		});
+	}
 });
-
 // get watched shows
 router.get('/watched', async (req, res) => {
-    const user = await fetchUser(req, res);
-    if (user) {
-        res.render('users/watched', { watched: user.watched });
-    }
+	const user = await fetchUser(req, res);
+	if (user) {
+		res.render('users/watched', {
+			watched: user.watched
+		});
+	}
 });
-
 // user hub
 router.get('/hub', async (req, res) => {
-    const user = await fetchUser(req, res);
-    if (user) {
-        res.render('users/hub', {
-            userId: req.session.userId,
-            favorites: user.favorites,
-            watched: user.watched,
-            watchlist: user.watchlist
-        });
-    }
+	const user = await fetchUser(req, res);
+	if (user) {
+		res.render('users/hub', {
+			userId: req.session.userId,
+			favorites: user.favorites,
+			watched: user.watched,
+			watchlist: user.watchlist
+		});
+	}
 });
-
 // userhub data
 router.get('/users/hub', async (req, res) => {
-    console.log('Fetching show details');
-    const { username, loggedIn, userId } = req.session;
-    try {
-      const response = await axios.get(`${API_BASE_URL}/tv/on_the_air?language=en-US`, { headers: HEADERS });
-      const shows = response.data;
-      console.log(shows);
-      res.render('users/hub', { shows, username, loggedIn, userId });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Error fetching show details');
-    }
-  });
-
-
-
-
+	console.log('Fetching show details');
+	const {
+		username,
+		loggedIn,
+		userId
+	} = req.session;
+	try {
+		const response = await axios.get(`${API_BASE_URL}/tv/on_the_air?language=en-US`, {
+			headers: HEADERS
+		});
+		const shows = response.data;
+		console.log(shows);
+		res.render('users/hub', {
+			shows,
+			username,
+			loggedIn,
+			userId
+		});
+	} catch (error) {
+		console.error(error);
+		res.status(500).send('Error fetching show details');
+	}
+});
 // GET -> Logout - /users/logout
 router.get('/logout', (req, res) => {
-    const { username, loggedIn, userId } = req.session
-
-    res.render('users/logout', { username, loggedIn, userId }) 
+	const {
+		username,
+		loggedIn,
+		userId
+	} = req.session
+	res.render('users/logout', {
+		username,
+		loggedIn,
+		userId
+	})
 })
-
 // DELETE -> Logout - /logout
 router.delete('/logout', (req, res) => {
-    req.session.destroy(() => {
-        res.redirect('/')
-    })
+	req.session.destroy(() => {
+		res.redirect('/')
+	})
 })
-
 console.log('userController.js is connected')
 module.exports = router;
-
-
-
-
-
-
-
-
 ///////////////////////
 //// Export Router ////
 ///////////////////////

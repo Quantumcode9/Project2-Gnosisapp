@@ -1,11 +1,11 @@
 const path = require('path');
 require('dotenv').config();
 const express = require('express');
-const mongoose = require('./utils/connection');
 const axios = require('axios');
 const UserRouter = require('./controllers/userController');
 const ShowRouter = require('./controllers/showsController');
 const middleware = require('./utils/middleware');
+const mongoose = require('./utils/connection');
 const showsController = require('./controllers/showsController')
 const deleteController = require('./controllers/delete')
 const TMDB_API_KEY = process.env.TMDB_API_KEY;

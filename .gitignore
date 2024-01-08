@@ -1,3 +1,5 @@
 .env
 node_modules
+fly.toml
+.elslintrc.js
 
