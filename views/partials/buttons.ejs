@@ -84,6 +84,38 @@
 
 
 
+        <script>
+          
+          const forms = document.querySelectorAll('.add-to-favorites-form, #watchedForm, .watchlist-form');
+        
+          forms.forEach(form => {
+            form.addEventListener('submit', event => {
+              event.preventDefault();
+        
+              // Get the show ID from the hidden input field
+              const showId = form.querySelector('input[name="id"]').value;
+        
+              // Fetch the recommendations
+              fetch(`/get-recommendations/${showId}`)
+                .then(response => response.json())
+                .then(recommendations => {
+                  // Display the recommendations
+                  const recommendationsContainer = document.querySelector('#recommendations-container');
+                  recommendationsContainer.innerHTML = ''; // Clear the container
+                  recommendations.forEach(recommendation => {
+                    // Add each recommendation to the container
+                    const div = document.createElement('div');
+                    div.textContent = recommendation.name;
+                    recommendationsContainer.appendChild(div);
+                  });
+                })
+                .catch(error => console.error('Error:', error));
+            });
+          });
+        </script>
+        
+
+
 
 
 

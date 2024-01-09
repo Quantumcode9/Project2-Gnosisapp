@@ -20,11 +20,11 @@ const HEADERS = {
  router.get('/pages/browse', async (req, res) => {
    try {
      const genreResponse = await axios.get(`${API_BASE_URL}/genre/tv/list?language=en`, { headers: HEADERS });
-    console.log(genreResponse.data); // Log the response data
+    console.log(genreResponse.data); 
 
-    const genres = genreResponse.data.genres; // Extract genres from the response
+    const genres = genreResponse.data.genres; 
      console.log(genres);
-     res.render('pages/browse', { genres }); // Pass genres to the EJS template
+     res.render('pages/browse', { genres }); 
    } catch (error) {
     console.error(error);
     res.status(500).send('Error fetching genres');
@@ -35,8 +35,7 @@ const HEADERS = {
 
 //Render Shows by genre
  router.get('/pages/genre/:genreId', async (req, res) => {
-  const genreId = req.params.genreId; // Get the genre ID from the URL parameter
-
+  const genreId = req.params.genreId; 
   const url = `${API_BASE_URL}/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=1&sort_by=popularity.desc&with_genres=${genreId}`;
 
   try {
@@ -127,7 +126,7 @@ router.get('/pages/popular', async (req, res) => {
   try {
     const response = await axios.get(url, { headers: HEADERS });
     console.log(response.data.results);
-    // Render your EJS view here, passing the TV shows data
+    
     res.render('pages/popular', { shows: response.data.results, userId: req.session.userId});
   } catch (error) {
     console.error('error:', error);
@@ -145,7 +144,7 @@ router.post('/update-rating', async (req, res) => {
 
     const user = await User.findById(userId);
 
-    // Find the show in the 'watched' array and update the rating
+    // UPDATE Rating
     const showToUpdate = user.watched.find(show => show.id === showId);
     if (showToUpdate) {
       showToUpdate.user_rating = Number(rating); 
@@ -169,16 +168,12 @@ router.post('/shows/add/', async (req, res) => {
 const user = await User.findById(userId);
 console.log('user:', user);
 
-    // Check if user exists
     if (!user) {
       res.status(404).json({ message: 'User not found' });
       return;
     }
-
-    // Add the show to the user's favorites array
     user.favorites.push({ id, name, poster_path });
 
-    // Save the user
     await user.save();
 
     // Send a success response
@@ -363,7 +358,6 @@ router.post('/shows/watched/add/:userId', async (req, res) => {
       console.log('Show added');
     }
 
-    // Send a success response
     // res.json({ message: 'Show added to watched list', user });
   } catch (err) {
     console.error(err);
@@ -426,8 +420,6 @@ router.post('/shows/watchlist/add/:userId', async (req, res) => {
       await user.save();
       console.log('Show added');
     }
-
-    // Send a success response
    // res.json({ message: 'Show added to watchlist', user });
   } catch (err) {
     console.error(err);

@@ -37,7 +37,7 @@ app.use(async (req, res, next) => {
         'Authorization': `Bearer ${TMDB_API_KEY}`,
       },
     });
-    // Do something with the response...
+    
     next();
   } catch (error) {
     console.error(error);
@@ -107,7 +107,7 @@ app.get('/home', async (req, res) => {
 
   try {
     const response = await axios.get(url, { headers: HEADERS });
-    res.render('home', { shows: response.data.results }); // Render home.ejs with tvShows data
+    res.render('home', { shows: response.data.results }); 
   } catch (error) {
     console.error('Error fetching TV shows:', error);
     res.status(500).send('Error fetching TV shows');
@@ -122,7 +122,7 @@ app.get('/home', async (req, res) => {
 app.get('/error', (req, res) => {
   const error = req.query.error || 'Something went wrong...try again';
   const { username, loggedIn, userId } = req.session;
-  res.render('error', { error, userId, username, loggedIn }); // Assuming 'error.ejs' is in the 'views' directory
+  res.render('error', { error, userId, username, loggedIn }); 
 });
 
 
