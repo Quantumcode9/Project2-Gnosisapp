@@ -21,7 +21,30 @@ const app = express();
 // Middleware setup
 middleware(app);
 
-// Static files
+// Session data in views
+app.use((req, res, next) => {
+  res.locals.username = req.session.username;
+  res.locals.loggedIn = req.session.loggedIn;
+  res.locals.userId = req.session.userId;
+  next();
+});
+
+// Fetch genres middleware
+app.use(async (req, res, next) => {
+  try {
+    const response = await axios.get('https://api.themoviedb.org/3/genre/tv/list?language=en', {
+      headers: {
+        'Authorization': `Bearer ${TMDB_API_KEY}`,
+      },
+    });
+    // Do something with the response...
+    next();
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // EJS view engine
@@ -36,34 +59,14 @@ app.use('/', deleteController);
 
 // Home route
 app.get('/', (req, res) => {
-  const { username, loggedIn, userId } = req.session;
-  res.render('pages/home', { username, loggedIn, userId });
+  res.render('pages/home');
 });
-
-
-// search tv shows
 
 app.get('/pages/search', (req, res) => {
-  res.render('pages/search');
+  res.render('pages/search', { userId: req.session.userId });
 });
 
 
- //fetch genres
-app.use(async (req, res, next) => {
-  try {
-    const response = await axios.get('https://api.themoviedb.org/3/genre/tv/list?language=en', {
-      headers: {
-        'Authorization': `Bearer ${TMDB_API_KEY}`,
-        'Accept': 'application/json'
-      }
-    });
-    req.genres = response.data.genres; 
-    next();
- } catch (error) {
-    console.error(error);
-    res.status(500).send('Error fetching genres');
-  }
- });
 
 // Genre routes
 app.get('/pages/browse', (req, res) => {
@@ -73,9 +76,6 @@ app.get('/pages/browse', (req, res) => {
 app.get('/pages/genre', (req, res) => {
   res.render('pages/genre', { genres: req.genres });
 });
-
-
-
 
 ////////////////////////////////////
 ////////////////////////////////////
@@ -100,9 +100,7 @@ app.get('/get-recommendations/:showId', async (req, res) => {
 });
 
 
-
 // // Submit rating
-
 
 app.get('/home', async (req, res) => {
   const url = `${API_BASE_URL}${POPULAR_TV_SHOWS_URL}`;
@@ -116,13 +114,9 @@ app.get('/home', async (req, res) => {
   }
 });
 
-
-//Favorites Page
-
 // server.js
 
 /////////////////////////////////////////
-
 
 // Error page
 app.get('/error', (req, res) => {

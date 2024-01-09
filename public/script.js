@@ -1,28 +1,63 @@
-
-
-
 document.addEventListener('DOMContentLoaded', function() {
-  const userId = "<%= userId %>"; 
-  document.querySelectorAll('.add-to-favorites-form').forEach(form => {
-    form.addEventListener('submit', function(event) {
-      event.preventDefault(); 
-      const formData = new FormData(form);
-      const showId = formData.get('id');
-      const showTitle = formData.get('name');
-      const showPoster = formData.get('poster_path');
+  const searchInput = document.getElementById('searchInput');
 
-      addToFavorites(userId, showId, showTitle, showPoster); 
-    });
+  searchInput.addEventListener('keyup', function(event) {
+      const query = event.target.value;
+  
+      if (query.length > 2) {
+          fetch(`/search-tv-shows?q=${encodeURIComponent(query)}`)
+              .then(response => response.json())
+              .then(data => {
+                  const searchResults = document.getElementById('searchResults');
+                  searchResults.innerHTML = ''; // Clear previous results
+
+                  data.forEach(show => {
+                      const showDiv = document.createElement('div');
+                      showDiv.className = 'show';
+                      showDiv.innerHTML = `
+                          <a href="/pages/show/${show.id}">
+                              <img src="https://image.tmdb.org/t/p/w500${show.poster_path}" alt="${show.name}" class="img">
+                          </a>
+                          <div class= "show-icons">
+                          <form class="favorite-form">
+                          <input type="hidden" name="id" value="${show.id}">
+                          <input type="hidden" name="name" value="${show.name}">
+                          <input type="hidden" name="poster_path" value="${show.poster_path}">
+                          <button type="submit" class="icon-button">
+                          <img class="icon" src="/images/Favorites.png" alt="Add to Favorites">
+    
+                          </button>
+                      </form>
+                      </div>
+                          
+                      `;
+                      searchResults.appendChild(showDiv);
+                  });
+              })
+              .catch(error => console.error('Error:', error));
+      }
   });
+  // Event delegation for dynamically added forms
+  document.body.addEventListener('submit', function(event) {
+    if (event.target.matches('.favorite-form')) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        formData.append('userId', userId); // Add the userId to the form data
+        const showId = formData.get('id');
+        const showTitle = formData.get('name');
+        const showPoster = formData.get('poster_path');
+        addToFavorites(userId, showId, showTitle, showPoster);
+    }
 });
 
 function addToFavorites(userId, showId, showTitle, showPoster) {
-  fetch(`/shows/add/${userId}`, { 
-    method: 'POST',
-    headers: {
+  fetch('/shows/add/', {
+      method: 'POST',
+      headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
+      userId: userId, 
       id: showId,
       name: showTitle,
       poster_path: showPoster
@@ -38,7 +73,7 @@ function addToFavorites(userId, showId, showTitle, showPoster) {
   })
   .catch(error => console.error('Error:', error));
 }
-
+});
 
 // Fetch recommendations
 
@@ -50,7 +85,6 @@ fetch(`/get-recommendations/${showId}`)
   })
   .catch(error => console.error('Error fetching recommendations:', error));
 }
-
 
 // Display recommendations
 
@@ -84,9 +118,4 @@ recommendations.forEach(show => {
   recommendationsContainer.appendChild(recommendationElement);
 });
 }
-
-
-
-
-
 

@@ -93,6 +93,7 @@ res.render('pages/latest', { shows: apiRes.data.results, username, loggedIn, use
 
  router.get('/search-tv-shows', async (req, res) => {
   const query = req.query.q;
+
   try {
      const response = await axios.get(`${API_BASE_URL}/search/tv?query=${query}`,{ headers: HEADERS })
       // Process and filter the API response as needed
@@ -158,17 +159,57 @@ router.post('/update-rating', async (req, res) => {
   }
 });
 
+/////////////////////////////////////////
+router.post('/shows/add/', async (req, res) => {
+  const { userId, id, name, poster_path } = req.body;
+
+  try {
+    // Find the user by userId
+    console.log('userId:', userId);
+const user = await User.findById(userId);
+console.log('user:', user);
+
+    // Check if user exists
+    if (!user) {
+      res.status(404).json({ message: 'User not found' });
+      return;
+    }
+
+    // Add the show to the user's favorites array
+    user.favorites.push({ id, name, poster_path });
+
+    // Save the user
+    await user.save();
+
+    // Send a success response
+    res.json({ message: 'Show added to favorites' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error adding show to favorites');
+  }
+});
+
+
+
+
+
+
+
+
 /////////////////////////////////////////////////// 
 
 
 // ADD TO FAVORITES AND SAVE TO DB AND USER
 router.post('/shows/add/:userId', async (req, res) => {
- // console.log('Received request body:', req.body);
+  console.log('Received request body:', req.body);
 
   try{
 
   const showData = req.body;
   const userId = req.params.userId;
+  if (!userId) {
+    return res.status(400).send("Invalid user ID");
+}
   const lastEpisodeToAir = showData.last_episode_to_air ? JSON.parse(showData.last_episode_to_air) : {};
   const nextEpisodeToAir = showData.next_episode_to_air ? JSON.parse(showData.next_episode_to_air) : {};
    let show = await Show.findOne({ id: showData.id });
