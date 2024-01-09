@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
               .then(response => response.json())
               .then(data => {
                   const searchResults = document.getElementById('searchResults');
-                  searchResults.innerHTML = ''; 
+                  searchResults.innerHTML = ''; // Clear previous results
 
                   data.forEach(show => {
                       const showDiv = document.createElement('div');
@@ -57,7 +57,8 @@ document.addEventListener('DOMContentLoaded', function() {
     event.preventDefault();
     const form = event.target;
     const formData = new FormData(event.target);
-    formData.append('userId', userId); 
+    formData.append('userId', userId); // Add the userId to the form data
+    const showId = formData.get('id');
     const showTitle = formData.get('name');
     const showPoster = formData.get('poster_path');
   
@@ -143,5 +144,3 @@ recommendations.forEach(show => {
   recommendationsContainer.appendChild(recommendationElement);
 });
 }
-
-

@@ -2,18 +2,24 @@
 <main>
     <h1>Popular TV Shows</h1>
     <div class="show-list">
-        
         <% shows.forEach(show => { %>
             <div id="show_<%= show.id %>" class="show">  
                 <a href="/pages/show/<%= show.id %>">
                     <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>" >
                 </a>
                 <%- include('../partials/buttons', { show: show, userId: userId }) %>
+                  <div id="recommendations-container"></div> 
                 <h2><%= show.name %></h2>
             </div>
         <% }) %>
     </div>
 </main>
+
 <%- include('../partials/footer') %>
 
-<div id="recommendations-container"></div>
+
+
+
+
+
+

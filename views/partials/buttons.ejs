@@ -19,8 +19,8 @@
             <img class="icon" src="/images/Favorites.png" alt="Add to Favorites">
         </button>
         </form>
-        <div id="recommendations-container"></div>
 
+        <div id="recommendations-container"></div>
 
 
         <form action="/shows/watchlist/add/<%= userId %>" method="post">
@@ -42,7 +42,6 @@
                 <img class="icon" src="/images/Watching.png" alt="Add to Watchlist">
                </button>
           </form>   
-          <div id="recommendations-container"></div>
 
        
             <form id="watchedForm" action="/shows/watched/add/<%= userId %>" method="post">
@@ -65,10 +64,10 @@
              <img class="icon" src="/images/Watched.png" alt="Add to Watched">
             </button>
             </form>
-
-            <div id="recommendations-container"></div>
       </div>
 
+
+    
 
           <div id="ratingModal" class="modal">
             <div class="modal-content">
@@ -82,38 +81,6 @@
             </div>
         </div>
 
-
-
-        <script>
-          
-          const forms = document.querySelectorAll('.add-to-favorites-form, #watchedForm, .watchlist-form');
-        
-          forms.forEach(form => {
-            form.addEventListener('submit', event => {
-              event.preventDefault();
-        
-              // Get the show ID from the hidden input field
-              const showId = form.querySelector('input[name="id"]').value;
-        
-              // Fetch the recommendations
-              fetch(`/get-recommendations/${showId}`)
-                .then(response => response.json())
-                .then(recommendations => {
-                  // Display the recommendations
-                  const recommendationsContainer = document.querySelector('#recommendations-container');
-                  recommendationsContainer.innerHTML = ''; // Clear the container
-                  recommendations.forEach(recommendation => {
-                    // Add each recommendation to the container
-                    const div = document.createElement('div');
-                    div.textContent = recommendation.name;
-                    recommendationsContainer.appendChild(div);
-                  });
-                })
-                .catch(error => console.error('Error:', error));
-            });
-          });
-        </script>
-        
 
 
 
