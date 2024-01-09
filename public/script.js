@@ -25,10 +25,28 @@ document.addEventListener('DOMContentLoaded', function() {
                           <input type="hidden" name="poster_path" value="${show.poster_path}">
                           <button type="submit" class="icon-button">
                           <img class="icon" src="/images/Favorites.png" alt="Add to Favorites">
-    
                           </button>
                       </form>
-                      </div>
+                    
+                      <form class="watched-form">
+                      <input type="hidden" name="id" value="${show.id}">
+                      <input type="hidden" name="name" value="${show.name}">
+                      <input type="hidden" name="poster_path" value="${show.poster_path}">
+                      <button type="submit" class="icon-button">
+                          <img class="icon" src="/images/Watched.png" alt="Mark as Watched">
+                      </button>
+                  </form>
+                  <form class="watchlist-form">
+                      <input type="hidden" name="id" value="${show.id}">
+                      <input type="hidden" name="name" value="${show.name}">
+                      <input type="hidden" name="poster_path" value="${show.poster_path}">
+                      <button type="submit" class="icon-button">
+                          <img class="icon" src="/images/Watching.png" alt="Add to Watchlist">
+                      </button>
+                  </form>
+              </div>
+
+
                           
                       `;
                       searchResults.appendChild(showDiv);
@@ -109,11 +127,16 @@ recommendations.forEach(show => {
   recommendationElement.className = 'recommendation';
   recommendationElement.innerHTML = `
     <img src="https://image.tmdb.org/t/p/w200${show.poster_path}" alt="${show.name}" class="recommendation-poster">
-    <div class="recommendation-buttons">
-    <img src="/images/Favorites.png" alt="Add to Favorites" onclick="addToFavorites('${show.id}')" class="icon">
-    <img src="/images/Watching.png" alt="Add to Watch List" onclick="addToWatchList('${show.id}')" class="icon">
-    <img src="/images/Watched.png" alt="Add to Watched" onclick="addToWatched('${show.id}')" class="icon">
-  </div>
+    <div class= "show-icons">
+    <form class="favorite-form">
+    <input type="hidden" name="id" value="${show.id}">
+    <input type="hidden" name="name" value="${show.name}">
+    <input type="hidden" name="poster_path" value="${show.poster_path}">
+    <button type="submit" class="icon-button">
+    <img class="icon" src="/images/Favorites.png" alt="Add to Favorites">
+    </button>
+</form>
+</div>
   `;
   recommendationsContainer.appendChild(recommendationElement);
 });

@@ -14,11 +14,36 @@
         <input type="hidden" name="name" value="${show.name}">
         <input type="hidden" name="poster_path" value="${show.poster_path}">
         <button type="submit" class="icon-button">
-          <img class="icon" src="/images/Favorites.png" alt="Add to Favorites">
+          <img class="hidden" src="/images/Favorites.png" alt="Add to Favorites">
         </button>
       </form>
 
+      <form class="watched-form">
+        <input type="hidden" name="userId" value="<%= userId %>">
+        <input type="hidden" name="id" value="${show.id}">
+        <input type="hidden" name="name" value="${show.name}">
+        <input type="hidden" name="poster_path" value="${show.poster_path}">
+        <button type="submit" class="icon-button">
+          <img class="hidden" src="/images/Watched.png" alt="Mark as Watched">
+        </button>
+      </form>
+      
+      <form class="watchlist-form">
+        <input type="hidden" name="userId" value="<%= userId %>">
+        <input type="hidden" name="id" value="${show.id}">
+        <input type="hidden" name="name" value="${show.name}">
+        <input type="hidden" name="poster_path" value="${show.poster_path}">
+        <button type="submit" class="icon-button">
+          <img class="hidden" src="/images/Watchlist.png" alt="Add to Watchlist">
+        </button>
+      </form>
+    
+
+
+
+
     <div id="searchResults"></div>
+    <div id="recommendations-container"></div>
 </main>
 <%- include('../partials/footer') %>
 <script>
