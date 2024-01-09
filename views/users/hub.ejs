@@ -8,6 +8,10 @@
   </div>
   <div class="scroll-container">
     <div class="d-flex">
+      <% if (favorites.length === 0) { %>
+        <p>You have no favorites. Try searching for some.</p><br>
+        <a href="/pages/search" class="btn btn-primary">Search Shows</a>
+      <% } else { %>
       <% favorites.forEach(show => { %>
       <div class="hub-card">
         <a href="/pages/show/<%= show.id %>">
@@ -24,6 +28,7 @@
 
       </div>
       <% }); %>
+      <% } %>
     </div>
   </div>
   <!-- Watchlist -->
@@ -31,6 +36,10 @@
   <h3>Watchlist</h3>
   <div class="scroll-container">
     <div class="d-flex">
+      <% if (watchlist.length === 0) { %>
+        <p>You have nothing on your Watchlist. Let's add some!</p><br>
+        <a href="/pages/browse" class="btn btn-primary">Browse Shows</a>
+      <% } else { %>
       <% watchlist.forEach(show => { %>
       <div class="hub-card">
         <a href="/pages/show/<%= show.id %>">
@@ -45,6 +54,7 @@
         </form>
       </div>
       <% }); %>
+      <% } %>
     </div>
   </div>
 
@@ -53,6 +63,10 @@
   <h3>Watched Shows</h3>
   <div class="scroll-container">
     <div class="d-flex">
+      <% if (watched.length === 0) { %>
+        <p>You have no watched shows. Try some of these!</p><br>
+        <a href="/pages/popular" class="btn btn-primary">Popular Shows</a>
+      <% } else { %>
       <% watched.forEach(show => { %>
       <div class="hub-card">
         <a href="/pages/show/<%= show.id %>">
@@ -84,7 +98,7 @@
 
         <% } %>
       </div>
-
+   
       <!-- Button trigger modal -->
       <div class="modal fade" id="rateModal<%= show.id %>" tabindex="-1" aria-labelledby="rateModalLabel<%= show.id %>" aria-hidden="true">
         <div class="modal-dialog">
@@ -109,8 +123,9 @@
           </div>
         </div>
       </div>
-
       <% }); %>
+     
+      <% } %>
     </div>
   </div>
 
