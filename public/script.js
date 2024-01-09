@@ -17,7 +17,8 @@ document.addEventListener('DOMContentLoaded', function() {
                       showDiv.innerHTML = `
                           <a href="/pages/show/${show.id}">
                               <img src="https://image.tmdb.org/t/p/w500${show.poster_path}" alt="${show.name}" class="img">
-                          </a>
+                           </a>
+                           <div id="messageBox-${show.id}" class="message-box"></div>
                           <div class= "show-icons">
                           <form class="favorite-form">
                           <input type="hidden" name="id" value="${show.id}">
@@ -85,14 +86,28 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     .then(response => response.json())
     .then(data => {
+      const messageBox = document.getElementById(`messageBox-${showId}`);
       if (data.message === 'Show added') {
         fetchRecommendations(showId); // Fetch recommendations
-      } else {
-        console.error('Error:', data.message);
-      }
-    })
-    .catch(error => console.error('Error:', error));
+        messageBox.innerText = 'Show added';
+    } else {
+        console.error(data.message);
+        messageBox.innerText =  data.message;
+    }
+    setTimeout(() => {
+        messageBox.innerText = '';
+    }, 1000);
+})
+.catch(error => {
+    console.error('Error:', error);
+    const messageBox = document.getElementById(`messageBox-${showId}`);
+    messageBox.innerText = 'Error: ' + error;
+
+    setTimeout(() => {
+        messageBox.innerText = '';
+    }, 1000);
   });
+});
 });
 
 

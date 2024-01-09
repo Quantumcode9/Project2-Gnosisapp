@@ -289,8 +289,11 @@ router.post('/shows/add/:userId', async (req, res) => {
         last_air_date: show.last_air_date
       });
       await user.save();
-       console.log('Show added');
-     }
+         res.redirect('/users/hub');
+    } else {
+      // If the show is already in favorites, you might want to send a different response
+      res.json({ message: 'Show already in favorites', user });
+    }
 
     // Send a success response
       // res.json({ message: 'Show added to favorites', user });
@@ -355,9 +358,9 @@ router.post('/shows/watched/add/:userId', async (req, res) => {
       });
 
       await user.save();
-      console.log('Show added');
+      res.redirect('/users/hub');
     }
-
+    
     // res.json({ message: 'Show added to watched list', user });
   } catch (err) {
     console.error(err);
@@ -418,7 +421,7 @@ router.post('/shows/watchlist/add/:userId', async (req, res) => {
       });
 
       await user.save();
-      console.log('Show added');
+      res.redirect('/users/hub');
     }
    // res.json({ message: 'Show added to watchlist', user });
   } catch (err) {
