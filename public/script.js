@@ -45,9 +45,6 @@ document.addEventListener('DOMContentLoaded', function() {
                       </button>
                   </form>
               </div>
-
-
-                          
                       `;
                       searchResults.appendChild(showDiv);
                   });
@@ -55,43 +52,49 @@ document.addEventListener('DOMContentLoaded', function() {
               .catch(error => console.error('Error:', error));
       }
   });
-  // Event delegation for dynamically added forms
+  // dynamically added forms
   document.body.addEventListener('submit', function(event) {
-    if (event.target.matches('.favorite-form')) {
-        event.preventDefault();
-        const formData = new FormData(event.target);
-        formData.append('userId', userId); // Add the userId to the form data
-        const showId = formData.get('id');
-        const showTitle = formData.get('name');
-        const showPoster = formData.get('poster_path');
-        addToFavorites(userId, showId, showTitle, showPoster);
-    }
-});
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(event.target);
+    formData.append('userId', userId); // Add the userId to the form data
+    const showId = formData.get('id');
+    const showTitle = formData.get('name');
+    const showPoster = formData.get('poster_path');
+  
+    let route;
 
-function addToFavorites(userId, showId, showTitle, showPoster) {
-  fetch('/shows/add/', {
+    if (form.classList.contains('favorite-form')) {
+      route = '/shows/add';
+    } else if (form.classList.contains('watched-form')) {
+      route = '/shows/watched/add';
+    } else if (form.classList.contains('watchlist-form')) {
+      route = '/shows/watchlist/add';
+    }
+    fetch(route, {
       method: 'POST',
       headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      userId: userId, 
-      id: showId,
-      name: showTitle,
-      poster_path: showPoster
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        userId: userId, 
+        id: showId,
+        name: showTitle,
+        poster_path: showPoster
+      })
     })
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.message === 'Show added to favorites') {
-      fetchRecommendations(showId); // Fetch recommendations
-    } else {
-      console.error('Error:', data.message);
-    }
-  })
-  .catch(error => console.error('Error:', error));
-}
+    .then(response => response.json())
+    .then(data => {
+      if (data.message === 'Show added') {
+        fetchRecommendations(showId); // Fetch recommendations
+      } else {
+        console.error('Error:', data.message);
+      }
+    })
+    .catch(error => console.error('Error:', error));
+  });
 });
+
 
 // Fetch recommendations
 
@@ -141,4 +144,5 @@ recommendations.forEach(show => {
   recommendationsContainer.appendChild(recommendationElement);
 });
 }
+
 

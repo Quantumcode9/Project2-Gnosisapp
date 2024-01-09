@@ -182,18 +182,58 @@ console.log('user:', user);
     await user.save();
 
     // Send a success response
-    res.json({ message: 'Show added to favorites' });
+    res.json({ message: 'Show added' });
   } catch (error) {
     console.error(error);
     res.status(500).send('Error adding show to favorites');
   }
 });
 
+/////////////////////////////////////////////////////
 
+router.post('/shows/watched/add', async (req, res) => {
+  const { userId, id, name, poster_path } = req.body;
 
+  try {
+    const user = await User.findById(userId);
 
+    if (!user) {
+      res.status(404).json({ message: 'User not found' });
+      return;
+    }
 
+    user.watched.push({ id, name, poster_path });
+    await user.save();
 
+    res.json({ message: 'Show added to watched' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error adding show to watched');
+  }
+});
+
+//////////////////////////////////////////////////////////
+
+router.post('/shows/watchlist/add', async (req, res) => {
+  const { userId, id, name, poster_path } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      res.status(404).json({ message: 'User not found' });
+      return;
+    }
+
+    user.watchlist.push({ id, name, poster_path });
+    await user.save();
+
+    res.json({ message: 'Show added to watchlist' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error adding show to watchlist');
+  }
+});
 
 
 /////////////////////////////////////////////////// 
@@ -254,7 +294,7 @@ router.post('/shows/add/:userId', async (req, res) => {
         last_air_date: show.last_air_date
       });
       await user.save();
-       console.log('User updated with new favorite');
+       console.log('Show added');
      }
 
     // Send a success response
@@ -320,7 +360,7 @@ router.post('/shows/watched/add/:userId', async (req, res) => {
       });
 
       await user.save();
-      console.log('User updated with new watched show');
+      console.log('Show added');
     }
 
     // Send a success response
@@ -384,7 +424,7 @@ router.post('/shows/watchlist/add/:userId', async (req, res) => {
       });
 
       await user.save();
-      console.log('User updated with new watchlist item');
+      console.log('Show added');
     }
 
     // Send a success response
