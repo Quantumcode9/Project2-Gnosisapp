@@ -7,7 +7,6 @@
             <a href="/pages/show/<%= show.id %>">
             <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
               </a>
-            <h2><%= show.name %></h2>
                 <%- include('../partials/buttons', { show: show, userId: userId }) %>
         </div>
     <% }) %>

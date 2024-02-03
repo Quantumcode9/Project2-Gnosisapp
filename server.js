@@ -68,6 +68,7 @@ app.get('/pages/search', (req, res) => {
 
 
 
+
 // Genre routes
 app.get('/pages/browse', (req, res) => {
   res.render('pages/browse', { genres: req.genres });
@@ -114,7 +115,7 @@ app.get('/home', async (req, res) => {
   }
 });
 
-// server.js
+
 
 /////////////////////////////////////////
 

@@ -11,7 +11,6 @@
             <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
           </a>
           <%- include('../partials/buttons', { show: show, userId: userId }) %>
-          <h2><%= show.name %></h2>
         <% } else { %>
           <p>No image available.</p>
         <% } %>

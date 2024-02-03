@@ -23,7 +23,7 @@ const HEADERS = {
     console.log(genreResponse.data); 
 
     const genres = genreResponse.data.genres; 
-     console.log(genres);
+     console.log(genreResponse.data);
      res.render('pages/browse', { genres }); 
    } catch (error) {
     console.error(error);
@@ -369,7 +369,7 @@ router.post('/shows/watched/add/:userId', async (req, res) => {
 });
 
 /////////////////////////////////////////////////// 
-//  ADD TO WATCHLIST AND SAVE TO DB AND USER
+//  ADD TO WATCHLIST 
 
 router.post('/shows/watchlist/add/:userId', async (req, res) => {
 

@@ -1,5 +1,6 @@
 <%- include('../partials/header.ejs'); %>
 <main>
+    <div class="container-fluid">
     <h1>Popular TV Shows</h1>
     <div class="show-list">
         <% shows.forEach(show => { %>
@@ -9,7 +10,6 @@
                 </a>
                 <%- include('../partials/buttons', { show: show, userId: userId }) %>
                   <div id="recommendations-container"></div> 
-                <h2><%= show.name %></h2>
             </div>
         <% }) %>
     </div>

@@ -65,7 +65,7 @@ router.post('/login', async (req, res) => {
                     req.session.loggedIn = true;
                     req.session.userId = user._id; 
 
-                    res.redirect('/');
+                    res.redirect('/users/hub');
                 } else {
                     res.redirect(`/error?error=Invalid credentials`);
                 }
