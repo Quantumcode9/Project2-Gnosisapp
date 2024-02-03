@@ -8,7 +8,7 @@
 
 
 main {
-  padding: 20px;
+
 
 }
 
@@ -17,7 +17,6 @@ body {
     line-height: 1.6;
     background-color: #1c1b1b;
     color: #dddbdb;
-    padding: 20px;
 }
 
 @media (max-width: 600px) {
@@ -78,20 +77,21 @@ header {
 header a {
     color: #fff;
     text-decoration: none;
-    text-transform: uppercase;
-    font-size: 16px;
-    text-align: center;
 }
+
 
 /* Navigation bar */
 
 
+
+
 nav a {
     margin-left: 20px;
-    text-align: center;
     float: left;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    color: #fff;
 }
 
 nav a:hover {
@@ -155,6 +155,9 @@ a {
     text-align: center;
 }
 
+.navbar-brand me-3 {
+  margin-right: 0;
+}
 
 .form-container .btn {
   margin: 10px;
@@ -211,7 +214,6 @@ margin-top: 10px;
   flex: 1;
   flex-basis: calc(33.333% - 10px); 
   max-width: calc(33.333% - 10px); 
-
 } 
 
 
@@ -240,6 +242,7 @@ margin-top: 10px;
     .show {
       flex-basis: calc(50% - 10px);
       max-width: calc(50% - 10px);
+      gap: 10px;
     }
   }
   
@@ -366,7 +369,7 @@ margin-top: 10px;
           right: 0;
           justify-content: space-evenly;
           background-color: rgba(0, 0, 0, 0.5);
-          margin-left: 20px;
+          margin-left: 30px;
         }
 
         .show-icons .icon {
@@ -470,7 +473,7 @@ margin-top: 10px;
   align-items: center;
 }
 
-@media (max-width: 576px) { /* Adjust as needed */
+@media (max-width: 600px) { 
   .navbar-nav {
     display: none;
   }
@@ -480,6 +483,7 @@ margin-top: 10px;
   .logout-footer {
     display: block;
     left: 0;
+    top: 0;
   
   }
   
@@ -497,16 +501,18 @@ margin-top: 10px;
 
 
 
+
+
 .footer a {
   color: #fff;
-
-
 }
 
 .footer a i {
   font-size: 2em;
   display: block;
-  margin-inline: auto;
+  bottom: 0;
+
+  
 }
 
 @media (max-width: 576px) { 
@@ -516,20 +522,25 @@ margin-top: 10px;
   }
 }
 
+
+
+
 /* Footer */
 
 footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
   background-color: #333;
   color: #fff;
   position: fixed;
   bottom: 0;
   width: 100%;
+  left: 0;
   text-align: center;
 }
+
+
 
 
 @media screen and (max-width: 600px) {
@@ -539,7 +550,6 @@ footer {
 
 
   nav a {
-    margin-left: 20px;
     text-align: center;
     display: flex;
     flex-direction: row;
