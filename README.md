@@ -7,8 +7,8 @@ An app that helps you find and manage your favorite TV Shows
 
 _GNOSIS_ is an application designed to enhance the TV viewing experience for users by allowing them to discover, manage, and keep track of their favorite TV shows. 
 
-
-
+## Check it out here
+https://gnosis-app.fly.dev
 
 ### The Build
 ![Login or Sign Up Screenshot](Photos/readme/screen.png)
