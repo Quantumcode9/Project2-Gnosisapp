@@ -12,7 +12,7 @@ https://gnosis-app.fly.dev
 
 ### The Build
 ![Screenshots](Photos/Screenshot-Search.png)
-(Photos/Screenshot-Show.png)
+![Screenshots](Photos/Screenshot-Show.png)
 
 ## User Stories
 > - As a user, I want the ability to sign up.
