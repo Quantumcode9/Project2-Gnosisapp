@@ -38,7 +38,7 @@ const showSchema = new mongoose.Schema({
   in_production: Boolean,
   rating: [String],
   last_air_date: {
-    type: Date,
+    type: String,
     required: false 
   },
   last_episode_to_air: episodeSchema,

@@ -9,16 +9,16 @@ document.addEventListener('DOMContentLoaded', function() {
               .then(response => response.json())
               .then(data => {
                   const searchResults = document.getElementById('searchResults');
-                  searchResults.innerHTML = ''; // Clear previous results
+                  searchResults.innerHTML = ''; 
 
                   data.forEach(show => {
                       const showDiv = document.createElement('div');
                       showDiv.className = 'show';
                       showDiv.innerHTML = `
                           <a href="/pages/show/${show.id}">
-                              <img src="https://image.tmdb.org/t/p/w500${show.poster_path}" alt="${show.name}" class="img">
-                           </a>
-                           <div id="messageBox-${show.id}" class="message-box"></div>
+                          <div class="show-card">
+                          <img src="https://image.tmdb.org/t/p/w500${show.poster_path}" alt="${show.name}"  style="height: 300px;">
+                          <div id="messageBox-${show.id}" class="message-box"></div>
                           <div class= "show-icons">
                           <form class="favorite-form">
                           <input type="hidden" name="id" value="${show.id}">
@@ -40,11 +40,14 @@ document.addEventListener('DOMContentLoaded', function() {
                   <form class="watchlist-form">
                       <input type="hidden" name="id" value="${show.id}">
                       <input type="hidden" name="name" value="${show.name}">
-                      <input type="hidden" name="poster_path" value="${show.poster_path}">
+                      <input type="hidden" name="poster_path" value="${show.poster_path}">>
+                      <input type="hidden" name="next_episode" value="${show.next_episode}">
+                      <input type="hidden" name="last_air_date" value="${show.last_air_date}">
                       <button type="submit" class="icon-button">
                           <img class="icon" src="/images/Watching.png" alt="Add to Watchlist">
                       </button>
                   </form>
+              </div>
               </div>
                       `;
                       searchResults.appendChild(showDiv);
@@ -53,12 +56,11 @@ document.addEventListener('DOMContentLoaded', function() {
               .catch(error => console.error('Error:', error));
       }
   });
-  // dynamically added forms
   document.body.addEventListener('submit', function(event) {
     event.preventDefault();
     const form = event.target;
     const formData = new FormData(event.target);
-    formData.append('userId', userId); // Add the userId to the form data
+    formData.append('userId', userId); 
     const showId = formData.get('id');
     const showTitle = formData.get('name');
     const showPoster = formData.get('poster_path');
@@ -88,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(data => {
       const messageBox = document.getElementById(`messageBox-${showId}`);
       if (data.message === 'Show added') {
-        fetchRecommendations(showId); // Fetch recommendations
+        fetchRecommendations(showId); 
         messageBox.innerText = 'Show added';
     } else {
         console.error(data.message);
@@ -109,7 +111,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 });
-
 
 // Fetch recommendations
 
@@ -137,7 +138,6 @@ if (!recommendationsContainer) {
   showElement.after(recommendationsContainer);
 }
 
-// Clear previous recommendations
 recommendationsContainer.innerHTML = '';
 
 recommendations.forEach(show => {

@@ -1,23 +1,23 @@
 <%- include('../partials/header') %>
-<!-- ... Head elements ... -->
 <main>
-  <h1>TV Shows</h1> 
+  <h1><%= genre.name %> TV Shows</h1>
   <div class="show-list">
     <% shows.forEach(show => { %>
-      <div id="show_<%= show.id %>" class="show">
-        <!-- Check if the show has a poster image -->
-        <% if (show.poster_path) { %>
-          <a href="/pages/show/<%= show.id %>">
-            <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
-          </a>
-          <%- include('../partials/buttons', { show: show, userId: userId }) %>
-        <% } else { %>
-          <p>No image available.</p>
-        <% } %>
-      </div>
-    <% }); %>
-  </div>
-      
-  
-      </main>
+        <div id="show_<%= show.id %>" class="show">  
+            <a href="/pages/show/<%= show.id %>">
+            <div class="show-card">
+                <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>" style="height: 300px;">
+            </a>
+            <%- include('../partials/buttons', { show: show, userId: userId }) %>      
+            <div id="messageBox-<%= show.id %>" class="message-box"></div>
+        </div>
+        </div>
+    <% }) %>
+    <div id="recommendations-container"></div>
+</div>
+</main>
     <%- include('../partials/footer') %>
+    <script>
+      window.userId = '<%= userId %>';
+    </script>
+     <script src="/recommendations.js"></script>

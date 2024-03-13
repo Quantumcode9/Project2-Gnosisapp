@@ -1,14 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/user'); // Replace with your actual user model path
+const User = require('../models/user'); 
 
 
-// GET -> Delete Show from Watchlist -> /users/delete-show/:showId
+// GET -> Delete Show 
 router.post('/delete-show/:showId', async (req, res) => {
     const showId = req.params.showId;
 
     try {
-        // Update all user documents, removing the show from their watchlists
         await User.updateMany(
             { 'watchlist.id': showId },
             { $pull: { watchlist: { id: showId } } }
@@ -21,7 +20,7 @@ router.post('/delete-show/:showId', async (req, res) => {
     }
 });
 
-// GET -> Delete Show from Favorites -> /users/delete-show/:showId
+// GET -> Delete Show from Favorites 
 
 router.post('/delete-show-watched/:showId', async (req, res) => {
     const showId = req.params.showId;
@@ -39,7 +38,6 @@ router.post('/delete-show-watched/:showId', async (req, res) => {
     }
 });
 
-// Route to delete a show from the favorites list
 router.post('/delete-show-favorites/:showId', async (req, res) => {
     const showId = req.params.showId;
 

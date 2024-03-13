@@ -1,13 +1,12 @@
 <%- include('../partials/header') %>
 
-    <div class="container-md">
-        <h2>Are you sure you would like to log out?</h2>
+    <div class="logout-container">
+        <h2>Are you sure you want to log out?</h2>
 
         <div class="btn-group">
-            <a href="/" class="btn btn-warning me-3">No, go back home</a>
-
+            <a href="#" class="btn btn-warning back-btn" style="width: 150px; height: 50px; margin-right: 10px; border-radius: 8px;" onclick="event.preventDefault(); try { window.history.go(-1); } catch(e) { window.location.href = '/user/hub'; }">Back</a>
             <form action="/users/logout?_method=DELETE" method="POST">
-                <input type="submit" class="btn btn-danger me-3" value="Yes, log me out">
+            <input type="submit" class="btn btn-danger logout-btn" style="width: 150px; height: 50px;" value="Yes, log me out">
             </form>
         </div>
     </div>

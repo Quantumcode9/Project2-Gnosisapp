@@ -33,10 +33,8 @@ router.post('/signup', async (req, res) => {
         newUser.password, 
         await bcrypt.genSalt(10)
     );
-    // we can now create our user
     User.create(newUser)
         .then(user => {
-// the new user will be created and redirected to the login page
         res.redirect('/users/login')
         })
         .catch(err => {
@@ -45,8 +43,7 @@ router.post('/signup', async (req, res) => {
     })
 })
 
-
-// GET -> Login -> /users/login
+// GET -> Login - /users/login
 router.get('/login', (req, res) => {
     const { username, loggedIn, userId } = req.session
 res.render('users/login', { username, loggedIn, userId })
@@ -56,7 +53,6 @@ router.post('/login', async (req, res) => {
 
     User.findOne({ username })
         .then(async (user) => {
-            // if the user exists
             if (user) {
                 const result = await bcrypt.compare(password, user.password);
 

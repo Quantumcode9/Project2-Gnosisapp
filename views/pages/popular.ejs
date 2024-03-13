@@ -6,20 +6,22 @@
         <% shows.forEach(show => { %>
             <div id="show_<%= show.id %>" class="show">  
                 <a href="/pages/show/<%= show.id %>">
-                    <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>" >
+                <div class="show-card">
+                    <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>" style="height: 300px;">
                 </a>
-                <%- include('../partials/buttons', { show: show, userId: userId }) %>
-                  <div id="recommendations-container"></div> 
+                <%- include('../partials/buttons', { show: show, userId: userId }) %>      
+                <div id="messageBox-<%= show.id %>" class="message-box"></div>
+            </div>
             </div>
         <% }) %>
+        <div id="recommendations-container"></div>
     </div>
 </main>
 
 <%- include('../partials/footer') %>
 
-
-
-
-
-
-
+<script>
+    window.userId = '<%= userId %>';
+    
+</script>
+<script src="/recommendations.js"></script>

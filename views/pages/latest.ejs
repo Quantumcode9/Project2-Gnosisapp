@@ -3,14 +3,23 @@
 <h1>Latest TV Shows</h1>
 <div class="show-list">
     <% shows.forEach(show => { %>
-        <div id="show_<%= show.id %>" class="show">
+        <div id="show_<%= show.id %>" class="show">  
             <a href="/pages/show/<%= show.id %>">
-            <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
-              </a>
-                <%- include('../partials/buttons', { show: show, userId: userId }) %>
+            <div class="show-card">
+                <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>" style="height: 300px;">
+            </a>
+            <%- include('../partials/buttons', { show: show, userId: userId }) %>      
+            <div id="messageBox-<%= show.id %>" class="message-box"></div>
+        </div>
         </div>
     <% }) %>
+    <div id="recommendations-container"></div>
 </div>
-</body>
+
 </main>
 <%- include('../partials/footer.ejs'); %>
+
+<script>
+    window.userId = '<%= userId %>';
+</script>
+<script src="/recommendations.js"></script>

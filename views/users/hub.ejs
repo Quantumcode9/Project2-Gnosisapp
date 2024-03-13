@@ -7,15 +7,17 @@
     <h3>Favorite Shows</h3>
     <% if (favorites.length === 0) { %>
     <p class="text-center">You have no favorites. </p>
-    <a href="/pages/search" class="btn btn-primary d-block mx-auto">Search Shows</a>
+    <a href="/pages/search" class="btn btn-light btn-center">Search Shows</a>
     <% } else { %>
   <div class="scroll-container">
     <div class="d-flex">
       <% favorites.forEach(show => { %>
       <div class="hub-card">
+
         <a href="/pages/show/<%= show.id %>">
           <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
         </a>
+
         <h4><%= show.name %></h4>
         </p>
         <p> <%= show.last_air_date %></p>
@@ -35,7 +37,7 @@
   <h3>Watchlist</h3>
   <% if (watchlist.length === 0) { %>
     <p class="text-center">You have no shows in your watchlist. </p>
-  <a href="/pages/popular" class="btn btn-primary d-block mx-auto">Popular Shows</a>
+  <a href="/pages/popular" class="btn btn-light btn-center">Popular Shows</a>
   <% } else { %>
   <div class="scroll-container">
     <div class="d-flex">
@@ -45,7 +47,6 @@
           <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
         </a>
         <h4><%= show.name %></h4>
-        <p>Rating: <%= show.rating %></p>
         <form action="/delete-show/<%= show.id %>" method="POST">
           <button type="submit" class="btn btn-danger icon-button">
             <i class="bi bi-trash"></i>
@@ -62,7 +63,7 @@
   <h3>Watched Shows</h3>
 <% if (watched.length === 0) { %>
   <p class="text-center">You have no shows in your watched list. </p>
-  <a href="/pages/popular" class="btn btn-primary d-block mx-auto">Popular Shows</a>
+  <a href="/pages/popular" class="btn btn-light btn-center">Popular Shows</a>
 <% } else { %>
   <div class="scroll-container">
     <div class="d-flex">
@@ -83,7 +84,7 @@
               <% } %>
             </p>
           <% } %>
-          <!-- <% if(typeof show.user_rating === 'undefined' || show.user_rating === null) { %>
+          <% if(typeof show.user_rating === 'undefined' || show.user_rating === null) { %>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#rateModal<%= show.id %>">
               <i class="bi bi-star-fill"></i> Add Rating
             </button>
@@ -92,7 +93,7 @@
                 <i class="bi bi-trash"></i>
               </button>
             </form>
-          <% } %> -->
+          <% } %>
         </div>
         <!-- Button trigger modal -->
         <div class="modal fade" id="rateModal<%= show.id %>" tabindex="-1" aria-labelledby="rateModalLabel<%= show.id %>" aria-hidden="true">
@@ -103,6 +104,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
+                <p>Rate "<%= show.name %>" from 1 to 5 stars.</p>
                 <form action="/update-rating" method="POST">
                   <% for(let i = 1; i <= 5; i++) { %>
                     <input type="radio" id="star<%= show.id %>-<%= i %>" name="rating" value="<%= i %>" <%= i == show.user_rating ? 'checked' : '' %> class="star-rating-input">
@@ -110,11 +112,13 @@
                       <i class="bi bi-star-fill"></i>
                     </label>
                   <% } %>
+                  </div>
                   <input type="hidden" name="userId" value="<%= userId %>">
                   <input type="hidden" name="showId" value="<%= show.id %>">
-                  <button type="submit" class="btn btn-success">Submit Rating</button>
+                  
+                  <button type="submit" class="btn btn-success btn-bottom">Submit Rating</button>
                 </form>
-              </div>
+              
             </div>
           </div>
         </div>
@@ -129,12 +133,10 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  // Attach a touchstart event listener to each link
   document.querySelectorAll('.show-link').forEach((link) => {
     let touchstartX = 0;
     let touchendX = 0;
     link.addEventListener('touchstart', (e) => {
-      // Get the initial position of the touch
       touchstartX = e.changedTouches[0].screenX;
     });
     link.addEventListener('touchend', (e) => {
