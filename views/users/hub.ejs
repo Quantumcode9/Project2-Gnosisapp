@@ -83,7 +83,7 @@
                 <% } %>
               <% } %>
             </p>
-          <% } %>
+          <% } %> 
           <% if(typeof show.user_rating === 'undefined' || show.user_rating === null) { %>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#rateModal<%= show.id %>">
               <i class="bi bi-star-fill"></i> Add Rating
@@ -106,7 +106,7 @@
               <div class="modal-body">
                 <p>Rate "<%= show.name %>" from 1 to 5 stars.</p>
                 <form action="/update-rating" method="POST">
-                  <% for(let i = 1; i <= 5; i++) { %>
+                  <% for(let i = 5; i >= 1; i--) { %>
                     <input type="radio" id="star<%= show.id %>-<%= i %>" name="rating" value="<%= i %>" <%= i == show.user_rating ? 'checked' : '' %> class="star-rating-input">
                     <label for="star<%= show.id %>-<%= i %>" class="star-rating-label">
                       <i class="bi bi-star-fill"></i>
@@ -118,7 +118,6 @@
                   
                   <button type="submit" class="btn btn-success btn-bottom">Submit Rating</button>
                 </form>
-              
             </div>
           </div>
         </div>
@@ -126,9 +125,7 @@
       <% } %>
     </div>
   </div>
-  
-
-  </main>
+</main>
     <%- include('../partials/footer') %>
 
 <script>

@@ -40,9 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
                   <form class="watchlist-form">
                       <input type="hidden" name="id" value="${show.id}">
                       <input type="hidden" name="name" value="${show.name}">
-                      <input type="hidden" name="poster_path" value="${show.poster_path}">>
-                      <input type="hidden" name="next_episode" value="${show.next_episode}">
-                      <input type="hidden" name="last_air_date" value="${show.last_air_date}">
+                      <input type="hidden" name="poster_path" value="${show.poster_path}">
                       <button type="submit" class="icon-button">
                           <img class="icon" src="/images/Watching.png" alt="Add to Watchlist">
                       </button>

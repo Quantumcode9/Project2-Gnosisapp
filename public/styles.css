@@ -89,7 +89,7 @@ header {
 }
 
 header a {
-    color: #fff;
+    color: #ffffff;
     text-decoration: none;
 }
 
@@ -97,20 +97,38 @@ header a {
 /* Navigation bar */
 
 
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+
+    padding: 10px 20px;
+    background-color: #900303;
+    color: #fff;
+}
 
 
-nav a {
+.navbar-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-height: 40px;
+}
+
+.navbar-nav a {
+  margin-top: 10px;
     margin-left: 20px;
     float: left;
-    display: flex;
     justify-content: space-between;
     align-items: center;
     color: #fff;
 }
 
-nav a:hover {
-    color: #007bff;
+.navbar-nav a:hover {
+    color: #e1b410;
 }
+
+
 
 .logout-footer {
   display: none;
@@ -658,6 +676,13 @@ margin-top: 10px;
   margin-bottom: .25rem;
 }
 
+.hello-user
+{
+  margin-left: 20%;
+  margin-right: 50%;
+  font-size: 20px;
+  color: #fff;
+}
 .navbar-nav {
   display: block;
   display: flex;
@@ -1068,7 +1093,7 @@ transition: transform 0.3s ease-in-out;
 .rating .bi {
   color: gold; 
   font-size: 20px; 
-} */
+}  */
 
 
 /* search */
@@ -1152,12 +1177,6 @@ transition: transform 0.3s ease-in-out;
 
 
 
-.user-rating {
-  display: flex;
-  justify-content: center; 
-  flex-direction: row-reverse; 
-}
-
 
 .modal-dialog {
   max-width: 90%;
@@ -1177,6 +1196,8 @@ transition: transform 0.3s ease-in-out;
 .modal-title {
   color: #495057; 
 }
+
+
 
 .modal-body form {
   display: flex;
