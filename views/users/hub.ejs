@@ -12,22 +12,19 @@
   <div class="scroll-container">
     <div class="d-flex">
       <% favorites.forEach(show => { %>
-      <div class="hub-card">
-
-        <a href="/pages/show/<%= show.id %>">
-          <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
-        </a>
-
-        <h4><%= show.name %></h4>
-        </p>
-        <p> <%= show.last_air_date %></p>
-        <form action="/delete-show-favorites/<%= show.id %>" method="POST">
-          <button type="submit" class="btn btn-danger icon-button">
-            <i class="bi bi-trash"></i>
-          </button>
-        </form>
-
-      </div>
+        <div class="hub-card">
+          <a href="/pages/show/<%= show.id %>" class="image-link">
+            <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
+            <form action="/delete-show-favorites/<%= show.id %>" method="POST" class="delete-form">
+              <button type="submit" class="btn btn-danger icon-button-trash">
+                <i class="bi bi-trash"></i>
+              </button>
+            </form>
+          </a>
+          <h4><%= show.name %></h4>
+          <p><%= show.last_air_date %></p>
+          <p><%= show.user_rating %></p>
+        </div>
       <% }); %>
       <% } %>
     </div>
@@ -42,17 +39,19 @@
   <div class="scroll-container">
     <div class="d-flex">
       <% watchlist.forEach(show => { %>
-      <div class="hub-card">
-        <a href="/pages/show/<%= show.id %>">
-          <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
-        </a>
-        <h4><%= show.name %></h4>
-        <form action="/delete-show/<%= show.id %>" method="POST">
-          <button type="submit" class="btn btn-danger icon-button">
-            <i class="bi bi-trash"></i>
-          </button>
-        </form>
-      </div>
+        <div class="hub-card">
+          <a href="/pages/show/<%= show.id %>" class="image-link">
+            <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
+            <form action="/delete-show/<%= show.id %>" method="POST" class="delete-form">
+              <button type="submit" class="btn btn-danger icon-button-trash">
+                <i class="bi bi-trash"></i>
+              </button>
+            </form>
+          </a>
+          <h4><%= show.name %></h4>
+          <p><%= show.last_air_date %></p>
+          <p><%= show.user_rating %></p>
+        </div>
       <% }); %>
       <% } %>
     </div>
@@ -63,7 +62,7 @@
   <h3>Watched Shows</h3>
 <% if (watched.length === 0) { %>
   <p class="text-center">You have no shows in your watched list. </p>
-  <a href="/pages/popular" class="btn btn-light btn-center">Popular Shows</a>
+  <a href="/pages/latest" class="btn btn-light btn-center">Latest Shows</a>
 <% } else { %>
   <div class="scroll-container">
     <div class="d-flex">
