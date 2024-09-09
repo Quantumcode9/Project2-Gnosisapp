@@ -44,46 +44,52 @@
     <!-- Networks Column -->
     <div class="col-md-6">
         <h3>Networks</h3>
-        <% show.networks.forEach(function(network) { %>
-            <div class="d-flex align-items-center mb-3">
-                <% if (network.logo_path) { %>
-                <div class="logo-card">
-                    <img src="https://image.tmdb.org/t/p/w500<%=network.logo_path %>" alt="<%= network.name %>" class="logo-image">
+        <div id="networks-container" class="d-flex flex-wrap">
+            <% show.networks.forEach(function(network) { %>
+                <div class="d-flex align-items-center mb-3 network-item">
+                    <% if (network.logo_path) { %>
+                    <div class="logo-card">
+                        <img src="https://image.tmdb.org/t/p/w500<%=network.logo_path %>" alt="<%= network.name %>" class="logo-image">
+                    </div>
+                    <% } %>
                 </div>
-                <% } %>
-            </div>
-        <% }); %>
+            <% }); %>
+        </div>
     </div>
     
     <!-- Production Companies Column -->
     <div class="col-md-6">
         <h3>Production Companies</h3>
-        <% show.production_companies.forEach(function(company) { %>
-            <div class="d-flex align-items-center mb-3">
-                <% if (company.logo_path) { %>
-                    <div class="logo-card">
-                        <img src="https://image.tmdb.org/t/p/w500<%= company.logo_path %>" alt="<%= company.name %>" class="logo-image">
-                    </div>
-                <% } %>
+        <div id="companies-container" class="d-flex flex-wrap">
+            <% show.production_companies.forEach(function(company) { %>
+                <div class="d-flex align-items-center mb-3 company-item">
+                    <% if (company.logo_path) { %>
+                        <div class="logo-card">
+                            <img src="https://image.tmdb.org/t/p/w500<%= company.logo_path %>" alt="<%= company.name %>" class="logo-image">
+                        </div>
+                    <% } %>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+</div>
+
+<!-- Created By -->
+<div class="container mt-6">
+    <h3>Created By</h3>
+    <div id="creators-container" class="row">
+        <% show.created_by.forEach(function(creator) { %>
+            <div class="col-md-6 col-sm-6 creator-item">
+                <% if (creator.profile_path) { %>
+                <div class="creator-card">
+                    <img src="<%= creator.profile_path ? `https://image.tmdb.org/t/p/w500${creator.profile_path}` : '/public/images/default-avatar.png' %>" alt="Profile Image" class="image-profile">
+                    <% } %>
+                    <h2><%= creator.name %></h2>
+                </div>
             </div>
         <% }); %>
-  </div>
-        <!-- Created By -->
-        <div class="container mt-6">
-            <h3>Created By</h3>
-            <div class="row">
-                <% show.created_by.forEach(function(creator) { %>
-                    <div class="col-md-6 col-sm-6">
-                        <% if (creator.profile_path) { %>
-                        <div class="creator-card">
-                            <img src="<%= creator.profile_path ? `https://image.tmdb.org/t/p/w500${creator.profile_path}` : '/public/images/default-avatar.png' %>" alt="Profile Image" class="image-profile">
-                            <% } %>
-                            <h2><%= creator.name %></h2>
-                        </div>
-                    </div>
-                <% }); %>
-            </div>
-        </div>
+    </div>
+</div>
 
         <!-- Seasons -->
             <div class="container">
@@ -134,3 +140,34 @@
     </main>
 <%- include('../partials/footer.ejs'); %>
 
+
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const networksContainer = document.getElementById('networks-container');
+      const networkItems = networksContainer.getElementsByClassName('network-item');
+      if (networkItems.length === 1) {
+        networksContainer.classList.add('center-single-item');
+      } else if (networkItems.length > 1) {
+        networksContainer.classList.add('distribute-items');
+      }
+    
+      const companiesContainer = document.getElementById('companies-container');
+      const companyItems = companiesContainer.getElementsByClassName('company-item');
+      if (companyItems.length === 1) {
+        companiesContainer.classList.add('center-single-item');
+      } else if (companyItems.length > 1) {
+        companiesContainer.classList.add('distribute-items');
+      }
+
+      const creatorsContainer = document.getElementById('creators-container');
+      const creatorItems = creatorsContainer.getElementsByClassName('creator-item');
+      if (creatorItems.length === 1) {
+        creatorsContainer.classList.add('center-single-item');
+      } else if (creatorItems.length > 1) {
+        creatorsContainer.classList.add('distribute-items');
+      }
+    });
+    </script>
