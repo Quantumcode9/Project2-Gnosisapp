@@ -103,29 +103,21 @@ function fetchRecommendations(showId, showName) {
         })
         .catch(error => console.error('Error fetching recommendations:', error));
 }
-    function displayRecommendations(showId, showName, recommendations) {
-    let wrapper = document.getElementById(`wrapper_${showId}`);
-    
-    if (!wrapper) {
-        wrapper = document.createElement('div');
-        wrapper.id = `wrapper_${showId}`;
-        wrapper.className = 'wrapper';
-    
-        const showElement = document.getElementById(`show_${showId}`);
-        showElement.after(wrapper);
-    }
-    wrapper.innerHTML = '';
-    
+
+function displayRecommendations(showId, showName, recommendations) {
+    const recommendationsSection = document.getElementById('recommendations-section');
+    recommendationsSection.innerHTML = ''; // Clear previous recommendations
+
     // Add the title
-    const title = document.createElement('h2');
+    const title = document.createElement('h1');
     title.textContent = `Because you like ${showName}`;
-    wrapper.appendChild(title);
+    recommendationsSection.appendChild(title);
     
     // Create and append the recommendations container
     const recommendationsContainer = document.createElement('div');
     recommendationsContainer.id = `recommendations_${showId}`;
     recommendationsContainer.className = 'recommendations-container';
-    wrapper.appendChild(recommendationsContainer);
+    recommendationsSection.appendChild(recommendationsContainer);
     
 
 
@@ -138,8 +130,8 @@ const recommendationElement = document.createElement('div');
 recommendationElement.className = 'show';
 recommendationElement.innerHTML = `
                 <a href="/pages/show/${show.id}">
-        <div class="show-card">
-                    <img src="https://image.tmdb.org/t/p/w500${show.poster_path}" alt="${show.name}"  style="height: 300px;">
+        <div class="show-card border-glow">
+                    <img src="https://image.tmdb.org/t/p/w500${show.poster_path}" alt="${show.name}"  style="height: 250px;">
                 </a>
             <div id="messageBox-${show.id}" class="message-box"></div>
                 <div class= "show-icons">

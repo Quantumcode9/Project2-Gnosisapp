@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 
-
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -19,14 +18,16 @@ const userSchema = new mongoose.Schema({
     name: String,
     poster_path: String,
     rating: String,
-    last_air_date: Date
+    last_episode_to_air: Object,
+    next_episode_to_air: Object,
   }],
 watched: [{
   id: String,
   name: String,
   poster_path: String,
   rating: String,
-  last_air_date: Date,
+  last_episode_to_air: Object,
+  next_episode_to_air: Object,
   user_rating: Number
 }],
 watchlist: [{
@@ -34,19 +35,10 @@ watchlist: [{
   name: String,
   poster_path: String,
   rating: String,
-  last_air_date: Date
+  last_episode_to_air: Object,
+  next_episode_to_air: Object 
 }],
-
 });
 
 const User = mongoose.model('User', userSchema);
-
-
 module.exports = User;
-
-
-
-
-
-
-

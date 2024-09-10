@@ -7,7 +7,6 @@ const path = require('path');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
-
 const middleware = (app) => {
     // Configure session middleware first
     app.use(session({
@@ -34,19 +33,10 @@ const middleware = (app) => {
     app.use(express.static(path.join(__dirname, 'public')));
     app.use(express.json());
     app.use(cors());
-
     app.set('view engine', 'ejs');
 }
 
 module.exports = middleware;
-
-
-
-
-
-
-
-
 
 //     app.use(
 //         session({

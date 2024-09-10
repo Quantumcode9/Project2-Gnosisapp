@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-
-
 const episodeSchema = new mongoose.Schema({
   id: Number,
   name: String,

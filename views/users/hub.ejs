@@ -1,7 +1,5 @@
-
 <%- include('../partials/header') %>
 <main>
-
     <!-- Favorite Shows -->
 
     <h3>Favorite Shows</h3>
@@ -22,7 +20,7 @@
             </form>
           </a>
           <h4><%= show.name %></h4>
-          <p><%= show.last_air_date %></p>
+          <p><%= show.next_episode_to_air %></p>
           <p><%= show.user_rating %></p>
         </div>
       <% }); %>
@@ -31,11 +29,11 @@
   </div>
   <!-- Watchlist -->
 
-  <h3>Watchlist</h3>
-  <% if (watchlist.length === 0) { %>
-    <p class="text-center">You have no shows in your watchlist. </p>
+<h3>Watchlist</h3>
+<% if (watchlist.length === 0) { %>
+  <p class="text-center">You have no shows in your watchlist. </p>
   <a href="/pages/popular" class="btn btn-light btn-center">Popular Shows</a>
-  <% } else { %>
+<% } else { %>
   <div class="scroll-container">
     <div class="d-flex">
       <% watchlist.forEach(show => { %>
@@ -49,14 +47,13 @@
             </form>
           </a>
           <h4><%= show.name %></h4>
-          <p><%= show.last_air_date %></p>
-          <p><%= show.user_rating %></p>
+            <p><%= watchlist.last_episode_to_air%></p>
+            <p><%= watchlist.next_episode_to_air %></p>
         </div>
       <% }); %>
-      <% } %>
     </div>
   </div>
-
+<% } %>
   <!-- Watched Shows -->
 
   <h3>Watched Shows</h3>
