@@ -7,12 +7,12 @@
 
 /* ========== CSS VARIABLES ========== */
 :root {
-    --primary-color: #1E90FF;
-    --secondary-color: #FFD700;
-    --background-dark: #1c1b1b;
+    --primary-color: #d4af35; 
+    --secondary-color: #b99c4b; 
+    --background-dark: #2d2b2a; 
     --text-light: #dddbdb;
-    --text-dark: #333;
-    --card-bg: rgba(0, 0, 0, 0.5);
+    --text-dark: #333;  
+    --card-bg: rgba(45, 43, 42, 0.5); 
     --border-radius: 10px;
     --default-spacing: 20px;
     --transition-speed: 0.3s ease-in-out;
@@ -22,7 +22,7 @@
 body {
     font-family: 'Arial', sans-serif;
     line-height: 1.6;
-    background-color: #1c1b1b;
+    background-color: #2d2b2a;
     color: var(--text-light);
 }
 
@@ -130,11 +130,51 @@ justify-content: space-between;
 
 
 
+.btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    text-align: center ;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--background-dark);
+    border: 1px solid var(--primary-color);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+    border: 1px solid transparent;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+    transform: translateY(-2px);
+}
+
+
+
 .btn-outline-primary {
-    border-radius: 0 20px 20px 0; 
-    border-color: #171717; 
-    background-color: #000000; 
-    color: rgb(58, 58, 58); 
+    color: #d4af35;
+    border-color: #d4af35;
+    background-color: #2a2a2a;
 }
 
 .btn-outline-primary:hover {
@@ -212,6 +252,11 @@ color: #fff;
 /* Typography */
 h2, h5, p {
     margin: 10px 0;
+}
+
+h3 {
+    margin: 20px 0;
+    text-align: center;
 }
 
 p.text-muted {

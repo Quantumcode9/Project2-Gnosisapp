@@ -14,6 +14,16 @@
   }
   
 
+  @media screen and (max-width: 767px) {
+    .scroll-container {
+      gap: 10px;
+    margin-bottom: 0;
+      max-height: 300px;
+      
+    }
+    
+  }
+
 
 /* Individual Cards */
 .hub-card {
@@ -34,7 +44,7 @@
   /* Shrink on smaller screens */
   @media (max-width: 767px) {
     .hub-card {
-      width: 150px; /* Slightly smaller */
+      width: 150px; 
     }
     
     .hub-card-content h4 {
@@ -353,36 +363,7 @@
     font-weight: bold;
   }
   
-  /* .stars-display {
-    display: flex;
-    justify-content: center;
-    margin: 10px 0;
-  }
-  
-  .stars-display i {
-    font-size: 1.5rem;
-    margin: 0 2px;
-    color: #6c757d; /* Default gray for empty stars
-  
-  
-  .stars-display i.filled {
-    color: #ffc107; /* Gold color for filled stars 
-  }
-  
-  .rating-value {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #ffc107;
-    margin-top: 5px;
-  } 
-  
-  .watch-date {
-    font-size: 0.9rem;
-    margin-top: 10px;
-    color: #adb5bd;
-    font-style: italic;
-  }
-  */
+
   
   /* Improve rating button container */
   .rating-button-container {
@@ -404,8 +385,9 @@
   .rating-btn {
     height: 40px;
     width: 100%;
-    background-color: #0d6efd;
-    border: none;
+    text-align: center;
+    background-color: #4b4a48;
+    border: 1px solid #d4af35;
     border-radius: 4px;
     padding: 8px 0;
     font-size: 0.9rem;
@@ -414,7 +396,8 @@
   }
   
   .rating-btn:hover {
-    background-color: #0b5ed7;
+    background-color: #d4af35;
+    border: none;
   }
 
 

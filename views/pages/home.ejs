@@ -1,19 +1,390 @@
 <%- include('../partials/header.ejs'); %>
 
-<% title = 'Home Page'; %>
-
-<div class="login-container">
-
-    <div class="container d-flex flex-column text-center vh-100 justify-content-center">
-        <h1 class="fw-bold top">Welcome to GNOSIS</h1>
-        <p class="text-muted">Discover and manage your favorite TV shows.</p>
-    
-        <div class="d-grid gap-2 col-6 mx-auto">
-            <button class="btn btn-primary btn-lg" onclick="location.href='/users/signup'">Sign Up</button>
-            <button class="btn btn-outline-secondary btn-lg" onclick="location.href='/users/login'">Sign In</button>
+<div class="landing-page">
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Welcome to <span class="brand-highlight">GNOSIS</span></h1>
+            <p class="hero-subtitle">Your ultimate TV show companion</p>
+            <p class="hero-description">Track what you're watching, discover new shows, and never miss an episode again.</p>
+            
+            <div class="hero-buttons">
+                <button class="btn btn-cta btn-lg" onclick="location.href='/users/signup'">
+                    <i class="bi bi-person-plus"></i> Get Started
+                </button>
+                <button class="btn btn-cta btn-lg" onclick="location.href='/users/login'">
+                    <i class="bi bi-box-arrow-in-right"></i> Sign In
+                </button>
+            </div>
         </div>
-    </div>
+        <div class="hero-backdrop"></div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <h2 class="section-title">Everything you need for your TV journey</h2>
+        
+        <div class="feature-cards">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-collection-play"></i>
+                </div>
+                <h3>Track Your Shows</h3>
+                <p>Easily maintain your watchlist and see what you've already watched.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-calendar-check"></i>
+                </div>
+                <h3>Never Miss an Episode</h3>
+                <p>Get notified about new episodes of your favorite shows.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-stars"></i>
+                </div>
+                <h3>Rate & Review</h3>
+                <p>Share your thoughts and see what others think about shows.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-compass"></i>
+                </div>
+                <h3>Discover New Shows</h3>
+                <p>Get personalized recommendations based on what you watch.</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- How It Works Section -->
+    <section class="how-it-works">
+        <h2 class="section-title">How It Works</h2>
+        
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Create an Account</h3>
+                <p>Sign up in seconds with just a username and password.</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Build Your Watchlist</h3>
+                <p>Add shows you're watching or want to watch.</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Track Progress</h3>
+                <p>Mark episodes as watched and rate your favorite shows.</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">4</div>
+                <h3>Discover More</h3>
+                <p>Get tailored recommendations based on your taste.</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-content">
+            <h2>Ready to take control of your TV watching?</h2>
+            <p>Join thousands of users who are already enjoying a better way to track and discover shows.</p>
+            <button class="btn btn-cta btn-lg" onclick="location.href='/users/signup'">
+                Get Started for Free
+            </button>
+        </div>
+    </section>
+</div>
+
+<!-- Add custom styles for the landing page -->
+<style>
+    /* Landing Page Styles */
+    .landing-page {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        color: #333;
+    }
+    
+    /* Hero Section */
+    .hero {
+        position: relative;
+        height: 100vh;
+        min-height: 600px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        overflow: hidden;
+    }
+    
+    .hero-backdrop {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #434343 0%, #909090 50%, #282828 100%);
+        z-index: -1;
+    }
+    
+    .hero-backdrop:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+        background-size: cover;
+        background-position: center;
+        opacity: 0.3;
+    }
+    
+    .hero-content {
+        max-width: 800px;
+        padding: 0 20px;
+        text-align: center;
+        z-index: 1;
+    }
+    
+    .hero-title {
+        font-size: 4rem;
+        font-weight: 800;
+        margin-bottom: 10px;
+        letter-spacing: -0.5px;
+    }
+    
+    .brand-highlight {
+        color: #d4af35;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.5rem;
+        font-weight: 300;
+        margin-bottom: 20px;
+    }
+    
+    .hero-description {
+        font-size: 1.2rem;
+        max-width: 600px;
+        margin: 0 auto 40px;
+        line-height: 1.6;
+    }
+    
+    .hero-buttons {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+    }
+    
+    /* Features Section */
+    .features {
+        padding: 80px 20px;
+        background-color: #4b4a48;
+    }
+    
+    .section-title {
+        text-align: center;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 60px;
+        color: #e1e1e1;
+    }
+    
+    .feature-cards {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .feature-card {
+        background: #2d2b2a;
+        border-radius: 10px;
+        padding: 30px;
+        flex: 1 1 250px;
+        max-width: 350px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    .feature-icon {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        color: #b99c4b;
+    }
+    
+    .feature-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+    
+    .feature-card p {
+        color: #6c757d;
+        line-height: 1.6;
+    }
+    
+    /* How It Works Section */
+    .how-it-works {
+        padding: 80px 20px;
+        background-color: white;
+    }
+
+    .how-it-works .section-title {
+        text-align: center;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 60px;
+        color: #6e6e6e;
+    }
+    
+    .steps {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 40px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .step {
+        flex: 1 1 200px;
+        max-width: 250px;
+        text-align: center;
+        position: relative;
+    }
+    
+    
+    .step-number {
+        width: 50px;
+        height: 50px;
+        background-color: #b99c4b;
+        border-radius: 50%;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0 auto 20px;
+    }
+    
+    .step h3 {
+        font-size: 1.3rem;
+        color: #353535;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+    
+    .step p {
+        color: #545454;
+        line-height: 1.6;
+    }
+    
+    /* CTA Section */
+    .cta {
+        padding: 80px 20px;
+        background: linear-gradient(135deg, #b99c4b 0%, #ffc904 100%);
+        color: white;
+        text-align: center;
+    }
+
+    .btn-cta {
+        margin: 0 auto;
+        background-color: #2d2b2a;
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        border-radius: 5px;
+        cursor: pointer;
+        border: 1px solid #d4af35;
+
+        transition: background-color 0.3s ease;
+        
+    }
+    
+    .btn-cta:hover {
+        background-color: #1f1e1d;
+        color: #d4af35;
+    }
 
 
+    .cta-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .cta h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+    
+    .cta p {
+        font-size: 1.2rem;
+        margin-bottom: 40px;
+        opacity: 0.9;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 3rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.3rem;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+        }
+        
+        .hero-buttons {
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        
+        .cta h2 {
+            font-size: 2rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .hero {
+            min-height: 500px;
+        }
+        
+        .hero-title {
+            font-size: 2.5rem;
+        }
+        
+        .feature-cards, .steps {
+            gap: 20px;
+        }
+        
+        .section-title {
+            margin-bottom: 40px;
+        }
+    }
+</style>
 
 <%- include('../partials/footer') %>

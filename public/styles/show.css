@@ -17,21 +17,22 @@
 
 @media (max-width: 370px) {
     .show-list {
-        grid-template-columns: repeat(1, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
 }
+
+
 
 /* ==========================
     SHOW CARD STYLING
    ========================== */
 .show-card {
     position: relative;
-    max-width: 300px;
-    max-height: 500px;
+    max-width: 200px;
+    max-height: 350px;
     width: 100%;
     border-radius: 8px;
     overflow: hidden;
-    padding: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease-in-out;
 }
@@ -69,12 +70,11 @@
 
 /* Title */
 .show-title {
-    margin: 10px 0;
-    font-size: 1.5rem;
-    font-weight: bold;
+    font-size: 0.9rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
 }
 
 /* Details */
@@ -131,21 +131,24 @@
    ========================== */
 .show-icons {
     position: absolute;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 10px;
+    top: 60%; /* Position in the middle vertically */
+    left: 0;
+    right: 0;
+    transform: translateY(-50%); /* Center precisely */
     z-index: 10;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
     opacity: 0; /* Hidden by default */
-    transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.3s ease;
 }
 
 /* General icon button styling */
 .icon-button {
     background: rgba(255, 255, 255, 0.8);
     border: none;
-    padding: 8px;
     border-radius: 50%;
     cursor: pointer;
     display: flex;
@@ -163,8 +166,8 @@
 }
 
 .icon-button img {
-    width: 24px;
-    height: 24px;
+    width: 40px;
+    height: 40px;
     transition: transform 0.2s ease-in-out;
 }
 

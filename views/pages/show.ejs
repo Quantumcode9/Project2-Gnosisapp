@@ -1,173 +1,834 @@
 <%- include('../partials/header.ejs'); %>
-    <main>
-        <div class="container-fluid header-image">
-            <div class="jumbotron jumbotron-fluid " style="background: url('https://image.tmdb.org/t/p/w1280<%= show.backdrop_path %>') no-repeat center center; background-size: cover;">
-                    <p class="lead"><%= show.tagline %></p>
-            </div>
-        </div>
+
+<div class="show-details-page">
+    <!-- Hero Banner with Backdrop -->
+    <div class="show-banner" style="background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('https://image.tmdb.org/t/p/original<%= show.backdrop_path %>')">
         <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="main-card">
-                    <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>" class="card-img-top">
-                    <h1 class="display-9"><%= show.name %></h1>
-                </div> 
-            </div>
-
-            <!-- Details Cards -->
-            <div class="col-md-6">
-                <div class="details-card">
-                    <div class="card-body">
-                        <h3 class="">Overview</h3>
-                        <p class=""><%= show.overview %></p>
-                    </div> 
-                </div> 
-                <div class="details-card">
-                    <div class="card-body"> 
-                        <p><strong>Genres:</strong> 
-                            <% show.genres.forEach(function(genre, index) { %>
-                                <%= genre.name %><% if(index < show.genres.length - 1) { %>,<% } %>
-                            <% }); %>
-                        </p>
-                        <p><strong>Rating:</strong> <%= show.vote_average %> (Based on <%= show.vote_count %> votes)</p>
-                        <p><strong>Air Date:</strong> <%= show.first_air_date %> - <%= show.last_air_date %></p>
-                        <p><strong>Seasons:</strong> <%= show.number_of_seasons %>, <strong>Episodes:</strong> <%= show.number_of_episodes %></p>
-                        <p><strong>Status:</strong> <%= show.status %></p>
-                        <p><strong>Popularity:</strong> <%= show.popularity %></p>
+            <div class="show-header">
+                <div class="show-poster">
+                    <img src="<%= show.poster_path ? `https://image.tmdb.org/t/p/w500${show.poster_path}` : '/images/no-poster.png' %>" 
+                        alt="<%= show.name %>" class="poster-img">
+                    
+                    <!-- Action buttons -->
+                    <div class="action-buttons">
+                        <% if (typeof isInWatchlist !== 'undefined' && isInWatchlist) { %>
+                            <button class="btn btn-outline-primary action-btn in-list" disabled>
+                                <i class="bi bi-check2-all"></i> In Watchlist
+                            </button>
+                        <% } else { %>
+                            <button class="btn btn-primary action-btn watchlist" 
+                                    data-id="<%= show.id %>" 
+                                    data-name="<%= show.name %>" 
+                                    data-poster="<%= show.poster_path %>">
+                                <i class="bi bi-plus-circle"></i> Add to Watchlist
+                            </button>
+                        <% } %>
+                        
+                        <% if (typeof isWatched !== 'undefined' && isWatched) { %>
+                            <div class="watched-status">
+                                <button class="btn btn-outline-success action-btn in-list" disabled>
+                                    <i class="bi bi-check2-circle"></i> Watched
+                                </button>
+                                <% if (typeof userRating !== 'undefined' && userRating) { %>
+                                    <div class="user-rating-badge">
+                                        <i class="bi bi-star-fill"></i> <%= userRating %>/5
+                                    </div>
+                                <% } else { %>
+                                    <button class="btn btn-sm btn-light rate-btn mt-2" 
+                                            onclick="showRatingModal('<%= show.id %>', '<%= show.name %>')">
+                                        <i class="bi bi-star"></i> Rate Show
+                                    </button>
+                                <% } %>
+                            </div>
+                        <% } else { %>
+                            <button class="btn btn-success action-btn watched" 
+                                    data-id="<%= show.id %>" 
+                                    data-name="<%= show.name %>" 
+                                    data-poster="<%= show.poster_path %>">
+                                <i class="bi bi-check-circle"></i> Mark as Watched
+                            </button>
+                        <% } %>
+                        
+                        <!-- Message box for actions feedback -->
+                        <div id="messageBox-<%= show.id %>" class="message-box"></div>
                     </div>
                 </div>
-            </div>   
-        </div>
-
-<!-- Networks -->
-<div class="row">
-    <!-- Networks Column -->
-    <div class="col-md-6">
-        <h3>Networks</h3>
-        <div id="networks-container" class="d-flex flex-wrap">
-            <% show.networks.forEach(function(network) { %>
-                <div class="d-flex align-items-center mb-3 network-item">
-                    <% if (network.logo_path) { %>
-                    <div class="logo-card">
-                        <img src="https://image.tmdb.org/t/p/w500<%=network.logo_path %>" alt="<%= network.name %>" class="logo-image">
-                    </div>
+                
+                <div class="show-info">
+                    <h1 class="show-title"><%= show.name %></h1>
+                    <% if (show.tagline) { %>
+                        <p class="show-tagline"><%= show.tagline %></p>
                     <% } %>
+                    
+                    <div class="show-meta">
+                        <span class="show-year"><%= show.first_air_date ? new Date(show.first_air_date).getFullYear() : 'N/A' %></span>
+                        <span class="meta-divider">•</span>
+                        <span class="show-status"><%= show.status %></span>
+                        <span class="meta-divider">•</span>
+                        <span class="show-seasons"><%= show.number_of_seasons %> Season<%= show.number_of_seasons !== 1 ? 's' : '' %></span>
+                        <span class="meta-divider">•</span>
+                        <span class="show-episodes"><%= show.number_of_episodes %> Episode<%= show.number_of_episodes !== 1 ? 's' : '' %></span>
+                    </div>
+                    
+                    <div class="show-genres">
+                        <% show.genres.forEach(function(genre) { %>
+                            <span class="genre-tag"><%= genre.name %></span>
+                        <% }); %>
+                    </div>
+                    
+                    <div class="show-rating">
+                        <div class="rating-circle" style="--rating: <%= Math.round(show.vote_average * 10) %>%">
+                            <span class="rating-value"><%= show.vote_average.toFixed(1) %></span>
+                        </div>
+                        <div class="rating-text">
+                            <span class="rating-label">User Score</span>
+                            <span class="rating-votes">(<%= show.vote_count.toLocaleString() %> votes)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="show-overview">
+                        <h3>Overview</h3>
+                        <p><%= show.overview %></p>
+                    </div>
+                    
+                    <div class="show-creators">
+                        <% if (show.created_by && show.created_by.length > 0) { %>
+                            <h4>Created By</h4>
+                            <div class="creator-list">
+                                <% show.created_by.forEach(function(creator) { %>
+                                    <div class="creator">
+                                        <% if (creator.profile_path) { %>
+                                            <img src="https://image.tmdb.org/t/p/w92<%= creator.profile_path %>" alt="<%= creator.name %>" class="creator-img">
+                                        <% } %>
+                                        <span class="creator-name"><%= creator.name %></span>
+                                    </div>
+                                <% }); %>
+                            </div>
+                        <% } %>
+                    </div>
                 </div>
-            <% }); %>
+            </div>
         </div>
     </div>
     
-    <!-- Production Companies Column -->
-    <div class="col-md-6">
-        <h3>Production Companies</h3>
-        <div id="companies-container" class="d-flex flex-wrap">
-            <% show.production_companies.forEach(function(company) { %>
-                <div class="d-flex align-items-center mb-3 company-item">
-                    <% if (company.logo_path) { %>
-                        <div class="logo-card">
-                            <img src="https://image.tmdb.org/t/p/w500<%= company.logo_path %>" alt="<%= company.name %>" class="logo-image">
-                        </div>
-                    <% } %>
-                </div>
-            <% }); %>
-        </div>
-    </div>
-</div>
-
-<!-- Created By -->
-<div class="container mt-6">
-    <h3>Created By</h3>
-    <div id="creators-container" class="row">
-        <% show.created_by.forEach(function(creator) { %>
-            <div class="col-md-6 col-sm-6 creator-item">
-                <% if (creator.profile_path) { %>
-                <div class="creator-card">
-                    <img src="<%= creator.profile_path ? `https://image.tmdb.org/t/p/w500${creator.profile_path}` : '/public/images/default-avatar.png' %>" alt="Profile Image" class="image-profile">
-                    <% } %>
-                    <h2><%= creator.name %></h2>
-                </div>
-            </div>
-        <% }); %>
-    </div>
-</div>
-
-        <!-- Seasons -->
-            <div class="container">
-                <h3>Seasons</h3>
-                <div class="row">
-                    <% show.seasons.forEach(function(season) { %>
-                        <div class="col-md-4 col-sm-6 col-xs-12">
-                            <div class="season-card">
+    <!-- Content Sections -->
+    <div class="container show-content">
+        <!-- Episode Information Section -->
+        <section class="content-section episode-section">
+            <h2 class="section-title">Episodes</h2>
+            
+            <div class="episode-cards">
+                <!-- Next Episode Card -->
+                <div class="episode-card next-episode">
+                    <h3 class="card-title">Next Episode</h3>
+                    <% if (show.next_episode_to_air) { %>
+                        <div class="episode-content">
+                            <% if (show.next_episode_to_air.still_path) { %>
+                                <img src="https://image.tmdb.org/t/p/w500<%= show.next_episode_to_air.still_path %>" alt="<%= show.next_episode_to_air.name %>" class="episode-img">
+                            <% } else { %>
+                                <div class="episode-img-placeholder">No Image Available</div>
+                            <% } %>
                             
-                                <img src="https://image.tmdb.org/t/p/w500<%= season.poster_path %>" onerror="this.onerror=null; this.src='Untitled.png';" class="season-image">
-                                <p><strong><%= season.name %>:</strong> <br> <%= season.episode_count %> Episodes</p>
-                                <p><strong>Air Date:</strong> <%= season.air_date %></p>
+                            <div class="episode-details">
+                                <h4 class="episode-title"><%= show.next_episode_to_air.name %></h4>
+                                <div class="episode-meta">
+                                    <span class="episode-number">S<%= show.next_episode_to_air.season_number %>E<%= show.next_episode_to_air.episode_number %></span>
+                                    <span class="meta-divider">•</span>
+                                    <span class="episode-date">
+                                        <script>document.write(formatDate("<%= show.next_episode_to_air.air_date %>"))</script>
+                                    </span>
+                                </div>
+                                <% if (show.next_episode_to_air.overview) { %>
+                                    <p class="episode-overview"><%= show.next_episode_to_air.overview.length > 150 ? show.next_episode_to_air.overview.substring(0, 150) + '...' : show.next_episode_to_air.overview %></p>
+                                <% } %>
                             </div>
                         </div>
-                    <% }); %>
+                    <% } else { %>
+                        <div class="no-episode">
+                            <i class="bi bi-calendar-x"></i>
+                            <p>No upcoming episodes scheduled</p>
+                        </div>
+                    <% } %>
+                </div>
+                
+                <!-- Last Episode Card -->
+                <div class="episode-card last-episode">
+                    <h3 class="card-title">Last Episode</h3>
+                    <% if (show.last_episode_to_air) { %>
+                        <div class="episode-content">
+                            <% if (show.last_episode_to_air.still_path) { %>
+                                <img src="https://image.tmdb.org/t/p/w500<%= show.last_episode_to_air.still_path %>" alt="<%= show.last_episode_to_air.name %>" class="episode-img">
+                            <% } else { %>
+                                <div class="episode-img-placeholder">No Image Available</div>
+                            <% } %>
+                            
+                            <div class="episode-details">
+                                <h4 class="episode-title"><%= show.last_episode_to_air.name %></h4>
+                                <div class="episode-meta">
+                                    <span class="episode-number">S<%= show.last_episode_to_air.season_number %>E<%= show.last_episode_to_air.episode_number %></span>
+                                    <span class="meta-divider">•</span>
+                                    <span class="episode-date">
+                                        <script>document.write(formatDate("<%= show.last_episode_to_air.air_date %>"))</script>
+                                    </span>
+                                </div>
+                                <% if (show.last_episode_to_air.overview) { %>
+                                    <p class="episode-overview"><%= show.last_episode_to_air.overview.length > 150 ? show.last_episode_to_air.overview.substring(0, 150) + '...' : show.last_episode_to_air.overview %></p>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% } else { %>
+                        <div class="no-episode">
+                            <i class="bi bi-calendar-x"></i>
+                            <p>No episode information available</p>
+                        </div>
+                    <% } %>
                 </div>
             </div>
-
-        <div class="container">
+        </section>
+        
+        <!-- Seasons Section -->
+        <section class="content-section seasons-section">
+            <h2 class="section-title">Seasons</h2>
+            
+            <div class="scroll-container">
+                <% show.seasons.forEach(function(season) { %>
+                    <div class="hub-card">
+                        <div class="season-poster">
+                            <img src="<%= season.poster_path ? `https://image.tmdb.org/t/p/w342${season.poster_path}` : '/images/no-poster.png' %>" 
+                                alt="<%= season.name %>" class="season-img">
+                        </div>
+                        <div class="hub-card-content">
+                            <h4 class="season-title"><%= season.name %></h4>
+                        </div>
+                        <div class="hub-card-info season-info">
+                            <div class="season-meta">
+                                <span class="season-year"><%= season.air_date ? new Date(season.air_date).getFullYear() : 'TBA' %></span>
+                                <span class="meta-divider">•</span>
+                                <span class="episode-count"><%= season.episode_count %> Episode<%= season.episode_count !== 1 ? 's' : '' %></span>
+                            </div>
+                            <% if (season.overview && season.overview.length > 0) { %>
+                                <p class="season-overview"><%= season.overview.length > 100 ? season.overview.substring(0, 100) + '...' : season.overview %></p>
+                            <% } %>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        </section>
+        
+        <!-- Networks & Production Companies -->
+        <section class="content-section networks-section">
             <div class="row">
-                <!-- Next Episode -->
+                <!-- Networks -->
                 <div class="col-md-6">
-                    <div class="season-card">
-                        <% if (show.next_episode_to_air) { %>
-                            <img src="https://image.tmdb.org/t/p/w500<%= show.next_episode_to_air.still_path %>" alt="<%= show.next_episode_to_air.name %>" class="still-image">
-                            <p><strong>Next Episode:</strong> <%= show.next_episode_to_air.name %></p>
-                            <p><strong>Next Air Date:</strong> <%= show.next_episode_to_air.air_date %></p>
+                    <h2 class="section-title">Networks</h2>
+                    <div class="logo-grid">
+                        <% if (show.networks && show.networks.length > 0) { %>
+                            <% show.networks.forEach(function(network) { %>
+                                <div class="logo-item">
+                                    <% if (network.logo_path) { %>
+                                        <img src="https://image.tmdb.org/t/p/w200<%= network.logo_path %>" alt="<%= network.name %>" class="logo-img">
+                                    <% } else { %>
+                                        <div class="logo-text"><%= network.name %></div>
+                                    <% } %>
+                                </div>
+                            <% }); %>
                         <% } else { %>
-                            <p>No next episode information available.</p>
+                            <p class="no-data">No network information available</p>
                         <% } %>
                     </div>
                 </div>
-                <!-- Last Episode -->
+                
+                <!-- Production Companies -->
                 <div class="col-md-6">
-                    <div class="season-card">
-                        <% if (show.last_episode_to_air) { %>
-                            <img src="https://image.tmdb.org/t/p/w500<%= show.last_episode_to_air.still_path %>" alt="<%= show.last_episode_to_air.name %>" class="still-image">
-                            <p><strong>Last Episode:</strong> <%= show.last_episode_to_air.name %></p>
-                            <p><strong>Last Air Date:</strong> <%= show.last_episode_to_air.air_date %></p>
+                    <h2 class="section-title">Production Companies</h2>
+                    <div class="logo-grid">
+                        <% if (show.production_companies && show.production_companies.length > 0) { %>
+                            <% show.production_companies.forEach(function(company) { %>
+                                <div class="logo-item">
+                                    <% if (company.logo_path) { %>
+                                        <img src="https://image.tmdb.org/t/p/w200<%= company.logo_path %>" alt="<%= company.name %>" class="logo-img">
+                                    <% } else { %>
+                                        <div class="logo-text"><%= company.name %></div>
+                                    <% } %>
+                                </div>
+                            <% }); %>
                         <% } else { %>
-                            <p>No last episode information available.</p>
+                            <p class="no-data">No production company information available</p>
                         <% } %>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
-    </main>
+</div>
+
+<!-- Date formatter script -->
+<script>
+    function formatDate(dateString) {
+        if (!dateString) return 'TBA';
+        
+        const date = new Date(dateString);
+        const now = new Date();
+        const tomorrow = new Date(now);
+        tomorrow.setDate(now.getDate() + 1);
+        
+        // Check if date is valid
+        if (isNaN(date.getTime())) return dateString;
+        
+        // Format: Today, Tomorrow, or date
+        if (date.toDateString() === now.toDateString()) {
+            return 'Today';
+        } else if (date.toDateString() === tomorrow.toDateString()) {
+            return 'Tomorrow';
+        } else {
+            return date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+    }
+    
+    // Carousel functionality for seasons
+    document.addEventListener('DOMContentLoaded', function() {
+        const seasonsCarousel = document.querySelector('.seasons-carousel');
+        if (seasonsCarousel && seasonsCarousel.children.length > 3) {
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+            
+            seasonsCarousel.addEventListener('mousedown', (e) => {
+                isDown = true;
+                startX = e.pageX - seasonsCarousel.offsetLeft;
+                scrollLeft = seasonsCarousel.scrollLeft;
+            });
+            seasonsCarousel.addEventListener('mouseleave', () => {
+                isDown = false;
+            });
+            seasonsCarousel.addEventListener('mouseup', () => {
+                isDown = false;
+            });
+            seasonsCarousel.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - seasonsCarousel.offsetLeft;
+                const walk = (x - startX) * 3; // Scroll speed
+                seasonsCarousel.scrollLeft = scrollLeft - walk;
+            });
+        }
+        
+
+    });
+</script>
+
+<style>
+
+    
+    /* Banner Section */
+    .show-banner {
+        background-size: cover;
+        background-position: center top;
+        color: white;
+        position: relative;
+        padding: 60px 0;
+    }
+    
+    .show-header {
+        display: flex;
+        gap: 30px;
+    }
+    
+    .show-poster {
+        flex-shrink: 0;
+        width: 300px;
+    }
+    
+    .poster-img {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    }
+    
+    .action-buttons {
+        margin-top: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .action-btn {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border-radius: 5px;
+    }
+    
+    .show-info {
+        flex-grow: 1;
+    }
+    
+    .show-title {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+    
+    .show-tagline {
+        font-size: 1.2rem;
+        font-style: italic;
+        opacity: 0.8;
+        margin-bottom: 15px;
+    }
+    
+    .show-meta {
+        margin-bottom: 15px;
+        font-size: 1.1rem;
+    }
+    
+    .meta-divider {
+        margin: 0 10px;
+        opacity: 0.6;
+    }
+    
+    .show-genres {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+    
+    .genre-tag {
+        background-color: rgba(255,255,255,0.1);
+        border-radius: 20px;
+        padding: 5px 15px;
+        font-size: 0.9rem;
+    }
+    
+    .show-rating {
+        display: flex;
+        align-items: center;
+        margin-bottom: 25px;
+        gap: 15px;
+    }
+    
+    .rating-circle {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: conic-gradient(
+            #4CAF50 0% var(--rating),
+            rgba(255, 255, 255, 0.2) var(--rating) 100%
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+    
+    .rating-circle::before {
+        content: '';
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        right: 5px;
+        bottom: 5px;
+        background-color: rgba(0,0,0,0.7);
+        border-radius: 50%;
+    }
+    
+    .rating-value {
+        position: relative;
+        z-index: 1;
+        font-size: 1.3rem;
+        font-weight: 700;
+    }
+    
+    .rating-text {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .rating-label {
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+    
+    .rating-votes {
+        font-size: 0.9rem;
+        opacity: 0.7;
+    }
+    
+    .show-overview {
+        margin-bottom: 25px;
+    }
+    
+    .show-overview h3 {
+        margin-bottom: 10px;
+        font-size: 1.5rem;
+    }
+    
+    .show-overview p {
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    @media screen  and (max-width: 768px) {
+        .show-overview p {
+            font-size: 0.8rem;
+            line-height: 1.1;
+        }
+    }
+    
+    .creator-list {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+    
+    .creator {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .creator-img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 5px;
+    }
+    
+    .creator-name {
+        font-size: 0.9rem;
+        text-align: center;
+    }
+    
+    /* Content Sections */
+    .show-content {
+        padding: 30px 0;
+    }
+    
+    .content-section {
+        margin-bottom: 40px;
+        background-color: #7a7a7a;
+        border-radius: 8px;
+        padding: 25px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    
+    .section-title {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        position: relative;
+        color: white;
+        padding-bottom: 10px;
+    }
+    
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 50px;
+        height: 3px;
+        background-color: #4CAF50;
+    }
+    
+    /* Episode Cards */
+    .episode-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+    }
+    
+    .episode-card {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        overflow: hidden;
+        background-color: #4b4a48;
+    }
+    
+    .card-title {
+        background-color: #cdcdcd;
+        padding: 10px 15px;
+        margin: 0;
+        font-size: 1.3rem;
+        color: #4b4a48;
+    }
+    
+    .episode-content {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .episode-img, .episode-img-placeholder {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+    }
+    
+    .episode-img-placeholder {
+        background-color: #e0e0e0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #757575;
+    }
+    
+    .episode-details {
+        padding: 15px;
+    }
+    
+    .episode-title {
+        margin-top: 0;
+        margin-bottom: 10px;
+        color: #d4af35;
+    }
+    
+    .episode-meta {
+        font-size: 0.9rem;
+        color: #afafaf;
+        margin-bottom: 10px;
+    }
+    
+    .episode-overview {
+        font-size: 0.95rem;
+        line-height: 1.5;
+        color: #dcdcdc;
+    }
+    
+    .no-episode {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 30px;
+        color: #9e9e9e;
+    }
+    
+    .no-episode i {
+        font-size: 3rem;
+        margin-bottom: 10px;
+    }
+    
+
+    .season-card {
+        background-color: #4b4a48;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+    
+    .season-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .season-poster {
+        width: 100%;
+    }
+    
+    .season-img {
+        width: 100%;
+        aspect-ratio: 2/3;
+        object-fit: cover;
+    }
+    
+    .season-info {
+        padding: 15px;
+    }
+    
+    .season-title {
+        margin-top: 0;
+        margin-bottom: 10px;
+        font-size: 1.2rem;
+    }
+    
+    .season-meta {
+        font-size: 0.9rem;
+        color: #d5d5d5;
+        margin-bottom: 10px;
+    }
+    
+    .season-overview {
+    font-size: 0.9rem;
+    color: #d1d1d1;
+    line-height: 1.4;
+    white-space: normal !important; 
+    -webkit-line-clamp: unset !important;
+    display: block !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+}
+
+    /* Logo Grid */
+    .logo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 15px;
+    }
+    
+    .logo-item {
+        background-color: #f5f5f5;
+        padding: 15px;
+        border-radius: 5px;
+        border: 1px solid #e0e0e0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 80px;
+    }
+    
+    .logo-img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+    
+    .logo-text {
+        font-size: 0.9rem;
+        text-align: center;
+        color: #424242;
+    }
+    
+    .no-data {
+        color: #9e9e9e;
+        font-style: italic;
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 992px) {
+        .show-header {
+            flex-direction: column;
+        }
+        
+        .show-poster {
+            width: 250px;
+            margin: 0 auto 30px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .show-banner {
+            padding: 30px 0;
+        }
+        
+        .show-title {
+            font-size: 2.5rem;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .show-title {
+            font-size: 2rem;
+        }
+        
+        .episode-cards {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
 <%- include('../partials/footer.ejs'); %>
 
 
+<script>
+    // Make userId available globally
+    window.userId = '<%= userId %>';
+</script>
 
 
+    
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-      const networksContainer = document.getElementById('networks-container');
-      const networkItems = networksContainer.getElementsByClassName('network-item');
-      if (networkItems.length === 1) {
-        networksContainer.classList.add('center-single-item');
-      } else if (networkItems.length > 1) {
-        networksContainer.classList.add('distribute-items');
-      }
-    
-      const companiesContainer = document.getElementById('companies-container');
-      const companyItems = companiesContainer.getElementsByClassName('company-item');
-      if (companyItems.length === 1) {
-        companiesContainer.classList.add('center-single-item');
-      } else if (companyItems.length > 1) {
-        companiesContainer.classList.add('distribute-items');
-      }
-
-      const creatorsContainer = document.getElementById('creators-container');
-      const creatorItems = creatorsContainer.getElementsByClassName('creator-item');
-      if (creatorItems.length === 1) {
-        creatorsContainer.classList.add('center-single-item');
-      } else if (creatorItems.length > 1) {
-        creatorsContainer.classList.add('distribute-items');
-      }
+    // Handle action button clicks
+    document.querySelectorAll('.action-btn:not([disabled])').forEach(btn => {
+        btn.addEventListener('click', function(event) {
+            event.preventDefault();
+            
+            // Get button data
+            const button = event.currentTarget;
+            const showId = button.dataset.id;
+            const showName = button.dataset.name;
+            const showPoster = button.dataset.poster;
+            const userId = '<%= typeof userId !== "undefined" ? userId : "" %>';
+            
+            console.log('Button clicked:', {showId, userId, type: button.classList.contains('watched') ? 'watched' : 'watchlist'});
+            
+            // Check if user is logged in
+            if (!userId) {
+                window.location.href = '/users/login?redirect=/pages/show/' + showId;
+                return;
+            }
+            
+            // Set button to loading state
+            const originalText = button.innerHTML;
+            button.disabled = true;
+            button.innerHTML = '<i class="bi bi-hourglass-split"></i> Processing...';
+            
+            // Determine action type and endpoint
+            let endpoint, successMessage;
+            if (button.classList.contains('watched')) {
+                endpoint = '/shows/watched/add';
+                successMessage = 'Added to watched shows!';
+            } else if (button.classList.contains('watchlist')) {
+                endpoint = '/shows/watchlist/add';
+                successMessage = 'Added to your watchlist!';
+            }
+            
+            // Send request - Ensure showId is sent correctly
+            fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId: userId,
+                    showId: showId,
+                    id: showId, // Send as both to ensure it works
+                    name: showName,
+                    poster_path: showPoster
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Show success message
+                const messageBox = document.getElementById(`messageBox-${showId}`);
+                if (messageBox) {
+                    messageBox.textContent = successMessage;
+                    messageBox.className = 'message-box success show';
+                }
+                
+                // Update UI after a delay
+                setTimeout(() => {
+                    // Refresh the page to show updated state
+                    window.location.reload();
+                }, 1200);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                
+                // Reset button state
+                button.disabled = false;
+                button.innerHTML = originalText;
+                
+                // Show error message
+                const messageBox = document.getElementById(`messageBox-${showId}`);
+                if (messageBox) {
+                    messageBox.textContent = 'There was an error processing your request.';
+                    messageBox.className = 'message-box error show';
+                }
+            });
+        });
+    });
     });
     </script>

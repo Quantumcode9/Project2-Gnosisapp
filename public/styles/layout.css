@@ -21,7 +21,20 @@
     text-align: center;
     margin-top: var(--default-spacing);
 }
+.action-buttons-container {
 
+position: absolute;
+top: 50%;
+left: 0;
+width: 100%;
+background-color: rgba(0, 0, 0, 0.75);
+display: flex;
+justify-content: space-around;
+padding: 10px;
+opacity: 0;
+transition: opacity 0.3s ease;
+
+}
 /* ========== CARDS ========== */
 
 .card-img-top {

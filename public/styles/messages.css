@@ -1,8 +1,8 @@
 .message-box {
   position: absolute;
   top: 3rem; 
-  margin: 0 auto;
-  transform: translateX(-50%);
+  left: 50%; /* Position from the left edge of parent */
+  transform: translateX(-50%); 
   width: 90%;
   text-align: center;
   font-size: 0.9rem;

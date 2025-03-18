@@ -384,6 +384,56 @@ router.post('/shows/watchlist/add/:userId', async (req, res) => {
 
 
 
+router.get('/show/:id', async (req, res) => {
+  try {
+      const showId = req.params.id;
+      const userId = req.session.userId; // Or however you track logged in users
+      
+      // Fetch show details from TMDB
+      const showDetails = await fetchShowData(showId);
+      
+      // If user is logged in, check their lists
+      let isInWatchlist = false;
+      let isWatched = false;
+      let userRating = null;
+      
+      if (userId) {
+          // Check if show is in watchlist
+          const watchlistResult = await db.query(
+              'SELECT * FROM watchlist WHERE user_id = $1 AND show_id = $2',
+              [userId, showId]
+          );
+          isInWatchlist = watchlistResult.rows.length > 0;
+          
+          // Check if show is watched and get rating if available
+          const watchedResult = await db.query(
+              'SELECT rating FROM watched WHERE user_id = $1 AND show_id = $2',
+              [userId, showId]
+          );
+          
+          if (watchedResult.rows.length > 0) {
+              isWatched = true;
+              userRating = watchedResult.rows[0].rating;
+          }
+      }
+      
+      // Render with all data
+      res.render('pages/show', {
+          show: showDetails,
+          userId,
+          isInWatchlist,
+          isWatched,
+          userRating
+      });
+  } catch (error) {
+      console.error('Error fetching show details:', error);
+      res.status(500).render('error', { message: 'Failed to load show details' });
+  }
+});
+
+
+
+
 // Add show to user's list
 
 

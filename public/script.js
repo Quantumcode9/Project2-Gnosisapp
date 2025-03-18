@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
               // Updated HTML structure to match hub cards style with hover effects
               showDiv.innerHTML = `
-                <div class="hub-card">
+                <div class="show-card">
                   <a href="/pages/show/${show.id}" class="image-link">
                     <img src="${posterPath}" alt="${show.name || 'TV Show'}" class="show-poster">
                   </a>
@@ -64,12 +64,12 @@ document.addEventListener('DOMContentLoaded', function() {
                   
                   <div id="messageBox-${show.id}" class="message-box"></div>
                   
-                  <div class="show-actions-container">
+                  <div class="show-icons">
                     <button class="icon-button watched" data-id="${show.id}" data-name="${show.name || ''}" data-poster="${show.poster_path || ''}">
-                      <img src="/images/Watched.png "  style="height: 30px; width 30px;" alt="Mark as Watched" class="action-icon">
+                      <img src="/images/Watched.png "  style="height: 30px; width 40px;" alt="Mark as Watched"">
                     </button>
                     <button class="icon-button watchlist" data-id="${show.id}" data-name="${show.name || ''}" data-poster="${show.poster_path || ''}">
-                      <img src="/images/Watching.png" style="height: 30px; width 30px;"  alt="Add to Watchlist" class="action-icon">
+                      <img src="/images/Watching.png" style="height: 30px; width 40px;"  alt="Add to Watchlist">
                     </button>
                   </div>
                 </div>
