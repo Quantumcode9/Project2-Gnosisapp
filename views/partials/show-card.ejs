@@ -1,215 +1,216 @@
 <div class="scroll-container">
+
+    <a href="/pages/show/<%= show.id %>" class="card-link">
     <div class="hub-card">
-        <!-- Image Section -->
-        <a href="/pages/show/<%= show.id %>" class="image-link"> 
-            <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>">
-        </a>
+        <!-- Image Section with Link -->
+        <div class="image-container"> 
+            <img src="<%= show.poster_path ? `https://image.tmdb.org/t/p/w500${show.poster_path}` : '/images/Placeholder.png' %>" 
+                alt="<%= show.name %>">
+        </div>  
 
+        <!-- Content Section -->
+  
+        <div class="hub-card-info">
+            <!-- Delete Button -->
+            <div class="delete-button-container">
+                <form class="delete-show-form" data-list-type="<%= listType %>">
+                    <input type="hidden" name="showId" value="<%= show.id %>">
+                    <input type="hidden" name="userId" value="<%= userId %>">
+                    <button type="button" class="btn btn-danger delete-btn" title="Remove from <%= listType %>">
+                        <i class="bi bi-trash-fill"></i>
+                    </button>
+                </form>
+            </div>
+    
 
-
-<!-- Content Section -->
-<div class="hub-card-content">
-    <h4><%= show.name %></h4>
-</div>
-    <div class="hub-card-info">
-                <!-- Delete Button -->
-                <div class="delete-button-container">
-                    <form class="delete-show-form" data-list-type="<%= listType %>">
-
-                        <input type="hidden" name="showId" value="<%= show.id %>">
-                        <input type="hidden" name="userId" value="<%= userId %>">
-                        <button type="submit" class="btn btn-danger delete-btn" title="Remove from <%= listType %>">
-                            <i class="bi bi-trash-fill"></i>
-                        </button>
-                    </form>
-                </div>
-   
-        <% if (listType === 'watchlist' && show.next_episode_to_air) { %>
-            <% const nextEpisodeDate = typeof show.next_episode_to_air === 'object' ? show.next_episode_to_air.air_date : null; %>
-            <% const formattedNextDate = nextEpisodeDate ? `<script>document.write(formatDate("${nextEpisodeDate}"))</script>` : 'TBA'; %>
-            
-            <% if (show.last_episode_to_air) { %>
-                <% const lastEpisodeDate = typeof show.last_episode_to_air === 'object' ? show.last_episode_to_air.air_date : null; %>
-                <% const formattedLastDate = lastEpisodeDate ? `<script>document.write(formatDate("${lastEpisodeDate}"))</script>` : 'N/A'; %>
+            <% if (listType === 'watchlist' && show.next_episode_to_air) { %>
+                <% const nextEpisodeDate = typeof show.next_episode_to_air === 'object' ? show.next_episode_to_air.air_date : null; %>
+                <% const formattedNextDate = nextEpisodeDate ? `<script>document.write(formatDate("${nextEpisodeDate}"))</script>` : 'TBA'; %>
                 
-                <p>Last: <br/> <%= typeof show.last_episode_to_air === 'object' ? show.last_episode_to_air.name || 'N/A' : 'N/A' %></p>
-                <p class="last-episode-air-date"> <%- formattedLastDate %></p>
-            <% } %>
+                <% if (show.last_episode_to_air) { %>
+                    <% const lastEpisodeDate = typeof show.last_episode_to_air === 'object' ? show.last_episode_to_air.air_date : null; %>
+                    <% const formattedLastDate = lastEpisodeDate ? `<script>document.write(formatDate("${lastEpisodeDate}"))</script>` : 'N/A'; %>
+                    
+                    <p>Last: <br/> <%= typeof show.last_episode_to_air === 'object' ? show.last_episode_to_air.name || 'N/A' : 'N/A' %></p>
+                    <p class="last-episode-air-date"> <%- formattedLastDate %></p>
+                <% } %>
 
-            <% if (nextEpisodeDate && nextEpisodeDate !== 'TBA' && nextEpisodeDate !== 'N/A') { %>
-                <p>Next: <br/> <%= show.next_episode_to_air.name %></p>
-                <p class="air-date"> <%- formattedNextDate %></p>
-            <% } %>
+                <% if (nextEpisodeDate && nextEpisodeDate !== 'TBA' && nextEpisodeDate !== 'N/A') { %>
+                    <p>Next: <br/> <%= show.next_episode_to_air.name %></p>
+                    <p class="air-date"> <%- formattedNextDate %></p>
+                <% } %>
             <% } else if (listType === 'watched' && show.user_rating) { %>
                 <!-- Show rating info on hover for watched shows -->
                 <div class="rating-display">
-                <p class="rating-title">Your Rating</p>
-                <div class="stars-display">
-                    <% for(let i = 1; i <= 5; i++) { %>
-                    <i class="bi bi-star-fill <%= i <= show.user_rating ? 'filled' : '' %>"></i>
+                    <p class="rating-title">Your Rating</p>
+                    <div class="stars-display">
+                        <% for(let i = 1; i <= 5; i++) { %>
+                        <i class="bi bi-star-fill <%= i <= show.user_rating ? 'filled' : '' %>"></i>
+                        <% } %>
+                    </div>
+                    <p class="rating-value"><%= show.user_rating %>/5</p>
+                    
+                    <% if (show.watch_date) { %>
+                        <p class="watch-date">Watched on: <%= show.watch_date %></p>
                     <% } %>
                 </div>
-                <p class="rating-value"><%= show.user_rating %>/5</p>
-                
-                <% if (show.watch_date) { %>
-                    <p class="watch-date">Watched on: <%= show.watch_date %></p>
-                <% } %>
-                </div>
-
             <% } %>
-
-            </div>
+        </div>
             
-<!-- Add Rating Button -->
-<% if (listType === 'watched' && (typeof show.user_rating === 'undefined' || show.user_rating === null)) { %>
-    <div class="rating-button-container">
-        <button type="button" class="btn btn-primary rating-btn" data-bs-toggle="modal" data-bs-target="#rateModal<%= show.id %>">
-            <i class="bi bi-star-fill"></i> Add Rating
-        </button>
+        <!-- Add Rating Button -->
+        <% if (listType === 'watched' && (typeof show.user_rating === 'undefined' || show.user_rating === null)) { %>
+            <div class="rating-button-container">
+                <button type="button" class="btn btn-primary rating-btn" data-bs-toggle="modal" data-bs-target="#rateModal<%= show.id %>">
+                    <i class="bi bi-star-fill"></i> Add Rating
+                </button>
+            </div>
+        <% } %>
     </div>
-<% } %>
-
-
-</div>
+</a>
 </div>
 
 <% if (listType === 'watched' && (typeof show.user_rating === 'undefined' || show.user_rating === null)) { %>
     <!-- Rating Modal -->
     <div class="modal fade" id="rateModal<%= show.id %>" tabindex="-1" aria-labelledby="rateModalLabel<%= show.id %>" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="rateModalLabel<%= show.id %>">Rate "<%= show.name %>"</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <p>Rate "<%= show.name %>" from 1 to 5 stars.</p>
-            <form action="/users/update-rating" method="POST">
-            <div class="rating-stars">
-                <div class="rating-value">Select rating: <span id="ratingValue<%= show.id %>">0</span>/5</div>
-                <div class="star-container">
-                <% for(let i = 1; i <= 5; i++) { %>
-                    <span class="star" data-rating="<%= i %>" onclick="setRating('<%= show.id %>', <%= i %>)">
-                    <i class="bi bi-star"></i>
-                    </span>
-                <% } %>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rateModalLabel<%= show.id %>">Rate "<%= show.name %>"</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <input type="hidden" id="ratingInput<%= show.id %>" name="rating" value="">
-                <input type="hidden" name="userId" value="<%= userId %>">
-                <input type="hidden" name="showId" value="<%= show.id %>">
+                <div class="modal-body">
+                    <p>Rate "<%= show.name %>" from 1 to 5 stars.</p>
+                    <form action="/users/update-rating" method="POST">
+                        <div class="rating-stars">
+                            <div class="rating-value">Select rating: <span id="ratingValue<%= show.id %>">0</span>/5</div>
+                            <div class="star-container">
+                                <% for(let i = 1; i <= 5; i++) { %>
+                                    <span class="star" data-rating="<%= i %>" onclick="setRating('<%= show.id %>', <%= i %>)">
+                                        <i class="bi bi-star"></i>
+                                    </span>
+                                <% } %>
+                            </div>
+                            <input type="hidden" id="ratingInput<%= show.id %>" name="rating" value="">
+                            <input type="hidden" name="userId" value="<%= userId %>">
+                            <input type="hidden" name="showId" value="<%= show.id %>">
+                        </div>
+                        <button type="submit" class="btn btn-success btn-bottom">Submit Rating</button>
+                    </form>
+                </div>
             </div>
-            <button type="submit" class="btn btn-success btn-bottom">Submit Rating</button>
-            </form>
         </div>
-        </div>
-    </div>
     </div>
 <% } %>
 
-<script>
-    function setRating(showId, rating) {
-    // Update hidden input value
-    document.getElementById('ratingInput' + showId).value = rating;
-    document.getElementById('ratingValue' + showId).textContent = rating;
     
-    // Update star appearance
-    const stars = document.querySelector('#rateModal' + showId).querySelectorAll('.star');
-    stars.forEach((star, index) => {
-        const starRating = parseInt(star.dataset.rating);
-        
-        // Reset all stars
-        star.innerHTML = '<i class="bi bi-star"></i>';
-        
-        // Fill stars up to selected rating
-        if (starRating <= rating) {
-        star.innerHTML = '<i class="bi bi-star-fill"></i>';
-        }
-    });
-    }
 </script>
 
 <script>
 
-document.addEventListener('DOMContentLoaded', function () {
-let isDeleting = false;
-
-document.querySelectorAll('.delete-show-form').forEach((form) => {
-    const submitButton = form.querySelector('button[type="submit"]');
-    
-    // Attach listener to the button instead of the form
-    submitButton.addEventListener('click', async (event) => {
-    event.preventDefault(); // Prevent default form submission
-    event.stopPropagation(); // Stop event bubbling
-
-    if (isDeleting) return;
-
-    console.log('Delete button clicked for form:', form);
-
-    isDeleting = true;
-    const showId = form.querySelector('input[name="showId"]').value;
-    const userId = form.querySelector('input[name="userId"]').value;
-    const listType = form.dataset.listType;
-
-    if (!userId || !showId) {
-        console.error('Missing userId or showId:', { userId, showId });
-        alert('Cannot delete: Missing user or show information.');
-        isDeleting = false;
-        return;
-    }
-
-    submitButton.disabled = true;
-    submitButton.innerHTML = '<i class="bi bi-hourglass-split"></i>';
-
-    const deleteUrl = {
-        watchlist: `/delete/delete-show/${showId}`,
-        watched: `/delete/delete-show-watched/${showId}`,
-        favorites: `/delete/delete-show-favorites/${showId}`,
-    }[listType];
-
-    if (!deleteUrl) {
-        console.error('Invalid listType:', listType);
-        resetButton(submitButton);
-        isDeleting = false;
-        return;
-    }
-
-    try {
-        console.log(`Sending DELETE to ${deleteUrl} for show ${showId}`);
-        const response = await fetch(deleteUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId }),
+document.addEventListener('DOMContentLoaded', function() {
+    // Debug link clicks
+    document.querySelectorAll('.image-link, .title-link').forEach(link => {
+        link.addEventListener('click', function(event) {
+            console.log('Link clicked:', this.href);
         });
-
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const data = await response.json();
-
-        if (data.success) {
-        const card = form.closest('.hub-card');
-        if (card) {
-            card.style.transition = 'opacity 0.3s ease-out';
-            card.style.opacity = '0';
-            setTimeout(() => card.remove(), 300);
+    });
+    
+    // Make sure entire card is not preventing navigation
+    document.querySelectorAll('.hub-card').forEach(card => {
+    card.addEventListener('click', function(event) {
+        const link = this.querySelector('.image-link');
+        if (link && !event.target.closest('.delete-btn')) { // Avoid delete button clicks
+            window.location.href = link.href;
         }
-        } else {
-        throw new Error(data.message || 'Deletion failed');
-        }
-    } catch (error) {
-        console.error('Delete error:', error);
-        alert('Failed to delete the show. Please try again.');
-        resetButton(submitButton);
-    } finally {
-        isDeleting = false;
-    }
     });
 });
+});
+document.addEventListener('DOMContentLoaded', function () {
+    let isDeleting = false;
 
-function resetButton(button) {
-    if (button) {
-    button.disabled = false;
-    button.innerHTML = '<i class="bi bi-trash-fill"></i>';
+    // Use event delegation to handle button clicks
+    document.body.addEventListener('click', function(event) {
+        // Find delete button if it or its child was clicked
+        const deleteBtn = event.target.closest('.delete-btn');
+        
+        if (deleteBtn && !isDeleting) {
+            event.preventDefault();
+            event.stopPropagation();  // Stop event from bubbling to parent elements
+            
+            // Set flag to prevent multiple simultaneous deletions
+            isDeleting = true;
+            
+            // Get form and data
+            const form = deleteBtn.closest('.delete-show-form');
+            const showId = form.querySelector('input[name="showId"]').value;
+            const userId = form.querySelector('input[name="userId"]').value;
+            const listType = form.dataset.listType;
+            
+            if (!userId || !showId) {
+                console.error('Missing userId or showId:', { userId, showId });
+                alert('Cannot delete: Missing user or show information.');
+                isDeleting = false;
+                return;
+            }
+            
+            // Visual feedback
+            const originalHTML = deleteBtn.innerHTML;
+            deleteBtn.disabled = true;
+            deleteBtn.innerHTML = '<i class="bi bi-hourglass-split"></i>';
+            
+            // Determine endpoint
+            const deleteUrl = {
+                watchlist: `/delete/delete-show/${showId}`,
+                watched: `/delete/delete-show-watched/${showId}`,
+                favorites: `/delete/delete-show-favorites/${showId}`,
+            }[listType];
+            
+            if (!deleteUrl) {
+                console.error('Invalid listType:', listType);
+                resetButton(deleteBtn, originalHTML);
+                isDeleting = false;
+                return;
+            }
+            
+            // Send delete request
+            fetch(deleteUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId }),
+            })
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    const card = deleteBtn.closest('.scroll-container');
+                    if (card) {
+                        card.style.transition = 'opacity 0.3s ease-out';
+                        card.style.opacity = '0';
+                        setTimeout(() => card.remove(), 300);
+                    }
+                } else {
+                    throw new Error(data.message || 'Deletion failed');
+                }
+            })
+            .catch(error => {
+                console.error('Delete error:', error);
+                alert('Failed to delete the show. Please try again.');
+                resetButton(deleteBtn, originalHTML);
+            })
+            .finally(() => {
+                isDeleting = false;
+            });
+        }
+    });
+    
+    function resetButton(button, html) {
+        if (button) {
+            button.disabled = false;
+            button.innerHTML = html || '<i class="bi bi-trash-fill"></i>';
+        }
     }
-}
 });
 </script>
     

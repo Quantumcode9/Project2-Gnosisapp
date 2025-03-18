@@ -27,17 +27,33 @@ app.use((req, res, next) => {
   next();
 });
 
-// Fetch genres for all routes
+
+const genresCache = {
+  data: null,
+  lastFetched: null,
+  maxAge: 24 * 60 * 60 * 1000 // 24 hours in milliseconds
+};
+
+// Middleware to fetch and cache genres
 app.use(async (req, res, next) => {
   if (!req.path.startsWith('/api/')) {
-    const url = `${API_BASE_URL}/genre/tv/list?language=en-US`;
-    try {
-      const response = await axios.get(url, { headers: HEADERS });
-      req.genres = response.data.genres;
-    } catch (error) {
-      console.error('Error fetching genres:', error);
-      req.genres = [];
+    // Check if we have cached genres that aren't too old
+    const now = Date.now();
+    if (!genresCache.data || !genresCache.lastFetched || (now - genresCache.lastFetched > genresCache.maxAge)) {
+      try {
+        const url = `${API_BASE_URL}/genre/tv/list?language=en-US`;
+        const response = await axios.get(url, { headers: HEADERS });
+        genresCache.data = response.data.genres;
+        genresCache.lastFetched = now;
+        console.log('Genres fetched and cached at', new Date(now).toLocaleString());
+      } catch (error) {
+        console.error('Error fetching genres:', error);
+        genresCache.data = genresCache.data || []; 
+      }
     }
+    
+    res.locals.genres = genresCache.data;
+    req.genres = genresCache.data;
   }
   next();
 });

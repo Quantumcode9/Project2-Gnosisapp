@@ -26,7 +26,12 @@ body {
     color: var(--text-light);
 }
 
-
+.show-poster {
+    width: 100%;
+    aspect-ratio: 2/3;
+    object-fit: cover;
+    display: block;
+  }
 
 h1 {
     margin: 20px 0;

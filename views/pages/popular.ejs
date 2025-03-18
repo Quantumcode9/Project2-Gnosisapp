@@ -6,7 +6,8 @@
                 <div class="show-card">
                     <!-- Image link -->
                     <a href="/pages/show/<%= show.id %>" class="image-link">
-                        <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>" class="show-poster">
+                        <img src="<%= show.poster_path ? `https://image.tmdb.org/t/p/w500${show.poster_path}` : '/images/Placeholder.png' %>" 
+                        alt="<%= show.name %>" class="show-poster">
                     </a>
                     <!-- Action Buttons  -->
                         <%- include('../partials/buttons', { show: show, userId: userId }) %>

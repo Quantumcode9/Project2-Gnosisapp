@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
               // Check for poster path
               const posterPath = show.poster_path ? 
                 `https://image.tmdb.org/t/p/w500${show.poster_path}` : 
-                '/images/no-poster.png';
+                '/images/Placeholder.png';
                 
               // Updated HTML structure to match hub cards style with hover effects
               showDiv.innerHTML = `
