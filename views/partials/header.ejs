@@ -9,9 +9,100 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css" rel="stylesheet">
     <!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
     <link rel="stylesheet" href="/styles.css">
+
+    <link rel="stylesheet" href="/styles/base.css">
+    <link rel="stylesheet" href="/styles/layout.css">
+    <link rel="stylesheet" href="/styles/genre.css">
+    <link rel="stylesheet" href="/styles/search.css">
+    <link rel="stylesheet" href="/styles/genre.css">
+    <link rel="stylesheet" href="/styles/show.css">
+    <link rel="stylesheet" href="/styles/popular.css">
+    <link rel="stylesheet" href="/styles/recommendations.css">
+    <link rel="stylesheet" href="/styles/buttons.css">
+    <link rel="stylesheet" href="/styles/rating-modal.css">
+    <link rel="stylesheet" href="/styles/footer.css">
+    <link rel="stylesheet" href="/styles/navbar.css">
+    <link rel="stylesheet" href="/styles/hub.css">
+    <link rel="stylesheet" href="/styles/login.css">
+    <link rel="stylesheet" href="/styles/modal.css">
+    <link rel="stylesheet" href="/styles/details.css">
+    <link rel="stylesheet" href="/styles/messages.css">
+
+
+    <script>
+        // Global date formatting helper function
+        function formatDate(dateString) {
+        if (!dateString || dateString === 'TBA' || dateString === 'N/A') {
+            return dateString;
+        }
+        
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) {
+            return dateString; // Return original if parsing fails
+        }
+        
+        // Calculate if the date is today, tomorrow, or this week
+        const today = new Date();
+        const tomorrow = new Date();
+        tomorrow.setDate(today.getDate() + 1);
+        
+        const isToday = date.toDateString() === today.toDateString();
+        const isTomorrow = date.toDateString() === tomorrow.toDateString();
+        
+        // For today or tomorrow, add time
+        if (isToday || isTomorrow) {
+            const timeString = date.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: '2-digit'
+            });
+            
+            return isToday ? `Today at ${timeString}` : `Tomorrow at ${timeString}`;
+        }
+        
+        // For dates within a week, show day name
+        const oneWeek = 7 * 24 * 60 * 60 * 1000;
+        if ((date - today) < oneWeek && (date - today) > 0) {
+            return date.toLocaleDateString('en-US', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric'
+            });
+        }
+        
+        // Otherwise show full date
+        return date.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        });
+        }
+    
+        window.formatDate = formatDate;
+    </script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.image-link').forEach((link) => {
+                let touchstartX = 0;
+                let touchendX = 0;
+                link.addEventListener('touchstart', (e) => {
+                    touchstartX = e.changedTouches[0].screenX;
+                });
+                link.addEventListener('touchend', (e) => {
+                    touchendX = e.changedTouches[0].screenX;
+                    if (Math.abs(touchstartX - touchendX) < 10) {
+                        window.location.href = link.getAttribute('href');
+                    }
+                });
+            });
+        });
+    </script>    
+
+
 </head>
 <body>
     <%- include('./navbar') %>
 
+    
 
 

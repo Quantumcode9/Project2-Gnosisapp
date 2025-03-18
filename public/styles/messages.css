@@ -1,0 +1,50 @@
+.message-box {
+  position: absolute;
+  top: 3rem; 
+  margin: 0 auto;
+  transform: translateX(-50%);
+  width: 90%;
+  text-align: center;
+  font-size: 0.9rem;
+  z-index: 1000;
+  color : #ffffff;
+  background: rgba(0, 0, 0, 0.75);
+
+}
+
+@media screen and (max-width: 600px) {
+.message-box {
+    width: 90%;
+    font-size: 1rem;
+    margin: 0 auto;
+  }
+}
+
+
+
+/* Show message only when a class is added dynamically */
+.message-box.show {
+  display: block;
+}
+
+/* Error message */
+.message-box.error {
+  color: #dc3545;
+}
+
+/* Success message */
+.message-box.success {
+  color: #28a745;
+}
+
+/* Info message */
+.message-box.info {
+  color: #17a2b8;
+}
+
+
+
+
+
+
+

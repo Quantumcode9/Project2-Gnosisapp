@@ -28,9 +28,14 @@ const seasonSchema = new mongoose.Schema({
   vote_average: Number
 });
 
+const genreSchema = new mongoose.Schema({
+  id: Number,
+  name: String
+});
+
 const showSchema = new mongoose.Schema({
   poster_path: String,
-  genres: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Genre' }],
+  genres: [genreSchema], 
   homepage: String,
   id: { type: Number, unique: true, required: true },
   in_production: Boolean,

@@ -1,5 +1,10 @@
-
 <%- include('../partials/header') %>
+
+<script>
+  // Make userId available globally
+  window.userId = "<%= userId %>";
+</script>
+
 <main>
     <div class="container-center">
         <form id="searchForm" action="/search" method="get" class="d-flex justify-content-center"> 
@@ -7,46 +12,16 @@
             <input type="hidden" name="userId" value="<%= userId %>">
             <button type="submit" class="btn btn-outline-primary">Search</button>
         </form>
-    </div> 
-    <form class="favorite-form">
-        <input type="hidden" name="userId" value="<%= userId %>">
-        <input type="hidden" name="id" value="${show.id}">
-        <input type="hidden" name="name" value="${show.name}">
-        <input type="hidden" name="poster_path" value="${show.poster_path}">
-        <button type="submit" class="icon-button">
-          <img class="hidden" src="/images/Favorites.png" alt="Add to Favorites">
-        </button>
-      </form>
-
-      <form class="watched-form">
-        <input type="hidden" name="userId" value="<%= userId %>">
-        <input type="hidden" name="id" value="${show.id}">
-        <input type="hidden" name="name" value="${show.name}">
-        <input type="hidden" name="poster_path" value="${show.poster_path}">
-        <button type="submit" class="icon-button">
-          <img class="hidden" src="/images/Watched.png" alt="Mark as Watched">
-        </button>
-      </form>
-      
-      <form class="watchlist-form">
-        <input type="hidden" name="userId" value="<%= userId %>">
-        <input type="hidden" name="id" value="${show.id}">
-        <input type="hidden" name="name" value="${show.name}">
-        <input type="hidden" name="poster_path" value="${show.poster_path}">
-        <button type="submit" class="icon-button">
-          <img class="hidden" src="/images/Watchlist.png" alt="Add to Watchlist">
-        </button>
-      </form>
+    </div>
     
-    <div id="searchResults"></div>
+    <!-- Remove the placeholder forms, they're causing issues -->
+    
+    <div id="searchResults" class="search-results-container"></div>
 </main>
+
 <%- include('../partials/footer') %>
-<script>
-    const userId = '<%= userId %>';
-  </script>
-<script src="/script.js"></script> 
 
-
+<script src="/script.js"></script>
 
 
 

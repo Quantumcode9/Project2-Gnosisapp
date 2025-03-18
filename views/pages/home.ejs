@@ -1,16 +1,18 @@
 <%- include('../partials/header.ejs'); %>
 
 <% title = 'Home Page'; %>
-<h1>Welcome to GNOSIS</h1>
-<p>Discover and manage your favorite TV shows.</p>
 
+<div class="login-container">
 
-<div class="home-container">
-    <button onclick="location.href='/users/signup'">Sign Up</button>
-    <br>
-    <button onclick="location.href='/users/login'">Sign In</button>
-</div>
-
+    <div class="container d-flex flex-column text-center vh-100 justify-content-center">
+        <h1 class="fw-bold top">Welcome to GNOSIS</h1>
+        <p class="text-muted">Discover and manage your favorite TV shows.</p>
+    
+        <div class="d-grid gap-2 col-6 mx-auto">
+            <button class="btn btn-primary btn-lg" onclick="location.href='/users/signup'">Sign Up</button>
+            <button class="btn btn-outline-secondary btn-lg" onclick="location.href='/users/login'">Sign In</button>
+        </div>
+    </div>
 
 
 

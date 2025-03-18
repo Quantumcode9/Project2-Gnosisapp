@@ -1,28 +1,24 @@
 <%- include('../partials/header.ejs'); %>
 <main>
-    <div class="container-fluid">
     <h1>Popular TV Shows</h1>
     <div class="show-list">
         <% shows.forEach(show => { %>
-            <div id="show_<%= show.id %>" class="show">  
-                <a href="/pages/show/<%= show.id %>">
+        <div id="show_<%= show.id %>" class="show">  
+            <a href="/pages/show/<%= show.id %>">
                 <div class="show-card">
                     <img src="https://image.tmdb.org/t/p/w500<%= show.poster_path %>" alt="<%= show.name %>" style="height: 300px;">
-                </a>
-                <%- include('../partials/buttons', { show: show, userId: userId }) %>      
-                <div id="messageBox-<%= show.id %>" class="message-box"></div>
-            </div>
-            </div>
-        <% }) %>
+            </a>
+            <%- include('../partials/buttons', { show: show, userId: userId }) %>      
+            <div id="messageBox-<%= show.id %>" class="message-box"></div>
+        </div>
     </div>
-    <div id="recommendations-section" class="recommendations-section">
-    </div>
+                <% }) %>
+                <div id="recommendations-section" class="recommendations-panel"></div>
 </main>
 
-<%- include('../partials/footer') %>
+<%- include('../partials/footer.ejs'); %>
 
 <script>
     window.userId = '<%= userId %>';
-    
 </script>
 <script src="/recommendations.js"></script>

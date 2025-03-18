@@ -1,159 +1,308 @@
 document.addEventListener('DOMContentLoaded', function() {
+  console.log("DOM fully loaded, userId:", window.userId);
+  
+  // Check if search input exists
   const searchInput = document.getElementById('searchInput');
-
-  searchInput.addEventListener('keyup', function(event) {
+  
+  if (searchInput) {
+    console.log("Search input found, adding event listeners");
+    
+    searchInput.addEventListener('keyup', function(event) {
       const query = event.target.value;
-  
+      
       if (query.length > 2) {
-          fetch(`/search-tv-shows?q=${encodeURIComponent(query)}`)
-              .then(response => response.json())
-              .then(data => {
-                  const searchResults = document.getElementById('searchResults');
-                  searchResults.innerHTML = ''; 
-
-                  data.forEach(show => {
-                      const showDiv = document.createElement('div');
-                      showDiv.className = 'show';
-                      showDiv.innerHTML = `
-                          <a href="/pages/show/${show.id}">
-                          <div class="show-card">
-                          <img src="https://image.tmdb.org/t/p/w500${show.poster_path}" alt="${show.name}"  style="height: 300px;">
-                          <div id="messageBox-${show.id}" class="message-box"></div>
-                          <div class= "show-icons">
-                          <form class="favorite-form">
-                          <input type="hidden" name="id" value="${show.id}">
-                          <input type="hidden" name="name" value="${show.name}">
-                          <input type="hidden" name="poster_path" value="${show.poster_path}">
-                          <button type="submit" class="icon-button">
-                          <img class="icon" src="/images/Favorites.png" alt="Add to Favorites">
-                          </button>
-                      </form>
-                    
-                      <form class="watched-form">
-                      <input type="hidden" name="id" value="${show.id}">
-                      <input type="hidden" name="name" value="${show.name}">
-                      <input type="hidden" name="poster_path" value="${show.poster_path}">
-                      <button type="submit" class="icon-button">
-                          <img class="icon" src="/images/Watched.png" alt="Mark as Watched">
-                      </button>
-                  </form>
-                  <form class="watchlist-form">
-                      <input type="hidden" name="id" value="${show.id}">
-                      <input type="hidden" name="name" value="${show.name}">
-                      <input type="hidden" name="poster_path" value="${show.poster_path}">
-                      <button type="submit" class="icon-button">
-                          <img class="icon" src="/images/Watching.png" alt="Add to Watchlist">
-                      </button>
-                  </form>
-              </div>
-              </div>
-                      `;
-                      searchResults.appendChild(showDiv);
-                  });
-              })
-              .catch(error => console.error('Error:', error));
+        console.log("Searching for:", query);
+        
+        fetch(`/search-tv-shows?q=${encodeURIComponent(query)}`)
+          .then(response => response.json())
+          .then(data => {
+            console.log("Search results:", data.length, "shows found");
+            
+            const searchResults = document.getElementById('searchResults');
+            if (!searchResults) {
+              console.error("Search results container not found");
+              return;
+            }
+            
+            searchResults.innerHTML = '';
+            
+            if (data.length === 0) {
+              searchResults.innerHTML = '<p class="no-results">No shows found matching your search.</p>';
+              return;
+            }
+            
+            // Create a container for the results
+            const resultsGrid = document.createElement('div');
+            resultsGrid.className = 'search-results-grid';
+            searchResults.appendChild(resultsGrid);
+            
+            data.forEach(show => {
+              if (!show.id) {
+                console.warn("Show missing ID:", show);
+                return;
+              }
+              
+              const showDiv = document.createElement('div');
+              showDiv.className = 'show-item';
+              showDiv.id = `show_${show.id}`;
+              
+              // Check for poster path
+              const posterPath = show.poster_path ? 
+                `https://image.tmdb.org/t/p/w500${show.poster_path}` : 
+                '/images/no-poster.png';
+                
+              // Updated HTML structure to match hub cards style with hover effects
+              showDiv.innerHTML = `
+                <div class="hub-card">
+                  <a href="/pages/show/${show.id}" class="image-link">
+                    <img src="${posterPath}" alt="${show.name || 'TV Show'}" class="show-poster">
+                  </a>
+                  
+                  <div class="hub-card-content">
+                    <h4>${show.name || 'Unknown Title'}</h4>
+                  </div>
+                  
+                  <div id="messageBox-${show.id}" class="message-box"></div>
+                  
+                  <div class="show-actions-container">
+                    <button class="icon-button watched" data-id="${show.id}" data-name="${show.name || ''}" data-poster="${show.poster_path || ''}">
+                      <img src="/images/Watched.png "  style="height: 30px; width 30px;" alt="Mark as Watched" class="action-icon">
+                    </button>
+                    <button class="icon-button watchlist" data-id="${show.id}" data-name="${show.name || ''}" data-poster="${show.poster_path || ''}">
+                      <img src="/images/Watching.png" style="height: 30px; width 30px;"  alt="Add to Watchlist" class="action-icon">
+                    </button>
+                  </div>
+                </div>
+              `;
+              
+              resultsGrid.appendChild(showDiv);
+            });
+            
+            // Add event listeners to the action buttons
+            const actionButtons = document.querySelectorAll('.icon-button');
+            actionButtons.forEach(button => {
+              button.addEventListener('click', handleActionClick);
+            });
+          })
+          .catch(error => {
+            console.error('Error searching shows:', error);
+            const searchResults = document.getElementById('searchResults');
+            if (searchResults) {
+              searchResults.innerHTML = '<p class="error">Error searching for shows. Please try again.</p>';
+            }
+          });
       }
-  });
-  document.body.addEventListener('submit', function(event) {
-    event.preventDefault();
-    const form = event.target;
-    const formData = new FormData(event.target);
-    formData.append('userId', userId); 
-    const showId = formData.get('id');
-    const showTitle = formData.get('name');
-    const showPoster = formData.get('poster_path');
-  
-    let route;
+    });
+  }
 
-    if (form.classList.contains('favorite-form')) {
-      route = '/shows/add';
-    } else if (form.classList.contains('watched-form')) {
-      route = '/shows/watched/add';
-    } else if (form.classList.contains('watchlist-form')) {
-      route = '/shows/watchlist/add';
-    }
-    fetch(route, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        userId: userId, 
-        id: showId,
-        name: showTitle,
-        poster_path: showPoster
-      })
+
+});
+
+// Handle action button clicks
+function handleActionClick(event) {
+  event.preventDefault();
+  
+  const button = event.currentTarget;
+  const showId = button.dataset.id;
+  const showName = button.dataset.name;
+  const showPoster = button.dataset.poster;
+  const userId = window.userId;
+  
+  if (!userId) {
+    console.error('User ID not found');
+    alert('Please log in to add shows to your lists.');
+    return;
+  }
+  
+  if (!showId) {
+    console.error('Show ID not found');
+    return;
+  }
+  
+  // Create or get message box
+  let messageBox = document.getElementById(`messageBox-${showId}`);
+  
+  // Determine action type based on button class
+  let endpoint;
+  let actionType;
+  
+  // Removed favorite option since we're consolidating
+  if (button.classList.contains('watched')) {
+    endpoint = `/shows/watched/add/${userId}`;
+    actionType = 'watched';
+  } else if (button.classList.contains('watchlist')) {
+    endpoint = `/shows/watchlist/add/${userId}`;
+    actionType = 'watchlist';
+  } else {
+    console.error('Unknown action type');
+    return;
+  }
+  
+  console.log(`Adding show ${showId} to ${actionType}`);
+  
+  // Send the request
+  fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      id: showId,
+      name: showName,
+      poster_path: showPoster
     })
-    .then(response => response.json())
-    .then(data => {
-      const messageBox = document.getElementById(`messageBox-${showId}`);
-      if (data.message === 'Show added') {
-        fetchRecommendations(showId); 
-        messageBox.innerText = 'Show added';
-    } else {
-        console.error(data.message);
-        messageBox.innerText =  data.message;
-    }
-    setTimeout(() => {
-        messageBox.innerText = '';
-    }, 1000);
-})
-.catch(error => {
-    console.error('Error:', error);
-    const messageBox = document.getElementById(`messageBox-${showId}`);
-    messageBox.innerText = 'Error: ' + error;
-
-    setTimeout(() => {
-        messageBox.innerText = '';
-    }, 1000);
-  });
-});
-});
-
-// Fetch recommendations
-
-function fetchRecommendations(showId) {
-fetch(`/get-recommendations/${showId}`)
-  .then(response => response.json())
-  .then(recommendations => {
-    displayRecommendations(showId, recommendations);
   })
-  .catch(error => console.error('Error fetching recommendations:', error));
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then(data => {
+    if (!messageBox) {
+      messageBox = document.createElement('div');
+      messageBox.id = `messageBox-${showId}`;
+      messageBox.className = 'message-box';
+      const hubCard = button.closest('.hub-card');
+      hubCard.querySelector('.hub-card-content').after(messageBox);
+    }
+    
+    // Show success message
+    messageBox.textContent = data.message || `Added to ${actionType}`;
+    messageBox.classList.add('success');
+    
+    // Clear message after delay
+    setTimeout(() => {
+      if (messageBox) {
+        messageBox.textContent = '';
+        messageBox.classList.remove('success');
+      }
+    }, 2000);
+    
+    // If show was added to watched, offer to rate it immediately
+    if (actionType === 'watched') {
+      setTimeout(() => {
+        const cardContent = button.closest('.hub-card');
+        
+        // Create a rating button if it doesn't already exist
+        if (!cardContent.querySelector('.rating-button-container')) {
+          const ratingButton = document.createElement('div');
+          ratingButton.className = 'rating-button-container';
+          ratingButton.innerHTML = `
+            <button type="button" class="btn btn-primary rating-btn" onclick="showRatingModal(${showId}, '${showName}')">
+              <i class="bi bi-star-fill"></i> Add Rating
+            </button>
+          `;
+          cardContent.appendChild(ratingButton);
+        }
+      }, 2100);
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    
+    if (!messageBox) {
+      messageBox = document.createElement('div');
+      messageBox.id = `messageBox-${showId}`;
+      messageBox.className = 'message-box';
+      const hubCard = button.closest('.hub-card');
+      hubCard.querySelector('.hub-card-content').after(messageBox);
+    }
+    
+    messageBox.textContent = 'Error: ' + (error.message || 'Unknown error');
+    messageBox.classList.add('error');
+    
+    setTimeout(() => {
+      messageBox.textContent = '';
+      messageBox.classList.remove('error');
+    }, 2000);
+  });
 }
 
-// Display recommendations
-
-function displayRecommendations(showId, recommendations) {
-let recommendationsContainer = document.getElementById(`recommendations_${showId}`);
-
-
-if (!recommendationsContainer) {
-  recommendationsContainer = document.createElement('div');
-  recommendationsContainer.id = `recommendations_${showId}`;
-  recommendationsContainer.className = 'recommendations-container';
+// Function to display an inline rating modal
+function showRatingModal(showId, showName) {
+  // Create a modal dynamically
+  const modalId = `ratingModal${showId}`;
   
-  const showElement = document.getElementById(`show_${showId}`);
-  showElement.after(recommendationsContainer);
-}
-
-recommendationsContainer.innerHTML = '';
-
-recommendations.forEach(show => {
-  const recommendationElement = document.createElement('div');
-  recommendationElement.className = 'recommendation';
-  recommendationElement.innerHTML = `
-    <img src="https://image.tmdb.org/t/p/w200${show.poster_path}" alt="${show.name}" class="recommendation-poster">
-    <div class= "show-icons">
-    <form class="favorite-form">
-    <input type="hidden" name="id" value="${show.id}">
-    <input type="hidden" name="name" value="${show.name}">
-    <input type="hidden" name="poster_path" value="${show.poster_path}">
-    <button type="submit" class="icon-button">
-    <img class="icon" src="/images/Favorites.png" alt="Add to Favorites">
-    </button>
-</form>
-</div>
+  // Check if modal already exists
+  if (document.getElementById(modalId)) {
+    // Just show it instead of creating a new one
+    const existingModal = new bootstrap.Modal(document.getElementById(modalId));
+    existingModal.show();
+    return;
+  }
+  
+  // Create new modal
+  const modal = document.createElement('div');
+  modal.className = 'modal fade';
+  modal.id = modalId;
+  modal.setAttribute('tabindex', '-1');
+  modal.setAttribute('aria-labelledby', `ratingModalLabel${showId}`);
+  modal.setAttribute('aria-hidden', 'true');
+  
+  modal.innerHTML = `
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="ratingModalLabel${showId}">Rate "${showName}"</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Rate "${showName}" from 1 to 5 stars.</p>
+          <form action="/users/update-rating" method="POST">
+            <div class="rating-stars">
+              <div class="rating-value">Select rating: <span id="ratingValue${showId}">0</span>/5</div>
+              <div class="star-container">
+                <% for(let i = 1; i <= 5; i++) { %>
+                  <span class="star" data-rating="${i}" onclick="setRating('${showId}', ${i})">
+                    <i class="bi bi-star"></i>
+                  </span>
+                <% } %>
+              </div>
+              <input type="hidden" id="ratingInput${showId}" name="rating" value="">
+              <input type="hidden" name="userId" value="${window.userId}">
+              <input type="hidden" name="showId" value="${showId}">
+            </div>
+            <button type="submit" class="btn btn-success btn-bottom">Submit Rating</button>
+          </form>
+        </div>
+      </div>
+    </div>
   `;
-  recommendationsContainer.appendChild(recommendationElement);
-});
+  
+  document.body.appendChild(modal);
+  
+  // Initialize and show the modal
+  const bootstrapModal = new bootstrap.Modal(document.getElementById(modalId));
+  bootstrapModal.show();
 }
+
+// Function to handle star rating selection
+function setRating(showId, rating) {
+  // Update hidden input value
+  document.getElementById('ratingInput' + showId).value = rating;
+  document.getElementById('ratingValue' + showId).textContent = rating;
+  
+  // Update star appearance
+  const stars = document.querySelector('#rateModal' + showId).querySelectorAll('.star');
+  stars.forEach((star, index) => {
+    const starRating = parseInt(star.dataset.rating);
+    
+    // Reset all stars
+    star.innerHTML = '<i class="bi bi-star"></i>';
+    
+    // Fill stars up to selected rating
+    if (starRating <= rating) {
+      star.innerHTML = '<i class="bi bi-star-fill"></i>';
+    }
+  });
+}
+
+// Make these functions available globally
+window.showRatingModal = showRatingModal;
+window.setRating = setRating;
+
+
+
+
+

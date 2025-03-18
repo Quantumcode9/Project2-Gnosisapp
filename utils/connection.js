@@ -12,7 +12,9 @@ const DATABASE_URL = process.env.DATABASE_URL
 // here is our DB config object
 const CONFIG = {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000, // Reduce the timeout for faster feedback
+    connectTimeoutMS: 10000, // Give up initial connection after 10 seconds
 }
 
 // establish our database connection

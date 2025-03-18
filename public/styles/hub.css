@@ -1,0 +1,462 @@
+
+/* Hub Card */
+
+.scroll-container {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    margin-bottom: 30px;
+    padding: 10px;
+    gap: 20px;
+    background-color: rgba(0, 0, 0, 0.1);
+    scroll-snap-type: x mandatory; /* Smooth scrolling experience */
+    -webkit-overflow-scrolling: touch; /* Improves performance on iOS */
+  }
+  
+
+
+/* Individual Cards */
+.hub-card {
+    position: relative;
+    flex: 0 0 auto; /* Prevents shrinking but allows flexibility */
+    width: 200px;
+    max-width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    background-color: #2f2f2f;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+  }
+  
+  
+  
+  /* Shrink on smaller screens */
+  @media (max-width: 767px) {
+    .hub-card {
+      width: 150px; /* Slightly smaller */
+    }
+    
+    .hub-card-content h4 {
+      font-size: 0.9rem; /* Reduce title size */
+    }
+  
+    .hub-card-info p {
+      font-size: 0.9rem;
+    }
+  }
+  
+  /* Image settings */
+  .hub-card img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    transition: transform 0.3s, opacity 0.3s ease-in-out;
+  }
+  
+  /* On hover (desktop) */
+  @media (min-width: 768px) {
+    .hub-card:hover {
+      transform: translateY(-5px);
+    }
+  
+    .hub-card:hover img {
+      transform: scale(1.3);
+      opacity: 0.3;
+    }
+  }
+  
+  /* Extra Info: Tap to reveal on mobile */
+  @media (max-width: 767px) {
+    .hub-card:active .hub-card-info {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+  
+  /* Hover effect (Only for larger screens) */
+  @media (min-width: 768px) {
+    .hub-card:hover {
+      transform: translateY(-5px);
+    }
+  
+    .hub-card:hover img {
+      transform: scale(1.3);
+      opacity: 0.3;
+    }
+  }
+  
+
+  
+  /* Content inside the card */
+  .hub-card-content {
+    padding: 10px;
+    background-color: #2f2f2f;
+    text-align: center;
+  }
+  
+  /* Title */
+  .hub-card-content h4 {
+    margin-top: 0;
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #d4d4d4;
+    transition: color 0.3s ease-in-out;
+    
+  }
+
+  .hub-card:hover .hub-card-content {
+    width: 100%;
+    color: #1E90FF;
+    text-align: center ;
+    opacity: 1;
+    font-weight: bold;
+    position: absolute;
+    z-index: 1;
+  }
+  
+  @media (max-width: 767px) {
+    .hub-card-content h4 {
+      white-space: normal; /* Allow wrapping */
+      display: -webkit-box;
+      text-align: center ;
+      -webkit-line-clamp: 2; /* Limit to 2 lines */
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  }
+
+
+  
+  
+  /* Air Date Color */
+  .air-date {
+    color: #1E90FF;
+    font-weight: bold;
+    font-size: 1rem;
+  }
+  
+  .last-episode-air-date {
+    color: #FFD700;
+    font-weight: bold;
+    font-size: 1rem;
+  }
+  
+  /* Extra Info - Now click-based for mobile */
+  .hub-card-info {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    color: white;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    
+    align-items: left;
+    text-align: left;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    font-size: 1rem;
+    text-align: center;
+    overflow-wrap: break-word; 
+    word-wrap: break-word;
+    max-height: 100%;
+    box-sizing: border-box;
+  }
+  
+  .hub-card-info p {
+    margin: 0;
+    font-size: 1rem;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+  }
+  
+  @media (max-width: 767px) {
+    .hub-card-info {
+      font-size: 0.9rem; 
+      padding: 10px;
+      text-overflow: ellipsis;
+    }
+  }
+  
+  
+  /* Show info on hover for desktop */
+  @media (min-width: 768px) {
+    .hub-card:hover .hub-card-info {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+  
+  /* Mobile-friendly version: Tap to show */
+  @media (max-width: 767px) {
+    .hub-card:active .hub-card-info {
+      opacity: 1;
+      pointer-events: auto;
+      -webkit-line-clamp: 2;
+    }
+  }
+  
+  /* Scrollable Snap Effect */
+  .scroll-container::-webkit-scrollbar {
+    height: 6px; /* Thin scrollbar */
+  }
+  
+  .scroll-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+  }
+  
+  .scroll-container::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+  }
+  
+  
+  /* Hover effect */
+  @keyframes slide-in {
+    from { opacity: 0; transform: translateY(-50px); }
+    to { opacity: 1; transform: translateY(0); }
+    }
+  
+  
+  
+  
+  .hub-card:hover .hub-card-info {
+    opacity: 1;
+    animation: slide-in 0.3s ease-in-out;
+  
+  }
+  
+
+  
+  /* User Rating */
+  .user-rating {
+    color: #ff9900;
+    font-weight: bold;
+  }
+  
+
+  
+  .icon-button-trash {
+    padding: 3px 6px;
+    font-size: 0.8rem;
+    opacity: 0.7;
+  }
+  /* hover */
+  
+  .hub-card-content:hover .delete-form {
+    transform: translateY(-5px);
+    transition: transform 0.3s;
+    scale: 1.1;
+  }
+  
+  
+  .icon-button-trash:hover {
+    opacity: 1;
+  }
+  
+  /* Rating stars */
+  .user-rating i {
+    color: gold;
+    font-size: 1.2rem;
+  }
+  
+  /* Action buttons */
+  .hub-card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 5px;
+  }
+  
+  /* Buttons */
+  .hub-card-actions button {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+  }
+  
+  .hub-card-actions button:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+  }
+  
+  .image-link {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .delete-form {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.5); 
+    opacity: 0;
+    transition: opacity 0.3s ease; 
+  }
+  
+  .image-link:hover .delete-form {
+    opacity: 1;
+  }
+  
+  .hub-card h4, .hub-card p {
+    font-size: 16px;
+    margin-top: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .hub-card:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  
+  .btn-danger:hover {
+    background-color: #d70f23; 
+  }
+  
+
+
+
+
+
+  /* RATINGS */
+
+  .rating-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .rating-title {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #fff;
+    font-weight: bold;
+  }
+  
+  /* .stars-display {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+  }
+  
+  .stars-display i {
+    font-size: 1.5rem;
+    margin: 0 2px;
+    color: #6c757d; /* Default gray for empty stars
+  
+  
+  .stars-display i.filled {
+    color: #ffc107; /* Gold color for filled stars 
+  }
+  
+  .rating-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffc107;
+    margin-top: 5px;
+  } 
+  
+  .watch-date {
+    font-size: 0.9rem;
+    margin-top: 10px;
+    color: #adb5bd;
+    font-style: italic;
+  }
+  */
+  
+  /* Improve rating button container */
+  .rating-button-container {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 10px;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .hub-card:hover .rating-button-container {
+    opacity: 1;
+  }
+  
+  .rating-btn {
+    height: 40px;
+    width: 100%;
+    background-color: #0d6efd;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 0;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+  
+  .rating-btn:hover {
+    background-color: #0b5ed7;
+  }
+
+
+  /* delete */
+
+  
+  .delete-button-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 100;
+    opacity: 0; /* Hide by default */
+    transition: opacity 0.3s ease;
+  }
+  
+  .hub-card:hover .delete-button-container {
+    opacity: 1; /* Show on hover */
+  }
+  
+  .delete-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(220, 53, 69, 0.8); /* Semi-transparent red */
+    border: none;
+    transition: all 0.2s ease;
+  }
+  
+  .delete-btn:hover {
+    background-color: #dc3545; /* Solid red on hover */
+    transform: scale(1.1);
+  }
+  
+  .delete-btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+  }
+  
+  .delete-btn i {
+    font-size: 0.9rem;
+  }

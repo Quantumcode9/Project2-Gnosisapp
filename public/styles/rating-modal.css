@@ -1,0 +1,40 @@
+
+/* Star rating container */
+.star-rating-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+  }
+  
+  /* Hide the input radio buttons */
+  .star-rating-input {
+    display: none;
+  }
+  
+  /* Style for the star labels */
+  .star-rating-label {
+    color: #ddd;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  
+  /* Highlight stars when hovering */
+  .star-rating-label:hover,
+  .star-rating-label:hover ~ .star-rating-label {
+    color: #ffcc00;
+  }
+  
+  /* For the left-to-right hover effect */
+  .star-rating-container {
+    direction: ltr;
+  }
+  
+  /* Fill in stars for selected rating */
+  .star-rating-input:checked ~ .star-rating-label,
+  .star-rating-input:checked + .star-rating-label {
+    color: #ffcc00;
+  }
+  

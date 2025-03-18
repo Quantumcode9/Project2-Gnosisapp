@@ -1,0 +1,146 @@
+/* ==========================
+  🔍 SEARCH RESULTS STYLING 
+  ========================== */
+  .search-results-container {
+    padding: 20px 0;
+    text-align: center;
+}
+
+/* Responsive Search Grid */
+.search-results-grid, 
+#searchResults {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 20px 10px 0;
+}
+
+/* Centered container */
+.container-center {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* ==========================
+  📱 RESPONSIVE DESIGN 
+  ========================== */
+@media screen and (max-width: 600px) {
+    .search-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    #searchInput {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .searchResults {
+        width: 100%;
+    }
+
+    .searchResults img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+    } 
+}
+
+/* Adjust search input width based on screen size */
+#searchInput {
+    width: 100%;
+}
+
+@media (min-width: 769px) {
+    #searchInput {
+        width: 300px;
+    }
+}
+
+/* ==========================
+  🎞️ SHOW ITEM & CARD STYLING
+  ========================== */
+.show-item {
+    position: relative;
+    transition: transform 0.3s;
+}
+
+/* Show Card */
+.show-item .hub-card {
+    height: 100%;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+}
+
+/* Image container */
+.hub-card .image-link {
+    display: block;
+    height: 300px;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* ==========================
+  🎭 ACTION BUTTONS (HIDDEN UNTIL HOVER)
+  ========================== */
+.show-actions-container {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Reveal buttons on hover */
+.hub-card:hover .show-actions-container,
+.hub-card:hover .rating-button-container,
+.hub-card:hover .icon-button img {
+    opacity: 1;
+}
+
+
+
+/* Action Icon */
+.action-icon,
+.action-button img {
+    width: 20px;
+    height: 20px;
+}
+
+
+/* ==========================
+  RATING BUTTON (HIDDEN UNTIL HOVER)
+  ========================== */
+.rating-button-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 10px;
+    text-align: center;
+    opacity: 0; 
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Rating Button */
+.rating-btn {
+    width: 100%;
+    background-color: #0d6efd;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 0;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.rating-btn:hover {
+    background-color: #0b5ed7;
+}

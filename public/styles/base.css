@@ -1,0 +1,246 @@
+/* ========== GLOBAL RESET ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ========== CSS VARIABLES ========== */
+:root {
+    --primary-color: #1E90FF;
+    --secondary-color: #FFD700;
+    --background-dark: #1c1b1b;
+    --text-light: #dddbdb;
+    --text-dark: #333;
+    --card-bg: rgba(0, 0, 0, 0.5);
+    --border-radius: 10px;
+    --default-spacing: 20px;
+    --transition-speed: 0.3s ease-in-out;
+}
+
+/* ========== GLOBAL TYPOGRAPHY ========== */
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background-color: #1c1b1b;
+    color: var(--text-light);
+}
+
+
+
+h1 {
+    margin: 20px 0;
+    font-size: 30px;
+    text-align: center;
+}
+
+p {
+    text-align: center;
+}
+
+
+a {
+  color: #007bff;
+}
+
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: var(--text-light);
+}
+
+p {
+    margin-bottom: 10px;
+    color: var(--text-light);
+}
+
+/* Links */
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color var(--transition-speed);
+}
+
+a:hover {
+    color: var(--secondary-color);
+}
+
+/* Buttons */
+button {
+    cursor: pointer;
+    transition: background var(--transition-speed), transform 0.2s ease-in-out;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+/* Images */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border-radius: var(--border-radius);
+}
+
+/* Utility Classes */
+.hidden {
+    display: none;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form input[type='text'],
+form input[type='password'],
+
+
+.center-single-item {
+justify-content: center;
+}
+
+.distribute-items {
+justify-content: space-between;
+}
+
+/* Bootstrap */
+
+.jumbotron {
+    width: 100%;
+    height: 20vw;
+    max-height: 30%;
+    padding: 2rem 1rem;
+    margin-bottom: 2rem;
+    border-radius: .3rem;
+    color: white;
+    text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+    object-fit: cover;
+
+}
+
+
+
+.btn-outline-primary {
+    border-radius: 0 20px 20px 0; 
+    border-color: #171717; 
+    background-color: #000000; 
+    color: rgb(58, 58, 58); 
+}
+
+.btn-outline-primary:hover {
+    background-color: #2a2a2a; 
+    border-color: #8a8a8a; 
+}
+
+.btn-bottom {
+    bottom: 0;
+    margin-top: 20px;
+    width: 100%;
+}
+
+
+.row {
+    display: flex;
+    align-items: stretch;
+}
+
+.btn-light {
+    display: inline-block;
+    padding: 10px 10px;
+    margin: 10px 0;
+    font-size: 20px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: #333;
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+
+.btn-center
+{
+display: flex;
+justify-content: center;
+align-items: center;
+text-align: center;
+margin-top: 20px;
+margin-left: 40%;
+margin-right: 40%;
+width: 20%;
+}
+.btn-center:hover
+{
+background-color: #000000;
+color: #fff;
+}
+
+
+.btn-limited {
+    max-width: 100px; 
+}
+
+.card, .details-card {
+    flex: 1;
+    max-width: 100%;
+}
+
+.card-body {
+    padding: 20px; 
+    color: rgb(217, 217, 217);
+}
+.card-body p {
+    margin-bottom: 0;
+    font-size: 1rem;
+}
+
+
+
+/* Typography */
+h2, h5, p {
+    margin: 10px 0;
+}
+
+p.text-muted {
+    color: #6c757d;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    margin-bottom: 5px;
+}
+
+
+.mt-4 {
+    display:flex;
+    margin-top: 1.5rem;
+}
+
+
+
+
+
+/* ========== MOBILE ========== */
+
+@media (max-width: 600px) {
+    body {
+    font-size: 14px; 
+    }
+}

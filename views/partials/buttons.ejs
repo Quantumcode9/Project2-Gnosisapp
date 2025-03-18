@@ -1,84 +1,62 @@
-
-<div class = "show-icons">
-        <form action="/shows/add/<%= userId %>" method="post" class="add-to-favorites-form">
-          <input type="hidden" name="id" value="<%= show.id %>">
-          <input type="hidden" name="name" value="<%= show.name %>">
-            <input type="hidden" name="poster_path" value="<%= show.poster_path %>">
-            <input type="hidden" name="rating" value="<%= show.vote_average %>">
-            <input type="hidden" name="overview" value="<%= show.overview %>">
-            <input type="hidden" name="numberepisodes" value="<%= show.number_of_episodes %>">
-            <input type="hidden" name="numberseasons" value="<%= show.number_of_seasons %>">
-            <input type="hidden" name="air_date" value="<%= show.air_date %>">
-            <input type="hidden" name="last_episode_to_air" value='<%= JSON.stringify(show.last_episode_to_air) %>'>
-            <input type="hidden" name="next_episode_to_air" value='<%= JSON.stringify(show.next_episode_to_air) %>'>
-            <input type="hidden" name="status" value="<%= show.status %>">   
-            <input type="hidden" name="popularity" value="<%= show.popularity %>">
-            <input type="hidden" name="next_episode" value="<%= show.next_episode_to_air%>">
-            <input type="hidden" name="last_air_date" value="<%= show.last_air_date %>">
-          <button type="submit" class="icon-button">
-            <img class="icon" src="/images/Favorites.png" alt="Add to Favorites">
-        </button>
-        </form>
-
-        <!-- <div id="recommendations-container"></div> -->
+<script>
+  window.userId = "<%= userId %>";
+</script>
+<script src="/user_rating.js"></script>
+<div class="show-icons">
 
 
-        <form action="/shows/watchlist/add/<%= userId %>" method="post" class="watchlist-form">
-            <input type="hidden" name="id" value="<%= show.id %>">
-            <input type="hidden" name="name" value="<%= show.name %>">
-              <input type="hidden" name="poster_path" value="<%= show.poster_path %>">
-              <input type="hidden" name="rating" value="<%= show.vote_average %>">
-              <input type="hidden" name="overview" value="<%= show.overview %>">
-              <input type="hidden" name="numberepisodes" value="<%= show.number_of_episodes %>">
-              <input type="hidden" name="numberseasons" value="<%= show.number_of_seasons %>">
-              <input type="hidden" name="air_date" value="<%= show.air_date %>">
-              <input type="hidden" name="last_episode_to_air" value='<%= JSON.stringify(show.last_episode_to_air) %>'>
-              <input type="hidden" name="next_episode_to_air" value='<%= JSON.stringify(show.next_episode_to_air) %>'>
-              <input type="hidden" name="status" value="<%= show.status %>">   
-              <input type="hidden" name="popularity" value="<%= show.popularity %>">
-              <input type="hidden" name="next_episode" value="<%= show.next_episode_to_air%>">
-              <input type="hidden" name="last_air_date" value="<%= show.last_air_date %>">
-              <button type="submit" class="icon-button">
-                <img class="icon" src="/images/Watching.png" alt="Add to Watchlist">
-              </button>
-          </form>   
+  <!-- Watchlist Button -->
+  <form action="/shows/watchlist/add/<%= userId %>" method="post" class="watchlist-form">
+    <input type="hidden" name="id" value="<%= show.id %>">
+    <input type="hidden" name="name" value="<%= show.name %>">
+    <input type="hidden" name="poster_path" value="<%= show.poster_path %>">
+    <button type="submit" class="icon-button">
+      <img class="icon" src="/images/Watching.png" style="height: 30px; width: 30px;" alt="Add to Watchlist">
+    </button>
+  </form>
 
-            <form id="watchedForm" action="/shows/watched/add/<%= userId %>" method="post" class="watched-form">
-            <input type="hidden" name="id" value="<%= show.id %>">
-            <input type="hidden" name="name" value="<%= show.name %>">
-              <input type="hidden" name="poster_path" value="<%= show.poster_path %>">
-              <input type="hidden" name="rating" value="<%= show.vote_average %>">
-              <input type="hidden" name="overview" value="<%= show.overview %>">
-              <input type="hidden" name="numberepisodes" value="<%= show.number_of_episodes %>">
-              <input type="hidden" name="numberseasons" value="<%= show.number_of_seasons %>">
-              <input type="hidden" name="air_date" value="<%= show.air_date %>">
-              <input type="hidden" name="last_episode_to_air" value='<%= JSON.stringify(show.last_episode_to_air) %>'>
-              <input type="hidden" name="next_episode_to_air" value='<%= JSON.stringify(show.next_episode_to_air) %>'>
-              <input type="hidden" name="status" value="<%= show.status %>">   
-              <input type="hidden" name="popularity" value="<%= show.popularity %>">
-              <input type="hidden" name="next_episode" value="<%= show.next_episode_to_air%>">
-              <input type="hidden" name="last_air_date" value="<%= show.last_air_date %>">
-              <input type="hidden" name="user_rating" id="userRatingInput">
-              <button type="submit" class="icon-button add-to-watched">
-              <img class="icon" src="/images/Watched.png" alt="Add to Watched">
-            </button>
-            </form>
+  <!-- Watched Button -->
+  <form action="/shows/watched/add/<%= userId %>" method="post" class="watched-form">
+    <input type="hidden" name="id" value="<%= show.id %>">
+    <input type="hidden" name="name" value="<%= show.name %>">
+    <input type="hidden" name="poster_path" value="<%= show.poster_path %>">
+    <div class="rating-container">
+      <button type="submit" class="icon-button">
+        <img class="icon" src="/images/Watched.png" style="height: 30px; width: 30px;" alt="Add to Watched">
+      </button>
+    </div>
+  </form>
+</div>
+<!--  Rating Modal -->
+<!--  Rating Modal - Use unique ID for each show -->
+<div id="ratingModal<%= show.id %>" class="modal rating-modal" data-show-id="<%= show.id %>">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Rate "<%= show.name %>"</h2>
+      <span class="close" onclick="closeRatingModal('<%= show.id %>')">&times;</span>
+    </div>
+    <div class="modal-body">
+      <div class="timer-bar" id="timerBar<%= show.id %>"></div>
+      <div class="form-group">
+        <label for="userRatingInput<%= show.id %>">Rating (1-10):</label>
+        <input type="number" id="userRatingInput<%= show.id %>" min="1" max="10">
       </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeRatingModal('<%= show.id %>')">Cancel</button>
+      <button class="btn btn-primary" onclick="submitRating('<%= show.id %>', '<%= userId %>')">Submit Rating</button>
+    </div>
+  </div>
+</div>
 
 
-    
 
-          <div id="ratingModal" class="modal">
-            <div class="modal-content">
-              <span class="close">&times;</span>
-              <h2>Rate the Show</h2>
-              <div>
-                <label for="userRatingInput">Rating (1-10):</label>
-            <input type="number" id="userRatingInput" min="1" max="10">
-              </div>
-              <button id="submitRating">Submit Rating</button>
-            </div>
-        </div>
+
+
+
+
+
+
 
 
 
